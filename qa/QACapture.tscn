@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://qa_capture_bootstrap"]
+
+[ext_resource type="Script" path="res://qa/QACapture.gd" id="1"]
+
+[node name="QACapture" type="Node"]
+script = ExtResource("1")

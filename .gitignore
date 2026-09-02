@@ -1,0 +1,16 @@
+# Godot 4.x
+.godot/
+.import/
+export.cfg
+export_presets.cfg
+
+# QA 캡처 산출물 (매 이터레이션 갱신되므로 버전관리 대상 아님)
+qa/output/*.png
+
+# 루프 실행 로그 / 제어 파일
+loop/logs/*.log
+loop/STOP
+
+# 사람이 외부 파일(에셋 팩, 기획 초안 등)을 임시로 던져두는 개인 인박스.
+# 여기 들어온 것 중 실제로 쓸 것은 assets/ 등 정식 위치로 정리해서 커밋한다.
+STEP/

@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://interact_trigger_scene"]
+
+[ext_resource type="Script" path="res://scripts/nap_trigger.gd" id="1_script"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_prompt"]
+font_size = 16
+font_color = Color(0.95, 0.85, 0.35, 0.9)
+
+[node name="InteractTrigger" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="PromptLabel" type="Label" parent="."]
+offset_left = -60.0
+offset_top = -44.0
+offset_right = 60.0
+offset_bottom = -20.0
+horizontal_alignment = 1
+label_settings = SubResource("LabelSettings_prompt")
+text = "Enter"

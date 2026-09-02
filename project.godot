@@ -1,0 +1,17 @@
+; Engine configuration file.
+; 이 파일은 QA 스캐폴딩 데모용 최소 project.godot 입니다.
+; 이미 진행 중인 Godot 프로젝트가 있다면 이 파일로 덮어쓰지 말고,
+; docs/, qa/, loop/, scenes/ 폴더만 실제 프로젝트 루트로 옮겨 병합하세요.
+
+config_version=5
+
+[application]
+
+config/name="ProjectS"
+run/main_scene="res://scenes/chapter1_real.tscn"
+config/features=PackedStringArray("4.3", "Forward Plus")
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720

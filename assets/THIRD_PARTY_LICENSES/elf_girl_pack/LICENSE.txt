@@ -1,0 +1,88 @@
+ELF GIRL BEDROOM PACK - LICENSE
+Copyright (c) 2026 AwakenPrism. All rights reserved.
+
+By downloading or using this asset pack you agree to the terms below.
+
+
+YOU MAY
+
+  * Use these sprites in your projects, including COMMERCIAL projects, with no
+    limit on how many copies you sell and no royalty owed.
+
+  * Use them in games, apps, videos, streams, prototypes, game jams, portfolio
+    pieces and printed material.
+
+  * MODIFY the character freely - recolour them, edit or repaint any tile,
+    change materials, resize or re-crop the sprites,
+    rebuild the sprite sheets, or use them as a base for new assets.
+
+  * Use the modified versions commercially under these same terms.
+
+  * Use the pack on an unlimited number of your own projects.
+
+  * Credit is appreciated but NOT required.
+
+
+YOU MAY NOT
+
+  * Resell, redistribute, sublicense or give away the sprite files themselves,
+    whether modified or unmodified. This includes uploading them to other asset
+    stores, marketplaces, or free-asset sites, and including them in another
+    asset pack or template.
+
+    The rule of thumb: you may sell a PROJECT that uses these sprites. You may
+    not sell, share or give away the SPRITES as art assets.
+
+  * Share the pack with other people. Each person who wants it should get their
+    own copy.
+
+  * Use the sprites, modified or not, to train machine learning or generative AI
+    models, or to create datasets for that purpose.
+
+  * Claim the original artwork as your own creation, or register it as your own
+    trademark.
+
+  * Use the sprites in projects that are illegal, or that harass or defame any
+    person.
+
+
+TEAMS AND CLIENTS
+
+  One purchase covers you and your team on your own projects. If you are making
+  a project for a client, you may use the sprites in it, but the client does not
+  receive a separate licence to reuse the sprites on other work - they should buy
+  their own copy for that.
+
+
+HOW THIS PACK WAS MADE  (AI disclosure)
+
+  This pack contains AI-assisted artwork. AI image tools were used as a starting
+  point and as visual reference, and the sprites were then corrected by hand -
+  which is where most of the work went.
+
+  Every frame was checked and reworked individually. Frames were rejected and
+  redone until the animation was right. The corrections included fixing which leg
+  was which across the cycle, fixing the depth order so the near leg is drawn in
+  front of the far one, repairing the hip joints where the legs did not connect
+  to the body, correcting the light and shadow so the near leg stays lighter
+  throughout, restoring the thigh-high stockings where they had been drawn as
+  tights, and rebuilding the walk mechanics so the body drops as the legs spread
+  and the feet stay on a consistent ground line.
+
+  The character design, art direction, animation timing and frame-by-frame
+  corrections are the author's own.
+
+
+NO WARRANTY
+
+  This pack is provided "as is", without warranty of any kind, express or
+  implied. The author is not liable for any claim, damages or other liability
+  arising from the use of these files.
+
+
+QUESTIONS
+
+  If you want to do something this licence does not cover - including reselling
+  or redistributing in some form - just ask. Contact me through my itch.io page.
+
+  https://awakenprism.itch.io
