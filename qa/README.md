@@ -81,3 +81,40 @@ godot4 --path . res://qa/QACapture.tscn
 이터레이션 루프는 이 exit code와 PNG 파일 존재 여부로 "완료" 여부를 1차
 판단하고, 최종 판단은 사람이 스크린샷을 직접 보고 내린다
 (`docs/DESIGN.md` §3 참고).
+
+## 상호작용(키 입력) 자동 테스트 — `tests/`
+
+이 도구는 **정적 스크린샷**만 확인한다 — 방향키를 눌러 실제로 이동하는지,
+Enter로 NPC와 대화가 시작/진행/종료되는지 같은 **입력에 따른 동작**은
+스크린샷만으로 검증 못 한다. 그런 상호작용은 `tests/`의 헤드리스
+Godot 스크립트로 자동 검증한다 — 사람이 직접 키보드로 눌러볼 필요 없이,
+`Input.parse_input_event()`로 실제 키 입력과 동일하게 시뮬레이션한다.
+
+```bash
+godot4 --headless --script res://tests/test_dialogue_interaction.gd --path .
+```
+
+- 성공: 각 검증 단계가 `[TEST] PASS - ...`로 출력되고 마지막에
+  `[TEST] ALL PASSED`, `exit 0`.
+- 실패: 실패한 항목이 `[TEST] FAIL - ...`로 출력되고 `exit 1`.
+
+### 새 상호작용 테스트를 만들 때 알아둘 것 (직접 겪은 함정)
+
+- `SceneTree`를 상속한 스크립트를 `--script`로 실행하면, 프로젝트
+  오토로드(예: `DialogueSystem`)가 **전역 식별자로는 컴파일이 안 된다**
+  (`Identifier not found` 컴파일 에러). `get_tree().root.get_node("이름")`
+  으로 직접 찾아서 써야 한다. (반면 일반 씬으로 로드되는 스크립트— 플레이어,
+  NPC 스크립트 등 —에서는 오토로드 전역 식별자가 정상 작동한다. `--script`
+  최상위 스크립트에서만 이 문제가 생긴다.)
+- 이동처럼 **폴링 기반**(`Input.is_action_pressed`) 입력은 `Input.
+  parse_input_event()`로 누른 뒤 최소 한 프레임을 기다려야 다음 로직이
+  반응한다. 누르자마자 바로 떼면 반응하기 전에 릴리즈될 수 있으니, "눌렀다
+  → 반응할 때까지(예: 이동 시작) 몇 프레임 대기 → 뗀다" 순서로 짜는 게
+  안전하다.
+- **같은 프레임 이중 트리거**에 주의: "가까이서 Enter로 상호작용 시작"과
+  "Enter로 진행/종료" 를 같은 입력(`ui_accept`)으로 처리하면, 시작과 종료가
+  같은 프레임에 겹칠 수 있다. 실제로 "대화를 닫는 그 Enter가 같은 프레임에
+  NPC를 다시 트리거해 무한 재시작되는" 버그를 이 방식으로 잡아냈다
+  (`scripts/dialogue_system.gd`의 `_started_frame`/`_ended_frame`,
+  `scripts/npc.gd`의 `just_ended_this_frame()` 참고). 새 상호작용을 만들
+  때도 "시작 프레임/종료 프레임"을 추적해서 같은 프레임 재진입을 막을 것.

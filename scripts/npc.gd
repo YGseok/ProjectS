@@ -14,7 +14,7 @@ func _ready() -> void:
 	_player = get_tree().get_first_node_in_group("player")
 
 func _process(_delta: float) -> void:
-	if _player == null or DialogueSystem.is_active():
+	if _player == null or DialogueSystem.is_active() or DialogueSystem.just_ended_this_frame():
 		return
 	if not Input.is_action_just_pressed("ui_accept"):
 		return

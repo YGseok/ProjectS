@@ -9,89 +9,94 @@
 
 ## 1. 지금 위치 (현재 상태 요약)
 
-- `res://scenes/chapter1_real.tscn` / `chapter1_dream.tscn` — 챕터 1의
-  현실·꿈 그레이박스 두 씬 모두 완성. 기와집 벽/툇마루/밭/원두막을 동일한
-  좌표에 배치하되, 꿈 씬은 전체 톤을 어둡게, 밭을 초록(밭)→붉은색
-  (피마자밭)으로 바꿔 "같은 공간, 다른 분위기"(DESIGN.md §3)를 표현.
-  실제 픽셀아트는 아직 없음 (의도적 플레이스홀더).
-- `res://scripts/player.gd` — 그리드 단위 4방향 이동 스크립트
-  (DESIGN.md §4: 키보드 방향키 전용, 타일 단위 이동, 자유이동 아님).
-  `add_to_group("player")` 로 상호작용 트리거가 플레이어를 찾을 수 있게 함.
-- **낮잠→꿈 전환 구현 완료**:
-  - `res://scenes/common/InteractTrigger.tscn` + `scripts/nap_trigger.gd` —
-    플레이어가 근처(반경 24px)에서 상호작용키(Enter/Space, `ui_accept`)를
-    누르면 페이드 후 다른 씬으로 전환하는 재사용 컴포넌트.
-  - `res://scenes/common/FadeOverlay.tscn` + `scripts/fade_overlay.gd` —
-    씬 시작 시 검은 화면에서 밝아지고, 전환 시 어두워진 뒤 다음 씬 로드.
-  - `chapter1_real.tscn`의 툇마루에 `NapTrigger` 배치 (프롬프트 "Enter: 낮잠")
-    → `chapter1_dream.tscn` 으로 전환.
-  - `chapter1_dream.tscn`의 같은 위치에 `WakeTrigger` 배치 (프롬프트
-    "Enter: 깨어나기 (임시)") → `chapter1_real.tscn` 으로 되돌아옴.
-    **주의**: 이건 왕복 테스트용 임시 트리거다. DESIGN.md §3(5)/§6.1에 따르면
-    진짜 각성은 "메인 퍼즐(단서 5종 수집) 해결"로 트리거돼야 하며, 단서
-    수집 시스템이 구현되면 이 임시 WakeTrigger는 제거/교체해야 한다.
-- `project.godot`의 `run/main_scene` 을 `dungeon.tscn`(QA 데모용
-  플레이스홀더, 그대로 보존)에서 `chapter1_real.tscn` 으로 변경함.
-- 아직 없음: 메인 퍼즐 단서 수집 시스템(DESIGN.md §6.1, 다음 작업),
-  실제 픽셀아트 에셋, 사운드.
-- QA 캡처 확인 완료: `GAME_START=chapter1_real` / `chapter1_dream` 둘 다
-  `./qa/run_qa.sh` → exit 0, 두 PNG 모두 육안 확인함 (이 세션에서).
-  낮잠/각성 트리거(Enter 키 → 페이드 → 씬 전환, 왕복)도 사람이 직접
-  플레이해서 정상 동작 확인함(2026-09-01).
-- **주인공 캐릭터 디자인 진행 중**: `tools/gen_player_sprite.gd` (헤드리스
-  Godot 스크립트로 도트 스프라이트를 절차적으로 그려 PNG 저장, 확정 전
-  반복 검토용)로 `assets/sprites/player_draft_v1~v7.png` 초안 제작.
-  v7까지 진행했고 아직 최종 컨펌 전 (2026-09-02 기준 진행 중, 등신비/
-  얼굴·드레스 형태 피드백 반영 중). **최종 컨펌 전까지 이 초안들을 실제
-  게임 스프라이트로 연결하지 말 것.**
-- **테스트용 외부 에셋 팩 반입**(2026-09-02): `STEP/Elf_Girl_Character_and_
-  Interior_Pack_DEMO.zip` (라이선스: 상업적 사용/수정 가능, 재판매·재배포만
-  금지 — `assets/THIRD_PARTY_LICENSES/elf_girl_pack/LICENSE.txt` 참고)을
-  정리해서 반영함:
-  - `assets/sprites/characters/elf_girl_test/` — 8방향 캐릭터 스프라이트시트
-  - `assets/tiles/interior_test/{walls,floors,dual_grid}/` — 벽/바닥 타일
-    (듀얼그리드 포함, Godot 4.3+ TileSet 듀얼그리드 기능과 호환)
-  - `assets/props/interior_test/{Architecture,Clutter,Furniture,WallDecor}/`
-    — 가구/소품
-  용도는 어디까지나 **파이프라인 테스트**(TileSet 구성, 8방향 스프라이트
-  애니메이션 연결 방법 검증)이며, 최종 아트(§6.1 주인공 디자인 등)와는
-  무관. 아직 실제 씬에 연결/통합하지는 않음.
-- **주의**: `.git` 디렉터리가 사라져 있음을 발견함(2026-09-02, 이전 세션의
-  커밋 이력 포함). 이 세션이 지운 적 없음 — 원인 불명, 사람 확인 필요.
+- **git**: `.git`이 사라졌던 사고 이후 재초기화 완료 (2026-09-02, 이전 이력은
+  복구 안 됨). `origin/master`에 push까지 연결돼 있음. 이 문서 기준 최신
+  커밋은 `1eede3a`.
+- **스토리 진상 대개정**(2026-09-04): `docs/scenario/2026-09-04.md`를 받아
+  `docs/DESIGN.md` §2를 다시 씀 — 리신 중독/목격 설정 등 기존 사망 원인은
+  **폐기**, 계모와의 몸싸움 중 익사·빨간 연필 금기·필통·일기 중심의 새
+  진상으로 교체(자세한 내용은 DESIGN.md §2 참고). §6(챕터 1)은 명백히 틀린
+  전제("외갓집에 놀러옴" → 실제로는 본인 고향집)만 고치고, §6.1 메인 퍼즐은
+  **재구성 여부가 미정 상태로 보류**돼 있음 — 사람이 "여기서는 구현/테스트만,
+  스토리 결정은 Claude.ai에서 한다"고 확인함. **§6.1을 다시 짜기 전까지는
+  손대지 말 것.**
+- **캐릭터 아트 초안 작업은 중단됨**: `tools/gen_player_sprite.gd`로 절차적
+  도트 스프라이트(`assets/sprites/player_draft_v1~v7.png`)를 v7까지
+  반복했으나, 진짜 이미지 생성이 아니라 도형 조합이라 한계가 있다고 사람이
+  판단(2026-09-04). **이 방식으로 캐릭터 아트를 더 다듬지 않는다.** 사람이
+  무료 에셋 등 별도 리소스를 구해올 예정 — 받으면 파이프라인 테스트
+  (`scenes/test/pipeline_test.tscn`)에서 검증한 방식(TileSet/스프라이트
+  연결)으로 통합.
+- **외부 에셋 파이프라인 검증 완료**: `STEP/`에서 받은 elf_girl 데모 팩을
+  `assets/{sprites/characters,tiles,props}/..._test/`로 정리 (라이선스:
+  상업적 사용/수정 가능, 재판매만 금지). `tools/build_interior_tileset.gd`로
+  개별 PNG들을 `TileSet` 리소스로 코드 조립, `scenes/test/pipeline_test.tscn`
+  에서 바닥/벽 타일 + 8방향 캐릭터 중 4방향을 그리드 이동에 연결해 QA
+  캡처로 확인. **오른쪽 세로벽 좌우반전 문제(`wall_vertical.png`이 한쪽
+  면만 그려져 있어 반대편은 FLIP_H 필요) 발견 후 수정 완료**
+  (`TileSetAtlasSource.TRANSFORM_FLIP_H`로 `set_cell()` 시 반전).
+- **대화 시스템 구현 완료**:
+  - `scripts/dialogue_system.gd` + `scenes/common/DialogueSystem.tscn` —
+    전역 오토로드(`project.godot` `[autoload]`), 하단 대화창, `ui_accept`
+    (Enter/Space)로 한 줄씩 진행, 더 없으면 종료.
+  - `scripts/npc.gd` + `scenes/common/ShadowNPC.tscn` — 재사용 가능한 NPC.
+    플레이어가 인접 타일에서 그 방향을 "바라볼 때"만 반응 (거리 + facing
+    내적 체크).
+  - `scripts/player.gd`에 `facing` 변수 추가, 대화 중 이동 입력 무시하도록
+    처리.
+  - `chapter1_real.tscn` 툇마루에 테스트용 그림자 NPC 배치 (플레이어와 동일
+    모양, 검은색, 대화 시 "[...]"만 출력).
+  - **버그 발견 및 수정**: NPC 옆에 서서 마지막 줄을 닫는 Enter 입력이 같은
+    프레임에 NPC를 다시 트리거해 대화가 즉시 재시작되는 버그가 있었음.
+    `DialogueSystem._started_frame`/`_ended_frame` + `npc.gd`의
+    `just_ended_this_frame()` 가드로 해결.
+- **새 역량: 상호작용 자동 테스트** (`tests/`, 2026-09-04) — 정적 스크린샷
+  QA로는 "키를 눌렀을 때 실제로 반응하는지" 검증이 안 됐는데, 이제
+  `Input.parse_input_event()`로 실제 키 입력을 헤드리스 Godot 스크립트에서
+  시뮬레이션해서 **사람 없이 자동으로 검증 가능**. 위 대화 시스템 버그도
+  이 방식으로 잡아냈다. 사용법/함정은 `qa/README.md`의 "상호작용 자동
+  테스트" 절 참고. 예시: `tests/test_dialogue_interaction.gd`.
+- `res://scenes/chapter1_real.tscn` / `chapter1_dream.tscn` — 그레이박스
+  상태 그대로 (실제 픽셀아트 없음, 의도적 플레이스홀더). 낮잠→꿈 전환은
+  왕복 가능하지만 `chapter1_dream.tscn`의 각성 트리거는 여전히 **임시**
+  (Enter만 누르면 각성 — 진짜 메인 퍼즐로 교체 전).
 
 ## 2. 다음 할 일 큐 (우선순위 순, 위가 먼저)
 
 > INBOX.md에 새 지시가 있으면 이 큐보다 항상 먼저 처리한다.
 
-1. DESIGN.md §6.1 메인 퍼즐("둘이었다" 흔적 모으기)용 단서 아이템 5종
-   배치 및 수집 시스템 구현 — §6.2 노출 페이싱 제약(언니 이름/죽음/기억
-   구조 반전 암시 금지) 반드시 준수. 완료되면 `chapter1_dream.tscn`의
-   임시 `WakeTrigger`를 "5종 단서 모두 수집 시 각성"으로 교체.
-2. 그레이박스 색상 블록을 실제 픽셀아트 타일/스프라이트로 교체
-3. 각 신규 씬 작업 후 반드시 `qa/run_qa.sh` 로 캡처 → 눈으로 확인 →
-   문제 있으면 즉시 수정 (같은 이터레이션 내에서)
+1. DESIGN.md §6.1(챕터 1 메인 퍼즐) 재구성 여부는 **사람이 Claude.ai에서
+   결정 중** — 여기서 먼저 판단하지 말고 결정 결과(INBOX.md 또는
+   docs/scenario/ 새 파일)를 기다릴 것.
+2. 캐릭터 아트: 사람이 외부 에셋을 구해오면, `pipeline_test`에서 검증한
+   방식(TileSet/스프라이트 연결)으로 실제 플레이어에 통합.
+3. 그레이박스 색상 블록을 실제 픽셀아트 타일로 교체 (배경 아트, INBOX
+   4번 항목 — 사람이 "쪼개진 타일 형태로 저장"을 요청했었음, TileSet
+   방식은 이미 pipeline_test로 검증됨).
+4. 각 신규 씬/상호작용 작업 후 `qa/run_qa.sh`(시각) + 해당하면 `tests/`
+   자동 상호작용 테스트로 검증 → 사람 눈 확인은 여전히 최종 기준.
 
-> DESIGN.md 전면 개정(2026-09-01): 옴니버스 → 단일 서사(기억 층위 구조)로
-> 변경, §2에 게임 전체 진상(스포일러) 추가, 챕터 1 메인 퍼즐과 노출 페이싱
-> 제약 확정. 구현 시 텍스트/연출에 §6.2 제약을 넘는 내용이 들어가지 않도록
-> 주의할 것.
-
-> 이동 사양 확정(사람 확인 완료, 2026-09-01): `play_area` 는 화면 전체
-> (Ground 영역)이며, 기와집 벽/밭/원두막 등 개별 구역은 현재 **충돌 처리
-> 없는 순수 시각적 표시**라 플레이어가 그냥 통과해서 지나다닐 수 있다.
-> 벽/구역 경계로 이동을 막는 충돌 처리는 **아직 요청되지 않았으므로
-> 구현하지 않는다** — 나중에 필요해지면 INBOX.md로 지시할 것.
+> 이동 사양 확정(2026-09-01): `play_area` 는 화면 전체이며, 벽/구역 경계
+> 충돌 처리는 아직 요청되지 않았으므로 구현하지 않는다.
 
 ## 3. 완료 기록 (최신이 위)
 
-- 낮잠→꿈 전환 구현: `InteractTrigger`/`FadeOverlay` 재사용 컴포넌트 작성,
-  `chapter1_real.tscn`(툇마루에 낮잠 트리거) ↔ `chapter1_dream.tscn`
-  (같은 위치에 임시 각성 트리거, 밭→피마자밭 색 전환) 왕복 구조 완성.
-  두 씬 다 QA 캡처로 렌더링 확인.
-- `chapter1_real.tscn` 그레이박스(기와집/툇마루/밭/원두막) + 그리드 이동
-  플레이어 스크립트 작성, QA 캡처로 렌더링 확인. `run_qa.sh`의
-  `add_child()` 타이밍 버그(부모 노드가 자식 설정 중일 때 즉시 add_child
-  호출해 실패 → 빈 화면 캡처됨) 수정, `call_deferred` 로 교체해 해결.
+- 상호작용 자동 테스트 도구(`tests/`) 도입 + 대화 시스템의 "닫는 즉시
+  재시작" 버그 발견/수정. 파이프라인 테스트 오른쪽 벽 좌우반전 버그 수정.
+- 대화 시스템(`DialogueSystem` 오토로드 + NPC 컴포넌트) 구현, 챕터 1
+  툇마루에 테스트용 그림자 NPC 배치.
+- 외부 에셋 팩(elf_girl_test) 파이프라인 검증: TileSet 코드 조립,
+  `pipeline_test.tscn`에서 타일+8방향 캐릭터 그리드 이동 확인.
+- `.git` 재초기화(사람이 직접 삭제했다고 확인, 이전 이력 복구 안 됨),
+  `docs/scenario/` 외부 시놉시스 인박스 워크플로 CLAUDE.md에 기록.
+- 시놉시스 대개정 반영: DESIGN.md §2(진상) 전면 재작성 (리신 중독 사망
+  원인 폐기 → 계모/익사/빨간 연필 금기 구조로 교체).
+- 캐릭터 도트 스프라이트 절차적 생성 v1~v7 반복 (등신비/셰이프 피드백
+  반영) 후 이 접근 자체를 중단하기로 결정.
+- 낮잠→꿈 전환 구현: `InteractTrigger`/`FadeOverlay` 재사용 컴포넌트,
+  `chapter1_real.tscn`↔`chapter1_dream.tscn` 왕복 구조.
+- `chapter1_real.tscn` 그레이박스 + 그리드 이동 플레이어 스크립트, QA
+  캡처 파이프라인의 `add_child()` 타이밍 버그 수정.
 
 ---
 
@@ -99,6 +104,8 @@
 
 - [ ] `qa/run_qa.sh` 실행 결과가 성공(exit 0)이고 PNG가 실제로 갱신되었는가?
 - [ ] 생성된 PNG를 직접 확인했는가? (파일 존재만으로 완료 판단 금지)
+- [ ] 입력에 반응하는 상호작용을 새로 만들었다면 `tests/`에 자동 검증을
+      추가했는가? (정적 스크린샷만으로는 키 입력 반응을 검증 못 함)
 - [ ] `docs/feedback/INBOX.md`의 지시를 모두 반영했는가, 반영 못했다면 이유를 남겼는가?
 - [ ] 위 "완료 기록"에 이번 이터레이션에서 한 일을 한두 줄로 추가했는가?
 - [ ] "다음 할 일 큐"를 다음 세션 기준으로 다시 정리했는가?
