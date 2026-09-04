@@ -10,12 +10,16 @@
 | `Cute_Yui.png` | 98×266 | 이름 붙은 캐릭터 하나("Yui") — 동물 귀 달린 후드를 쓴 아이, 여러 포즈/걷기 프레임. 정확한 프레임 격자(칸 크기)는 아직 확인 안 함 |
 | `femaleIdle.png` | 192×64 | 분홍/빨강 곱슬머리 여자아이, 3프레임(64×64씩) 대기(idle) 애니메이션 |
 
+## 라이선스
+
+`assets/tiles/main/`(AnisAous 팩)과 같은 출처에서 받은 보너스 자료로 확인됨
+(사람 확인, 2026-09-04) — 동일한 라이선스 적용:
+[assets/THIRD_PARTY_LICENSES/main_tileset_pack/LICENSE.txt](../../THIRD_PARTY_LICENSES/main_tileset_pack/LICENSE.txt)
+(개인 용도 무료, 상업적 사용은 $4.50 이상 후원 필요, 수정 가능, 팩 자체
+재판매/재배포 금지).
+
 ## 주의
 
-- **출처/라이선스 불명**: 이 압축 파일에는 라이선스 파일이 같이 들어있지
-  않았다. `assets/tiles/main/`(AnisAous 팩)과 같은 곳에서 받은 보너스인지,
-  다른 출처인지 확인 필요 — 확인되면
-  `assets/THIRD_PARTY_LICENSES/`에 기록할 것. **확인 전까지 상업적 사용 X.**
 - 아직 실제 씬에 연결하지 않음. 캐릭터 디자인은 DESIGN.md의 최종 주인공
   디자인(흰 원피스, 10살 전후 한국인 여아)과 다르므로, 그대로 주인공으로
   쓰기보다는 NPC/참고용으로 검토.
