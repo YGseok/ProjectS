@@ -1,0 +1,2 @@
+- [ProjectD loop ops](project_projectd_loop_ops.md) — Godot autonomous loop: Godot path, trust/winpty fix, sleep-hang timeout fix, off-screen QA window fix
+- [ProjectD loop cycle cleanup](feedback_projectd_loop_cycle_cleanup.md) — on loop restart (new iter_1), analyze+report+delete prior cycle's logs

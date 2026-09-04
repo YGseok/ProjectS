@@ -1,0 +1,28 @@
+---
+name: project-projectd-loop-ops
+description: "Operational facts about D:\\Claude\\ProjectD's autonomous Godot dev loop — environment quirks and fixes, not derivable from the code alone."
+metadata: 
+  node_type: memory
+  type: project
+  originSessionId: 08652cec-13b7-48ef-866d-b76e8abb51e2
+  modified: 2026-09-02T06:59:39.651Z
+---
+
+`D:\Claude\ProjectD` is a Godot 4.x roguelike (dice-building combat) being developed by an autonomous headless loop: `Util/loop/loop.sh` repeatedly runs `claude -p` with a fixed prompt, each iteration picking one task off `docs/STATUS.md`'s queue, verifying visually via `scripts/qa_shot.sh`, then committing. `D:\Claude\ProjectS` (this session's cwd) is an unrelated separate project/kit — do not conflate the two.
+
+**Root layout (as of the 2026-09-02 reorg, commit `ca70f90`)**: `docs/` (design+STATUS+feedback/INBOX.md), `qa_out/` (QA screenshots), `code/` (scenes/systems/dice/qa — includes `code/qa/visual_qa.gd`), `resources/materials/`, `Util/loop/` (the headless loop: `loop.sh`, `logs/`, `STOP`). `scripts/qa_shot.sh` stays at the project root as a deliberate exception, because `.claude/settings.json`'s permission allowlist references that path literally and the loop agent couldn't self-edit `.claude/settings.json` to update it (Claude Code appears to gate edits to its own settings file regardless of the Write/Edit allowlist — a built-in guard against self-granted permissions). If moving `scripts/qa_shot.sh` is wanted later, `.claude/settings.json`'s allow-list entries need a human (or an explicitly-approved edit) to update in step.
+
+**Environment facts (2026-09):**
+- Godot binary lives at `D:\Godot\Godot_v4.7.2-stable_win64.exe` (moved there from Downloads). Pass via `GODOT_BIN` env var.
+- Workspace trust for ProjectD was granted via `winpty claude` (plain `claude` in Git Bash/MinTTY doesn't get a real TTY and errors out demanding `--print` input — MinTTY-specific Node/Bun TTY-detection gotcha; `winpty` fixes it).
+- `.claude/settings.json` in ProjectD holds a scoped permission allowlist (Write/Edit + specific Bash prefixes) plus `env.GODOT_BIN` — the user chose this over `--dangerously-skip-permissions`.
+
+**Known failure modes and fixes:**
+- **Sleep mode silently hangs an iteration.** The `claude -p` process survives sleep (doesn't crash/exit) but its network connection dies with no timeout, so it hangs indefinitely — looks alive in `ps aux` but produces zero output/commits for hours. Fixed by wrapping the loop's `claude -p` call in `timeout -k 30 "$ITER_TIMEOUT" claude -p ...` in `Util/loop/loop.sh` (added 2026-09-02).
+  - **`ITER_TIMEOUT` default was raised from 900s to 1800s (30 min) on 2026-09-02** after a real (non-hung) iteration doing a large multi-file reorg + 10+ QA screenshot re-verifications got killed mid-task at the 900s mark, right before it would have committed. `claude -p`'s plain-text output mode prints nothing until the whole turn finishes, so an empty log for N minutes is not by itself evidence of a hang — it looks identical whether the session is dead or just doing a lot of silent tool-call work. Check for corroborating signal (files changed under the project during the stall window, e.g. `find <repo> -newermt "<start>" ! -newermt "<now>"`) before assuming "hung" vs "just slow."
+- **A stuck/killed iteration can leave silent partial file writes on disk** even though its log is empty — tool calls persist regardless of whether the session ever printed final text. The next iteration usually discovers and commits the orphaned work (seen twice: iter_7→iter_8 on 09-01, and the 1800s-timeout case above on 09-02).
+- **QA screenshots pop a real foreground window** (`scripts/qa_shot.sh` intentionally avoids `--headless` because this project's SubViewport-based 2D+3D hybrid rendering doesn't render correctly headless). Fixed by moving the window off-screen (`get_window().position = Vector2i(-4000, -4000)`) in `code/qa/visual_qa.gd` (path as of the 09-02 reorg; was `qa/visual_qa.gd` before) only when QA mode is active — verified byte-identical screenshot output vs on-screen capture, zero rendering impact.
+- The loop's own agent can regress infra fixes without realizing it (e.g. iter_13 silently reintroduced a Windows `DISPLAY`-check bug in `scripts/qa_shot.sh` while adding an unrelated feature). Worth spot-checking infra scripts occasionally.
+- **A running loop.sh instance breaks silently if its own directory gets moved while it's alive.** `SCRIPT_DIR`/`LOG_DIR`/`STOP_FILE` are computed once at startup; the 2026-09-02 reorg (which moved `loop/` → `Util/loop/`, done BY an iteration while the outer loop.sh process was still running from the old path) left the running process writing log-file redirections into a now-nonexistent directory — every iteration failed before `claude` even launched, no log ever got written (old or new location), and it silently retried every ~2s forever with zero visible signal (caught only by noticing a recurring `sleep` process in `ps aux`). Fixed (commit `3759007`) by adding a per-iteration check in `loop.sh`'s while-loop (`[[ ! -d "$SCRIPT_DIR" ]] || [[ ! -f "${BASH_SOURCE[0]}" ]]`) that now prints a loud error and exits instead of retrying blind. **Operational implication**: whenever `Util/loop/` (or its parent chain) gets moved/renamed while a loop.sh process is running, that instance must be killed and restarted from the new location — it won't self-heal, it'll just exit cleanly now (post-fix) instead of spinning silently (pre-fix behavior).
+
+See [[feedback_projectd_loop_cycle_cleanup]] for the standing log-cleanup workflow tied to this loop.
