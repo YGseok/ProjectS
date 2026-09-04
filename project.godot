@@ -11,6 +11,10 @@ config/name="ProjectS"
 run/main_scene="res://scenes/chapter1_real.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 
+[autoload]
+
+DialogueSystem="*res://scenes/common/DialogueSystem.tscn"
+
 [display]
 
 window/size/viewport_width=1280

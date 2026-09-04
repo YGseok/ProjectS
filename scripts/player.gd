@@ -8,6 +8,8 @@ const MOVE_SPEED := TILE_SIZE / TILE_MOVE_SECONDS
 
 @export var play_area: Rect2 = Rect2(0.0, 0.0, 1280.0, 720.0)
 
+var facing := Vector2.DOWN
+
 var _target_position: Vector2
 var _moving := false
 
@@ -21,6 +23,9 @@ func _process(delta: float) -> void:
 		if position.is_equal_approx(_target_position):
 			position = _target_position
 			_moving = false
+		return
+
+	if DialogueSystem.is_active():
 		return
 
 	var dir := Vector2.ZERO
@@ -40,6 +45,7 @@ func _process(delta: float) -> void:
 	if not play_area.has_point(next_position):
 		return
 
+	facing = dir
 	$FacingIndicator.position = dir * (TILE_SIZE * 0.5)
 	_target_position = next_position
 	_moving = true

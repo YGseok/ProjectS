@@ -1,0 +1,39 @@
+[gd_scene load_steps=4 format=3 uid="uid://dialogue_system_scene"]
+
+[ext_resource type="Script" path="res://scripts/dialogue_system.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_box"]
+bg_color = Color(0.05, 0.05, 0.07, 0.88)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 0.8, 0.75, 0.6)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="LabelSettings" id="LabelSettings_dialogue"]
+font_size = 22
+font_color = Color(0.95, 0.95, 0.92, 1)
+
+[node name="DialogueSystem" type="CanvasLayer" groups=["dialogue_system"]]
+layer = 50
+script = ExtResource("1_script")
+
+[node name="Panel" type="Panel" parent="."]
+offset_left = 40.0
+offset_top = 560.0
+offset_right = 1240.0
+offset_bottom = 700.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_box")
+
+[node name="Label" type="Label" parent="Panel"]
+offset_left = 24.0
+offset_top = 16.0
+offset_right = 1176.0
+offset_bottom = 124.0
+autowrap_mode = 3
+label_settings = SubResource("LabelSettings_dialogue")
+text = ""

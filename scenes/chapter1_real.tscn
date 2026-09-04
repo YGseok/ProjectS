@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
 [ext_resource type="PackedScene" path="res://scenes/common/FadeOverlay.tscn" id="2_fade"]
 [ext_resource type="PackedScene" path="res://scenes/common/InteractTrigger.tscn" id="3_trigger"]
+[ext_resource type="PackedScene" path="res://scenes/common/ShadowNPC.tscn" id="4_shadow_npc"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 18
@@ -112,6 +113,17 @@ offset_right = 4.0
 offset_bottom = 4.0
 position = Vector2(0, 16)
 color = Color(0.05, 0.05, 0.05, 0.8)
+
+[node name="ShadowNPC" parent="." instance=ExtResource("4_shadow_npc")]
+position = Vector2(704, 160)
+
+[node name="ShadowNPCLabel" type="Label" parent="."]
+offset_left = 660.0
+offset_top = 96.0
+offset_right = 900.0
+offset_bottom = 120.0
+text = "그림자 NPC (대화 테스트용, 가까이서 Enter)"
+label_settings = SubResource("LabelSettings_zone")
 
 [node name="NapTrigger" parent="." instance=ExtResource("3_trigger")]
 position = Vector2(608, 160)

@@ -13,12 +13,13 @@ func _ready() -> void:
 		set_cell(Vector2i(c, 0), 1, Vector2i(0, 0))
 	set_cell(Vector2i(COLS - 1, 0), 3, Vector2i(0, 0))
 
-	# 중간 (좌우 벽 + 바닥)
+	# 중간 (좌우 벽 + 바닥) — 오른쪽 벽은 wall_vertical.png이 한쪽 면만
+	# 그려져 있어 좌우반전(FLIP_H)해서 사용한다.
 	for r in range(1, ROWS - 1):
 		set_cell(Vector2i(0, r), 5, Vector2i(0, 0))
 		for c in range(1, COLS - 1):
 			set_cell(Vector2i(c, r), 0, Vector2i(0, 0))
-		set_cell(Vector2i(COLS - 1, r), 5, Vector2i(0, 0))
+		set_cell(Vector2i(COLS - 1, r), 5, Vector2i(0, 0), TileSetAtlasSource.TRANSFORM_FLIP_H)
 
 	# 아래쪽 벽
 	for c in range(0, COLS):
