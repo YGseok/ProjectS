@@ -1,7 +1,7 @@
 extends CanvasLayer
 ## 씬 전환용 검은 페이드. 씬 시작 시 검은 화면에서 자동으로 밝아지고,
 ## fade_to_scene() 호출 시 어두워진 뒤 다음 씬으로 전환한다.
-## "감각이 하나씩 지워진다"(DESIGN.md §3) 연출의 최소 구현 — 사운드는 §8 미정.
+## "감각이 하나씩 지워진다"(DESIGN.md §4) 연출의 최소 구현 — 사운드는 §9 미정.
 
 @onready var _rect: ColorRect = $FadeRect
 
