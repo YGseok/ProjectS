@@ -22,6 +22,13 @@
   `assets/THIRD_PARTY_LICENSES/main_tileset_pack/LICENSE.txt`): 개인 용도
   무료, **상업적 사용은 $4.50 이상 후원 필요**(아직 후원 여부 미확인 —
   상업 출시 전 확인할 것), 수정 가능, 팩 자체 재판매/재배포는 금지.
+- **보너스 팩 확보**(2026-09-04): `assets/Bonus.rar`(RAR라 압축 해제용
+  7-Zip을 winget으로 설치해서 풀었음)를 `assets/sprites/characters/
+  bonus_pack/`(캐릭터 3종: Bonus.png 잡다한 스프라이트 모음, Cute_Yui.png,
+  femaleIdle.png)와 `assets/props/bonus_pack/`(Door1.png 8프레임 문 열림
+  애니메이션 — 호러 연출용, RejectedAssets1.png 괘종시계)로 정리. 각 폴더
+  README 참고. **라이선스 정보 없음** — 메인 타일셋 팩과 같은 출처인지
+  사람이 확인해야 하고, 확인 전까지 상업적 사용 금지.
 - **스토리 진상 대개정**(2026-09-04): `docs/scenario/2026-09-04.md`를 받아
   `docs/DESIGN.md` §2를 다시 씀 — 리신 중독/목격 설정 등 기존 사망 원인은
   **폐기**, 계모와의 몸싸움 중 익사·빨간 연필 금기·필통·일기 중심의 새

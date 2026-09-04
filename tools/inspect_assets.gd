@@ -3,13 +3,11 @@ extends SceneTree
 
 func _initialize() -> void:
 	var paths := [
-		"res://assets/tiles/main/A4.png",
-		"res://assets/tiles/main/A5.png",
-		"res://assets/tiles/main/Outside.png",
-		"res://assets/tiles/main/Inside_C.png",
-		"res://assets/tiles/main/Inside_C_2.png",
-		"res://assets/tiles/main/Inside_D.png",
-		"res://assets/tiles/main/Inside_E.png",
+		"res://assets/sprites/characters/bonus_pack/Bonus.png",
+		"res://assets/sprites/characters/bonus_pack/Cute_Yui.png",
+		"res://assets/sprites/characters/bonus_pack/femaleIdle.png",
+		"res://assets/props/bonus_pack/Door1.png",
+		"res://assets/props/bonus_pack/RejectedAssets1.png",
 	]
 	for p in paths:
 		var img := Image.load_from_file(ProjectSettings.globalize_path(p))
