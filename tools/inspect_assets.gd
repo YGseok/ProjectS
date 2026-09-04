@@ -3,21 +3,13 @@ extends SceneTree
 
 func _initialize() -> void:
 	var paths := [
-		"res://assets/sprites/characters/elf_girl_test/elf girl 8 direction sprite sheet.png",
-		"res://assets/sprites/characters/elf_girl_test/elf girl current animations1.png",
-		"res://assets/tiles/interior_test/walls/wall_straight.png",
-		"res://assets/tiles/interior_test/walls/wall_corner_tl.png",
-		"res://assets/tiles/interior_test/walls/wall_corner_tr.png",
-		"res://assets/tiles/interior_test/walls/wall_bottom.png",
-		"res://assets/tiles/interior_test/walls/wall_vertical.png",
-		"res://assets/tiles/interior_test/walls/wall_shadow.png",
-		"res://assets/tiles/interior_test/floors/floor_carpet.png",
-		"res://assets/tiles/interior_test/floors/floor_wood_plank.png",
-		"res://assets/tiles/interior_test/dual_grid/dual_full.png",
-		"res://assets/tiles/interior_test/dual_grid/dual_edge.png",
-		"res://assets/tiles/interior_test/dual_grid/dual_inner.png",
-		"res://assets/tiles/interior_test/dual_grid/dual_outer.png",
-		"res://assets/tiles/interior_test/dual_grid/dual_diagonal.png",
+		"res://assets/tiles/main/A4.png",
+		"res://assets/tiles/main/A5.png",
+		"res://assets/tiles/main/Outside.png",
+		"res://assets/tiles/main/Inside_C.png",
+		"res://assets/tiles/main/Inside_C_2.png",
+		"res://assets/tiles/main/Inside_D.png",
+		"res://assets/tiles/main/Inside_E.png",
 	]
 	for p in paths:
 		var img := Image.load_from_file(ProjectSettings.globalize_path(p))
