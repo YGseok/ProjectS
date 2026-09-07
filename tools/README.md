@@ -1,7 +1,17 @@
-# tools/ — 헤드리스 Godot 일회성 스크립트 모음
+# tools/ — Godot 일회성 스크립트 모음
 
-전부 `SceneTree`를 상속하고 `godot4 --headless --script res://tools/<파일> --path <project>`
+대부분 `SceneTree`를 상속하고 `godot4 --headless --script res://tools/<파일> --path <project>`
 로 실행하는 일회성 도구다. 게임 코드가 아니라 에셋 준비/점검용.
+
+예외로 `verify_occlusion.gd`처럼 실제 렌더링 픽셀을 캡처해야 하는 도구는
+`--headless` 없이 창모드로 실행해야 한다 (헤드리스는 더미 렌더러라
+`get_texture().get_image()`가 null). **창모드에서 실행할 때는 반드시
+`--script` 플래그를 명시할 것** — `godot4 --path <project> res://tools/x.gd`
+처럼 스크립트 경로를 위치 인자로만 주면(플래그 없이) 조용히 아무 로직도
+실행하지 않고 바로 종료해버리는 경우가 있었다(정상 종료 코드 0, 로그도
+전혀 안 남음 — 스크립트가 아예 실행 안 됐다는 신호). 또한 창모드 stdout이
+안정적으로 안 잡힐 때가 있어서, 이런 스크립트는 `res://qa/output/`에
+자체 로그 파일도 같이 남기는 패턴을 쓴다(`verify_occlusion.gd` 참고).
 
 `--script` 모드에서는 프로젝트 오토로드(예: `DialogueSystem`)가 **전역
 식별자로 컴파일이 안 된다**(`Identifier not found` 오류) — 필요하면
@@ -19,6 +29,7 @@
 | `crop_outside_props.gd` | `assets/tiles/main/Outside.png`(불규칙 크기 자연 오브젝트 시트)에서 나무/덤불 등을 손으로 지정한 사각형으로 잘라 `assets/props/nature/`에 저장 | 재사용 중, 새 오브젝트를 더 자르려면 `_crops` 딕셔너리에 좌표 추가 후 재실행. 결과 좌표는 `assets/props/nature/README.md`에 기록됨 |
 | `upscale_preview.gd` | 작은 도트 이미지를 최근접 보간으로 확대 저장 (컨펌용 미리보기) | `gen_player_sprite.gd`와 짝, 아래 참고 |
 | `gen_player_sprite.gd` | 주인공 캐릭터 도트 스프라이트를 절차적(원/사각형 조합)으로 그려서 PNG 저장 | **중단됨** — 진짜 이미지 생성이 아니라 도형 조합이라 한계가 있어 v7까지 반복하다 접음 (STATUS.md 2026-09-04 참고). 캐릭터 아트는 외부 에셋으로 대체 예정. 코드는 도트 그리기 기법 참고용으로만 남겨둠 |
+| `verify_occlusion.gd` | 플레이어를 나무 캐노피/밑둥 뒤로 이동시킨 뒤 실제 창을 캡처해서 오클루전 반투명 리빌 셰이더가 시각적으로 동작하는지 확인 (`res://qa/output/occlusion_check.png` + `occlusion_log.txt`). **창모드 전용**(헤드리스 불가), 실행 시 `--script` 플래그 필수 | 재사용 중 — 나무 오클루전 확인용으로 작성했지만 건물/원두막 지붕 등 다른 오브젝트 검증에도 좌표만 바꿔서 재사용 가능 |
 
 ## 새 도구를 추가할 때
 

@@ -12,10 +12,12 @@ var facing := Vector2.DOWN
 
 var _target_position: Vector2
 var _moving := false
+var _collision_map: Node
 
 func _ready() -> void:
 	add_to_group("player")
 	_target_position = position
+	_collision_map = get_tree().get_first_node_in_group("collision_map")
 
 func _process(delta: float) -> void:
 	if _moving:
@@ -43,6 +45,10 @@ func _process(delta: float) -> void:
 
 	var next_position := position + dir * TILE_SIZE
 	if not play_area.has_point(next_position):
+		return
+	if _collision_map and _collision_map.is_blocked(next_position):
+		facing = dir
+		$FacingIndicator.position = dir * (TILE_SIZE * 0.5)
 		return
 
 	facing = dir

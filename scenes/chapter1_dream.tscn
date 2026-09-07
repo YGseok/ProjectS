@@ -8,6 +8,9 @@
 [ext_resource type="Texture2D" path="res://assets/props/nature/tree_green.png" id="6_tree_green"]
 [ext_resource type="Texture2D" path="res://assets/props/nature/tree_small.png" id="7_tree_small"]
 [ext_resource type="Texture2D" path="res://assets/props/nature/bush_berry.png" id="8_bush_berry"]
+[ext_resource type="Script" path="res://scripts/collision_map.gd" id="9_collision_map"]
+[ext_resource type="Shader" path="res://shaders/occlusion_reveal.gdshader" id="10_reveal_shader"]
+[ext_resource type="Script" path="res://scripts/occlusion_reveal_manager.gd" id="11_reveal_manager"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 18
@@ -16,6 +19,9 @@ font_color = Color(0.95, 0.95, 0.9, 0.85)
 [sub_resource type="LabelSettings" id="LabelSettings_zone"]
 font_size = 16
 font_color = Color(1, 1, 1, 0.55)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_reveal"]
+shader = ExtResource("10_reveal_shader")
 
 [node name="Chapter1Dream" type="Node2D"]
 
@@ -69,23 +75,37 @@ offset_bottom = 576.0
 mouse_filter = 2
 color = Color(0.3, 0.28, 0.3, 0.3)
 
-[node name="TreeGreen" type="Sprite2D" parent="."]
+[node name="CollisionMap" type="Node2D" parent="."]
+script = ExtResource("9_collision_map")
+blocked_rects = Array[Rect2]([Rect2(160, 0, 960, 128), Rect2(832, 352, 288, 64), Rect2(672, 448, 32, 32), Rect2(96, 640, 32, 32), Rect2(1120, 640, 32, 32)])
+
+[node name="OcclusionRevealManager" type="Node" parent="."]
+script = ExtResource("11_reveal_manager")
+shader_material = SubResource("ShaderMaterial_reveal")
+
+[node name="YSortObjects" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="TreeGreen" type="Sprite2D" parent="YSortObjects"]
 position = Vector2(700, 470)
 texture = ExtResource("6_tree_green")
+material = SubResource("ShaderMaterial_reveal")
 centered = false
 offset = Vector2(-70, -215)
 modulate = Color(0.55, 0.5, 0.55, 1)
 
-[node name="TreeSmall" type="Sprite2D" parent="."]
+[node name="TreeSmall" type="Sprite2D" parent="YSortObjects"]
 position = Vector2(100, 660)
 texture = ExtResource("7_tree_small")
+material = SubResource("ShaderMaterial_reveal")
 centered = false
 offset = Vector2(-75, -165)
 modulate = Color(0.55, 0.5, 0.55, 1)
 
-[node name="BushBerry" type="Sprite2D" parent="."]
+[node name="BushBerry" type="Sprite2D" parent="YSortObjects"]
 position = Vector2(1150, 660)
 texture = ExtResource("8_bush_berry")
+material = SubResource("ShaderMaterial_reveal")
 centered = false
 offset = Vector2(-70, -170)
 modulate = Color(0.6, 0.4, 0.4, 1)
@@ -138,18 +158,18 @@ offset_bottom = 416.0
 text = "원두막"
 label_settings = SubResource("LabelSettings_zone")
 
-[node name="Player" type="Node2D" parent="."]
+[node name="Player" type="Node2D" parent="YSortObjects"]
 position = Vector2(608, 160)
 script = ExtResource("1_player")
 
-[node name="Sprite" type="ColorRect" parent="Player"]
+[node name="Sprite" type="ColorRect" parent="YSortObjects/Player"]
 offset_left = -14.0
 offset_top = -14.0
 offset_right = 14.0
 offset_bottom = 14.0
 color = Color(0.25, 0.55, 0.85, 1)
 
-[node name="FacingIndicator" type="ColorRect" parent="Player"]
+[node name="FacingIndicator" type="ColorRect" parent="YSortObjects/Player"]
 offset_left = -4.0
 offset_top = -4.0
 offset_right = 4.0

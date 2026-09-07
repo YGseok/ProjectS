@@ -1,6 +1,12 @@
 extends SceneTree
 ## 자동 상호작용 테스트 — 플레이어가 play_area 경계 밖으로 나가지 못하는지
 ## 검증한다 (player.gd의 next_position/play_area.has_point 체크).
+##
+## 왼쪽(화면 x=0)으로 경계를 확인한다 — 위쪽은 이제 기와집 벽 콜리전이
+## y=128 자리에 있어서 화면 경계(y=0)보다 먼저 막히므로, "월드 경계"와
+## "오브젝트 콜리전"을 섞지 않기 위해 콜리전이 없는 왼쪽 방향을 쓴다.
+## 콜리전 자체는 test_collision_map.gd에서 따로 검증한다.
+##
 ## 실행: godot4 --headless --script res://tests/test_movement_bounds.gd --path <project>
 
 var _player: Node2D
@@ -17,21 +23,21 @@ func _initialize() -> void:
 		_finish()
 		return
 
-	# 시작 위치 (608,160) 에서 위로 5칸(160/32) 이동하면 y=0 (경계)에 도달
-	for i in range(5):
-		await _move_one_tile("ui_up")
-	_assert(_player.position.is_equal_approx(Vector2(608, 0)),
-		"위로 5칸 이동 후 (608,0), 실제: %s" % [_player.position])
+	# 시작 위치 (608,160) 에서 왼쪽으로 19칸(608/32) 이동하면 x=0 (경계)에 도달
+	for i in range(19):
+		await _move_one_tile("ui_left")
+	_assert(_player.position.is_equal_approx(Vector2(0, 160)),
+		"왼쪽으로 19칸 이동 후 (0,160), 실제: %s" % [_player.position])
 
-	# 경계에서 한 번 더 위로 누르면 화면 밖(y=-32)으로 못 나가고 그대로여야 함
-	await _move_one_tile("ui_up")
-	_assert(_player.position.is_equal_approx(Vector2(608, 0)),
-		"경계에서 추가로 위로 눌러도 그대로 (608,0), 실제: %s" % [_player.position])
+	# 경계에서 한 번 더 왼쪽으로 누르면 화면 밖(x=-32)으로 못 나가고 그대로여야 함
+	await _move_one_tile("ui_left")
+	_assert(_player.position.is_equal_approx(Vector2(0, 160)),
+		"경계에서 추가로 왼쪽으로 눌러도 그대로 (0,160), 실제: %s" % [_player.position])
 
-	# 아래로 다시 이동은 정상 작동해야 함 (경계 로직이 이동 자체를 막은 게 아님을 확인)
-	await _move_one_tile("ui_down")
-	_assert(_player.position.is_equal_approx(Vector2(608, 32)),
-		"경계 이후 아래로 이동은 정상, 실제: %s" % [_player.position])
+	# 오른쪽으로 다시 이동은 정상 작동해야 함 (경계 로직이 이동 자체를 막은 게 아님을 확인)
+	await _move_one_tile("ui_right")
+	_assert(_player.position.is_equal_approx(Vector2(32, 160)),
+		"경계 이후 오른쪽으로 이동은 정상, 실제: %s" % [_player.position])
 
 	_finish()
 

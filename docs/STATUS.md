@@ -84,6 +84,15 @@
   아님). 낮잠→꿈 전환은 왕복 가능하지만 `chapter1_dream.tscn`의 각성
   트리거는 여전히 **임시** (Enter만 누르면 각성 — 진짜 메인 퍼즐로 교체 전,
   §7.1 재구성 대기 중).
+- **이동 콜리전 + 오클루전 리빌 구현 완료**(사람 피드백, 2026-09-07):
+  `scripts/collision_map.gd`(구역별 `Rect2` 목록, 32px 그리드 정렬 필수)로
+  벽/나무 밑둥을 실제로 막음. 나무/덤불은 `YSortObjects`(Node2D,
+  `y_sort_enabled=true`) 안에 플레이어와 함께 두고 `shaders/
+  occlusion_reveal.gdshader`(공유 `ShaderMaterial`)를 붙여서, 플레이어가
+  나무 뒤로 가면 나무가 앞에 그려지되 플레이어 주변 원형 범위만 반투명
+  (`reveal_min_alpha=0.35`)해져 비쳐 보이게 함. **원두막 지붕은 아직
+  평평한 `ColorRect` 오버레이 + 콜리전일 뿐 이 리빌 처리 대상이
+  아님** — "나무 뒤"만 다뤘고 "건물 뒤"는 미완성 상태로 사람에게 알릴 것.
 
 ## 2. 다음 할 일 큐 (우선순위 순, 위가 먼저)
 
@@ -130,6 +139,62 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- **이동 콜리전 + 오클루전 리빌(사람 피드백 2/3번, 2026-09-07)**:
+  - **콜리전**: `scripts/collision_map.gd` 신설(`blocked_rects: Array[Rect2]`,
+    `is_blocked(pos)`), `chapter1_real.tscn`/`chapter1_dream.tscn`에 벽·
+    원두막 지붕·나무 밑둥 3그루 자리를 막는 `CollisionMap` 노드 추가.
+    `player.gd`가 이동 전 `_collision_map.is_blocked(next_position)`을
+    체크해서 막히면 `facing`만 갱신하고 이동은 취소. **함정**: 플레이어
+    이동이 항상 32px 그리드에 정렬되므로(시작 위치 (608,160) 자체가
+    32의 배수) 콜리전 사각형도 반드시 32px 격자에 맞춰야 함 — 처음
+    나무 밑둥에 `Rect2(686,462,28,16)`처럼 격자에 안 맞는 사각형을 썼다가
+    어떤 도달 가능한 좌표와도 안 겹쳐서 전혀 작동 안 했음. 32×32 셀
+    단위(`Rect2(672,448,32,32)` 등)로 고쳐서 해결. 이 과정에서
+    `test_movement_bounds.gd`가 실패했는데 이는 회귀가 아니라 새로 추가된
+    벽 콜리전이 의도대로 작동한 결과(기존엔 위쪽 화면 끝(y=0)까지 뚫려
+    있었는데 이제 벽(y=128)에서 막힘) — 테스트를 콜리전이 없는 왼쪽 경계
+    체크로 바꿔서 재작성. 전용 회귀 테스트 `tests/test_collision_map.gd`
+    신설(벽/나무 밑둥 막힘 + 옆 칸은 정상 통과 검증).
+  - **오클루전 리빌**: `shaders/occlusion_reveal.gdshader`(canvas_item,
+    `reveal_center` 기준 원형 `smoothstep` 반투명 구멍) +
+    `scripts/occlusion_reveal_manager.gd`(매 프레임 플레이어
+    `global_position`을 셰이더 유니폼에 반영)를 신설. 나무/덤불
+    Sprite2D 3종에 공유 `ShaderMaterial`을 붙이고, 플레이어와 나무를
+    같은 `YSortObjects`(`y_sort_enabled=true`) 밑에 둬서 Y좌표가 큰
+    쪽(더 아래)이 그려지는 순서로 자연스러운 앞뒤 관계를 만듦.
+    **버그 발견/수정**: `OcclusionRevealManager` 노드가 씬 트리 안에서
+    `YSortObjects/Player`보다 먼저 나오는 바람에, 매니저의 `_ready()`가
+    `get_first_node_in_group("player")`를 호출하는 시점에 플레이어가
+    아직 `add_to_group("player")`를 안 한 상태라 `_player`가 계속
+    `null`로 고정 — 리빌 유니폼이 화면 밖 기본값에 박혀서 나무가
+    플레이어를 완전히 가리기만 하고 반투명 효과가 전혀 안 먹혔음.
+    `_ready()`가 아니라 `_process()`에서 `_player`가 null일 때마다
+    다시 찾도록 고쳐서 노드 순서에 의존하지 않게 함(같은 종류의 순서
+    의존 버그가 이 세션에 또 있었음 — Y-sort 재배치 때 `parent=` 경로가
+    깨진 것과 유사한 패턴). 실제 창을 띄워 캡처한
+    `qa/output/occlusion_check.png`에서 플레이어를 나무 밑둥 위치로
+    이동시킨 뒤 해당 픽셀을 직접 읽어 수정 전/후 대조:
+    수정 전 `(0.4745, 0.2902, 0.2745)`(순수 나무 색, 플레이어 완전히
+    안 보임) → 수정 후 `(0.3294, 0.4588, 0.651)`(나무색+플레이어 파란색
+    블렌드, 반투명하게 비쳐 보임) — 의도한 효과 확인됨.
+  - **도구 관련 함정 기록**: `tools/verify_occlusion.gd`(실제 창을 띄워
+    스크린샷을 찍는 검증 도구, 헤드리스 불가)를 `--script` 플래그 없이
+    `godot4 --path <project> res://tools/verify_occlusion.gd` 형태로
+    실행하면 **조용히 아무 로직도 안 돌고 종료 코드 0으로 바로
+    끝나버림**(로그도 전혀 안 남음) — 위치 인자만으로는 스크립트가
+    메인 루프로 안 잡히는 것으로 보임. 창모드로 SceneTree 스크립트를
+    돌릴 때도 `--script res://...`를 반드시 명시할 것. 또한 창모드
+    stdout이 안정적으로 안 잡히는 경우가 있어(원인 불명 — 재현이
+    간헐적) `verify_occlusion.gd`는 `res://qa/output/occlusion_log.txt`에
+    자체 로그도 남기도록 보강함. 남은 재사용 도구는 `tools/README.md`에
+    기록.
+  - 캡처/테스트 순서상 프로젝트 임포트 큐가 밀려 있으면(예: 방금 찍은
+    QA 스크린샷이 재임포트 대상으로 잡혀 있는 상태) 창모드 실행이 임포트
+    처리 때문에 몇 분씩 멎어있는 것처럼 보일 수 있음 — 의심되면
+    `godot4 --headless --editor --quit-after 60 --path <project>`로
+    먼저 임포트를 비운 뒤 재시도.
+  - 회귀 확인: `tests/run_all.sh` 11종 전부 재통과(`test_collision_map`
+    신설분 포함), `qa/run_qa.sh`로 두 씬 시각 확인.
 - **버그 수정(사람 피드백, 2026-09-07)**: 꿈에서 각성해도 현실 배경이
   원래 색으로 안 돌아오는 문제. 근본 원인은 `TileData.modulate`로 구역별
   색을 칠하던 방식 — `TileData`는 `(source_id, atlas_coords)`마다 딱
