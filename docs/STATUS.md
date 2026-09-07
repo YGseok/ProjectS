@@ -117,6 +117,12 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- `STEP/` 정리: 이미 `assets/tiles/interior_test/`,
+  `assets/sprites/characters/elf_girl_test/` 등으로 추출·정리 끝난
+  `Elf_Girl_Character_and_Interior_Pack_DEMO.zip`을 삭제 (Bonus.rar
+  때와 같은 방식 — 내용은 이미 assets/에 보존돼 있어 손실 없음). 이제
+  `STEP/`엔 예전 그레이박스 스크린샷 사본(`2609011134.png`)만 남음,
+  실행 불필요.
 - 코드 품질 스윕: `scripts/`에 TODO/디버그 잔재 없음, 프로젝트 임포트 시
   경고/에러 없음 확인. 스윕 중 `STEP/`(개인 인박스)에 미정리 상태로 남아
   있던 더 이른 시놉시스 초안(2026-09-01, "주인공/전체 진상 기획 베이스")을
