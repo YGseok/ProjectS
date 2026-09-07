@@ -10,14 +10,16 @@
 ## 1. 지금 위치 (현재 상태 요약)
 
 - **git**: `.git`이 사라졌던 사고 이후 재초기화 완료 (2026-09-02, 이전 이력은
-  복구 안 됨). `origin/master`에 push까지 연결돼 있음. 이 문서 기준 최신
-  커밋은 `6e191b0`.
+  복구 안 됨). `origin/master`에 push까지 연결돼 있음. 정확한 최신 커밋은
+  `git log --oneline -1`로 확인할 것 (이 문서에 특정 해시를 박아두면
+  매번 바로 낡아서 더 이상 안 함).
 - **메인 타일셋 팩 확보**(2026-09-04): `assets/tiles/main/` — RPG Maker
   MV/MZ 스타일 48px 타일 시트(A4=벽/지붕, A5=바닥, Inside_C/C_2/D/E=가구·
   집기, Outside=자연 오브젝트(불규칙 크기, 타일 격자 아님)). 호러 장르에
   맞는 소재(핏자국 바닥 타일 등) 포함. 자세한 파일별 크기/그리드는
-  `assets/tiles/main/README.md` 참고. **아직 Godot TileSet 리소스로
-  조립하거나 실제 씬에 반영하지 않음** — 다음 배경 아트 작업 때 사용.
+  `assets/tiles/main/README.md` 참고. **A4(벽)/A5(바닥) 중 5개 타일은
+  `main_tileset.tres`로 조립해 챕터 1 두 씬에 이미 반영함** (아래 "배경
+  아트 통합" 참고) — Inside_C/D/E, Outside는 아직 미사용.
   **라이선스 확인됨**(작가 AnisAous,
   `assets/THIRD_PARTY_LICENSES/main_tileset_pack/LICENSE.txt`): 개인 용도
   무료, **상업적 사용은 $4.50 이상 후원 필요**(아직 후원 여부 미확인 —
@@ -108,6 +110,10 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- 회귀 스윕: `tests/`의 자동 테스트 4종(대화, 낮잠/각성 왕복, 이동 경계,
+  NPC 방향 체크) 전부 재통과 + QA 시각 캡처 5종(dungeon, chapter1_real,
+  chapter1_dream, pipeline_test, main_tileset_test) 전부 exit 0로 확인.
+  최근 배경 아트 교체 이후 회귀 없음.
 - `tests/test_npc_facing_check.gd` 추가: NPC가 "인접 + 그 방향을 바라볼
   때만" 반응한다는 로직의 부정 케이스(다른 방향 보면 반응 안 함)를
   대조군(다시 바라보면 반응함)과 함께 검증. 기존 대화 테스트는 긍정
