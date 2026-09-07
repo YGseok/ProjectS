@@ -128,3 +128,9 @@ godot4 --headless --script res://tests/test_dialogue_interaction.gd --path .
   (`scripts/dialogue_system.gd`의 `_started_frame`/`_ended_frame`,
   `scripts/npc.gd`의 `just_ended_this_frame()` 참고). 새 상호작용을 만들
   때도 "시작 프레임/종료 프레임"을 추적해서 같은 프레임 재진입을 막을 것.
+- **타입이 안 맞는 배열을 넘기면 조용히 멈춰버린다**: 예를 들어
+  `func f(lines: Array[String])`로 선언된 함수에 그냥 `[]`(타입 없는
+  빈 배열 리터럴)를 넘기면 `SCRIPT ERROR: Invalid type...`가 찍히지만
+  프로세스가 exit 하지 않고 그대로 멈춘다(타임아웃 전까지 응답 없음).
+  깔끔하게 실패하지 않으니 헷갈리기 쉽다 — `var x: Array[String] = []`
+  처럼 변수에 타입을 명시해서 넘길 것.
