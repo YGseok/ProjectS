@@ -23,6 +23,52 @@ font_color = Color(1, 1, 1, 0.55)
 tile_set = ExtResource("4_tileset")
 script = ExtResource("5_background")
 
+[node name="GroundTint" type="ColorRect" parent="."]
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+color = Color(0.35, 0.3, 0.4, 0.35)
+
+[node name="WallTint" type="ColorRect" parent="."]
+offset_left = 160.0
+offset_top = 0.0
+offset_right = 1120.0
+offset_bottom = 128.0
+mouse_filter = 2
+color = Color(0.15, 0.1, 0.1, 0.4)
+
+[node name="PorchTint" type="ColorRect" parent="."]
+offset_left = 160.0
+offset_top = 128.0
+offset_right = 1120.0
+offset_bottom = 192.0
+mouse_filter = 2
+color = Color(0.3, 0.2, 0.15, 0.3)
+
+[node name="FieldTint" type="ColorRect" parent="."]
+offset_left = 192.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 608.0
+mouse_filter = 2
+color = Color(0.7, 0.05, 0.08, 0.55)
+
+[node name="RoofTint" type="ColorRect" parent="."]
+offset_left = 832.0
+offset_top = 352.0
+offset_right = 1120.0
+offset_bottom = 416.0
+mouse_filter = 2
+color = Color(0.35, 0.15, 0.12, 0.35)
+
+[node name="GazeboFloorTint" type="ColorRect" parent="."]
+offset_left = 864.0
+offset_top = 384.0
+offset_right = 1088.0
+offset_bottom = 576.0
+mouse_filter = 2
+color = Color(0.3, 0.28, 0.3, 0.3)
+
 [node name="TreeGreen" type="Sprite2D" parent="."]
 position = Vector2(700, 470)
 texture = ExtResource("6_tree_green")
