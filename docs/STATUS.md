@@ -117,6 +117,12 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- `tests/test_pipeline_character_directions.gd` 추가: `pipeline_test.tscn`
+  캐릭터가 4방향 각각 이동할 때 실제로 해당 방향 텍스처로 바뀌는지 검증
+  (지금까지 QA 스크린샷 한 장(기본 아래쪽 포즈)으로만 확인했고 방향 전환
+  자체는 자동 검증된 적이 없었음). 리포지토리 크기/라이선스 파일 배치도
+  점검 — 문제 없음(.git 2.7MB, 최대 파일 266KB, elf_girl 라이선스도
+  정상 배치됨).
 - `tools/README.md`에 빠져있던 `crop_outside_props.gd` 항목 추가 (만든
   이터레이션에서 표를 안 갱신해서 누락됐던 것 — 재발 방지 메모도 추가).
 - 문서 감사: DESIGN.md §6(DoD 기준)이 이 세션에서 새로 생긴 `tests/`
