@@ -29,13 +29,28 @@ MV/MZ 스타일 타일 시트 (호러 장르 실내/실외 세트 — `Inside_C.
 | `Inside_E.png` | 768×768 | 16×16 | 문/창문/펜스/간판 |
 | `Outside.png` | 646×439 | **불규칙** — 48px 격자에 안 맞음 | 나무/수풀 등 자연 오브젝트. 타일이 아니라 개별 크기가 제각각인 오브젝트 스프라이트 모음이라 잘라 쓸 때 타일 격자 대신 오브젝트 단위로 손으로 잘라야 함 |
 
+## 골라둔 타일 좌표 (2026-09-07, `main_tileset.tres`)
+
+`_grid_reference_A4.png` / `_grid_reference_A5.png`(2배 확대 + 48px 격자선)를
+보면서 좌표를 확인했다. `(열, 행)` = `Vector2i(col, row)`, 0-인덱스, 48px
+기준.
+
+| 용도 | 시트 | 좌표 | 설명 |
+|---|---|---|---|
+| 벽 | A4.png | (2, 10) | 어두운 나무 판벽 |
+| 잔디(마당 기본) | A5.png | (0, 8) | |
+| 붉은 흙(밭) | A5.png | (1, 8) | |
+| 밝은 나무 바닥(툇마루) | A5.png | (0, 5) | |
+| 중간톤 나무 바닥(원두막) | A5.png | (1, 5) | |
+
+`main_tileset.tres`는 `TileSet.tile_size=32`, `texture_region_size=48`로
+만들어져 있어 원본 48px 타일이 게임 그리드(32px, `player.gd`의
+`TILE_SIZE`)에 맞게 자동으로 축소 렌더링된다. 다른 좌표를 더 쓰고
+싶으면 `tools/build_main_tileset.gd`에 좌표를 추가하고 재실행.
+
 ## 아직 안 한 것
 
-- Godot `TileSet` 리소스로 조립 (`tools/build_interior_tileset.gd`가
-  `interior_test` 팩에 쓴 방식 참고 — 다만 이번엔 개별 타일 PNG가 아니라
-  큰 시트라서 `TileSetAtlasSource.texture_region_size`를 48×48로 주고
-  시트 하나를 통째로 슬라이스하는 방식이 더 적합함).
-- 실제 씬(`chapter1_real.tscn` 등)의 그레이박스 색상 블록을 이 타일로
-  교체.
+- 실제 씬(`chapter1_real.tscn`, `chapter1_dream.tscn`)의 그레이박스 색상
+  블록을 이 타일로 교체.
 - 상업적으로 낼 계획이면 위 라이선스에 따라 $4.50 이상 후원 필요 (아직
   후원 여부 미확인 — 사람이 확인할 것).

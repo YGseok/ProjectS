@@ -83,22 +83,35 @@
 
 > INBOX.md에 새 지시가 있으면 이 큐보다 항상 먼저 처리한다.
 
-1. DESIGN.md §7.1(챕터 1 메인 퍼즐) 재구성 여부는 **사람이 Claude.ai에서
+1. `chapter1_real.tscn`의 그레이박스 ColorRect를 `assets/tiles/main/
+   main_tileset.tres`로 교체 (아래 "배경 아트 통합" 참고 — TileSet은
+   준비 완료, 씬 적용이 다음 단계).
+2. `chapter1_dream.tscn`도 동일하게 교체 (꿈 분위기에 맞는 톤 유지).
+3. DESIGN.md §7.1(챕터 1 메인 퍼즐) 재구성 여부는 **사람이 Claude.ai에서
    결정 중** — 여기서 먼저 판단하지 말고 결정 결과(INBOX.md 또는
    docs/scenario/ 새 파일)를 기다릴 것.
-2. 캐릭터 아트: 사람이 외부 에셋을 구해오면, `pipeline_test`에서 검증한
-   방식(TileSet/스프라이트 연결)으로 실제 플레이어에 통합.
-3. 그레이박스 색상 블록을 실제 픽셀아트 타일로 교체 (배경 아트, INBOX
-   4번 항목 — 사람이 "쪼개진 타일 형태로 저장"을 요청했었음, TileSet
-   방식은 이미 pipeline_test로 검증됨).
-4. 각 신규 씬/상호작용 작업 후 `qa/run_qa.sh`(시각) + 해당하면 `tests/`
+4. 캐릭터 아트: `bonus_pack`의 캐릭터들은 최종 디자인(흰 원피스, 10살
+   한국인 여아)과 안 맞음 — 맞는 에셋이 더 필요하거나 별도 제작 필요.
+5. 각 신규 씬/상호작용 작업 후 `qa/run_qa.sh`(시각) + 해당하면 `tests/`
    자동 상호작용 테스트로 검증 → 사람 눈 확인은 여전히 최종 기준.
+
+> **배경 아트 통합 진행 중**(2026-09-07): `tools/build_main_tileset.gd`로
+> `assets/tiles/main/main_tileset.tres` 생성 완료 — source 0 = A4.png
+> (벽, 좌표 (2,10) 어두운 나무 판벽), source 1 = A5.png (바닥/지면: (0,8)
+> 잔디, (1,8) 붉은 흙, (0,5) 밝은 나무 바닥, (1,5) 중간톤 나무 바닥).
+> 원본 48px 타일을 게임 그리드 32px로 자동 축소 렌더링(TileSet.tile_size=32,
+> texture_region_size=48). `scenes/test/main_tileset_test.tscn`으로 QA
+> 캡처 검증 완료 — 5종 타일 모두 이음매 없이 잘 반복됨. **다음 단계**:
+> 이 좌표들을 실제 챕터 1 씬에 적용.
 
 > 이동 사양 확정(2026-09-01): `play_area` 는 화면 전체이며, 벽/구역 경계
 > 충돌 처리는 아직 요청되지 않았으므로 구현하지 않는다.
 
 ## 3. 완료 기록 (최신이 위)
 
+- 배경 아트 통합 1단계: `assets/tiles/main/main_tileset.tres` 조립(벽/잔디/
+  흙/나무바닥 5종), 48px→32px 자동 축소 렌더링 확인, QA 캡처로 5종 타일
+  이음매 검증 완료. (다음: 실제 챕터 1 씬 적용)
 - DESIGN.md 절 번호 밀림에 따른 참조 오류 일괄 수정(§3 신설로 이후 절
   전부 한 칸씩 밀림), `assets/downloads/`에 받은 RPG Maker 스타일 메인
   타일셋 팩(7개 파일) `assets/tiles/main/`로 정리 + README 작성.

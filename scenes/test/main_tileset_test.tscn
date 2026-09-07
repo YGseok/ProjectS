@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://main_tileset_test_scene"]
+
+[ext_resource type="TileSet" path="res://assets/tiles/main/main_tileset.tres" id="1_tileset"]
+[ext_resource type="Script" path="res://scripts/test/main_tileset_test_room.gd" id="2_room"]
+
+[node name="MainTilesetTest" type="Node2D"]
+
+[node name="Label" type="Label" parent="."]
+offset_left = 20.0
+offset_top = 4.0
+offset_right = 900.0
+offset_bottom = 28.0
+text = "main_tileset_test.tscn — 위부터 벽/잔디/흙/밝은나무/중간나무 (32px 그리드, 48px 원본 축소)"
+
+[node name="Room" type="TileMapLayer" parent="."]
+position = Vector2(20, 40)
+scale = Vector2(4, 4)
+tile_set = ExtResource("1_tileset")
+script = ExtResource("2_room")
