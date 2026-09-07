@@ -117,6 +117,10 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- `qa/run_all.sh` 추가 — `tests/run_all.sh`의 시각 QA 버전. 알려진 씬
+  5개(dungeon, chapter1_real, chapter1_dream, pipeline_test,
+  main_tileset_test)를 순서대로 캡처하고 성공/실패 요약. 테스트해서
+  5개 다 성공 확인.
 - 루트 `README.md` 전면 갱신 — 초기 스캐폴딩 시절 구조 그대로였던 걸
   현재 상태(`tests/`, `assets/`, `scripts/`, `tools/`, `docs/scenario/`,
   `Setting/`, 챕터 1 씬들)로 다시 씀 + 개발 워크플로 요약 섹션 추가.
