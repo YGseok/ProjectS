@@ -108,6 +108,9 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- `tests/test_movement_bounds.gd` 추가: 플레이어가 `play_area` 경계
+  밖으로 못 나가는지(위쪽 끝까지 이동 후 추가 이동 시도해도 그대로,
+  반대 방향 이동은 정상 작동) 자동 검증.
 - `tests/test_nap_wake_roundtrip.gd` 추가: `chapter1_real`↔`chapter1_dream`
   낮잠/각성 씬 전환 왕복을 `change_scene_to_file` + `current_scene.name`
   체크로 자동 검증 (배경 아트 교체 이후에도 정상 작동 확인). INBOX.md
