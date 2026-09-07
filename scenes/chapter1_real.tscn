@@ -6,6 +6,9 @@
 [ext_resource type="PackedScene" path="res://scenes/common/ShadowNPC.tscn" id="4_shadow_npc"]
 [ext_resource type="TileSet" path="res://assets/tiles/main/main_tileset.tres" id="5_tileset"]
 [ext_resource type="Script" path="res://scripts/chapter1_real_background.gd" id="6_background"]
+[ext_resource type="Texture2D" path="res://assets/props/nature/tree_green.png" id="7_tree_green"]
+[ext_resource type="Texture2D" path="res://assets/props/nature/tree_small.png" id="8_tree_small"]
+[ext_resource type="Texture2D" path="res://assets/props/nature/bush_berry.png" id="9_bush_berry"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 18
@@ -20,6 +23,24 @@ font_color = Color(1, 1, 1, 0.55)
 [node name="Background" type="TileMapLayer" parent="."]
 tile_set = ExtResource("5_tileset")
 script = ExtResource("6_background")
+
+[node name="TreeGreen" type="Sprite2D" parent="."]
+position = Vector2(700, 470)
+texture = ExtResource("7_tree_green")
+centered = false
+offset = Vector2(-70, -215)
+
+[node name="TreeSmall" type="Sprite2D" parent="."]
+position = Vector2(100, 660)
+texture = ExtResource("8_tree_small")
+centered = false
+offset = Vector2(-75, -165)
+
+[node name="BushBerry" type="Sprite2D" parent="."]
+position = Vector2(1150, 660)
+texture = ExtResource("9_bush_berry")
+centered = false
+offset = Vector2(-70, -170)
 
 [node name="TitleLabel" type="Label" parent="."]
 offset_left = 20.0

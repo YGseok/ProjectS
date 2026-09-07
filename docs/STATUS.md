@@ -111,6 +111,9 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- `chapter1_real.tscn` 마당에 나무 2그루 + 열매 덤불 배치 (`assets/props/
+  nature/` 스프라이트, `Sprite2D` + `centered=false`/`offset`로 밑동
+  기준 배치). QA 캡처로 배치 확인, 자동 테스트 회귀 없음 확인.
 - `assets/props/nature/` 신설: `Outside.png`(불규칙 자연 오브젝트 시트,
   지금까지 미사용)에서 나무 2종(`tree_green`, `tree_small`)과 열매
   덤불(`bush_berry`)을 손으로 잘라 저장. `tools/crop_outside_props.gd`로
