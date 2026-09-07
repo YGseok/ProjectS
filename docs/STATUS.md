@@ -117,6 +117,11 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- 문서 감사: DESIGN.md §6(DoD 기준)이 이 세션에서 새로 생긴 `tests/`
+  자동 상호작용 테스트 계층을 전혀 언급 안 하고 있어서, 새 §6.2로
+  추가하고(§6.1=시각 QA, §6.2=상호작용 테스트, §6.3=사람 피드백으로
+  재배치) `qa/README.md`/`qa/run_all.sh`의 `§6.2` 참조를 `§6.3`으로
+  수정. §7~9는 영향 없음 확인.
 - `STEP/` 정리: 이미 `assets/tiles/interior_test/`,
   `assets/sprites/characters/elf_girl_test/` 등으로 추출·정리 끝난
   `Elf_Girl_Character_and_Interior_Pack_DEMO.zip`을 삭제 (Bonus.rar

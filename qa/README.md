@@ -91,7 +91,7 @@ godot4 --path . res://qa/QACapture.tscn
 
 이터레이션 루프는 이 exit code와 PNG 파일 존재 여부로 "완료" 여부를 1차
 판단하고, 최종 판단은 사람이 스크린샷을 직접 보고 내린다
-(`docs/DESIGN.md` §6.2 참고).
+(`docs/DESIGN.md` §6.3 참고).
 
 ## 상호작용(키 입력) 자동 테스트 — `tests/`
 
