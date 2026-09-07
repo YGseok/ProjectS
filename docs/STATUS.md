@@ -117,6 +117,9 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- 루트 `README.md` 전면 갱신 — 초기 스캐폴딩 시절 구조 그대로였던 걸
+  현재 상태(`tests/`, `assets/`, `scripts/`, `tools/`, `docs/scenario/`,
+  `Setting/`, 챕터 1 씬들)로 다시 씀 + 개발 워크플로 요약 섹션 추가.
 - `tests/test_fade_overlay_reentrancy.gd` 추가: `FadeOverlay.fade_to_scene()`
   를 짧은 시간 안에 두 번 호출하면 `_busy` 가드로 두 번째가 무시되고
   첫 번째 대상 씬으로만 전환되는지 검증. 첫 시도에 바로 통과.
