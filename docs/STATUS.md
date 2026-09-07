@@ -117,6 +117,9 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- `tests/test_fade_overlay_reentrancy.gd` 추가: `FadeOverlay.fade_to_scene()`
+  를 짧은 시간 안에 두 번 호출하면 `_busy` 가드로 두 번째가 무시되고
+  첫 번째 대상 씬으로만 전환되는지 검증. 첫 시도에 바로 통과.
 - `tests/test_dialogue_system_unit.gd` 추가: `DialogueSystem`을 NPC 없이
   직접 호출해 여러 줄 대화 진행, 빈 배열/대화 중 재호출 가드를 검증
   (기존 테스트는 전부 1줄짜리 NPC만 써서 이 경로가 한 번도 실행된 적
