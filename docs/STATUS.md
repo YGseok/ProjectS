@@ -120,16 +120,14 @@
 
 > INBOX.md에 새 지시가 있으면 이 큐보다 항상 먼저 처리한다.
 
-1. **각성 트리거를 진짜 조건으로 교체**: 지금은 꿈에서 Enter만 누르면
-   항상 각성되는 임시 트리거인데, DESIGN.md §7.1대로라면 "일기 개봉
-   (`Chapter1Progress.diary_opened == true`)"이 챕터 종료(→각성)를
-   유발해야 한다. `nap_trigger.gd`의 WakeTrigger를 무조건 활성 대신
-   `diary_opened` 체크로 게이팅할지, 아니면 완전히 별도의 "챕터 종료"
-   흐름으로 뺄지 결정 필요 — 최소한 4단계 이전에는 각성이 막히면 안
-   된다는 점(순환 자체가 각성으로 진행되므로)에 주의.
-2. `floorboard.gd`/`gonggi_stones.gd`/`hopscotch_key.gd`/`jar_stamp.gd`의
+1. `floorboard.gd`/`gonggi_stones.gd`/`hopscotch_key.gd`/`jar_stamp.gd`의
    `ColorRect` 그레이박스를 실제 스프라이트로 교체 (판자/공기돌/사방치기/
    장독대 — `assets/tiles/main/`의 Inside 시트나 별도 크롭 대상 확인).
+2. `scenes/chapter1_end.tscn`은 의도적으로 최소한의 임시 종료 화면이다
+   (검은 배경 + 텍스트 한 줄, 그 이상 없음) — 챕터 2가 아직 없어서 그
+   너머로 갈 곳도 없다. 사람이 실제로 더 채워 넣고 싶다면(엔딩 연출,
+   챕터 2로 이어지는 처리 등) 그건 스토리/설계 결정 영역이니 지시를
+   기다릴 것.
 3. 각 신규 씬/상호작용 작업 후 `qa/run_all.sh`(시각) + `tests/run_all.sh`
    (상호작용, 해당하면) 로 검증 → 사람 눈 확인은 여전히 최종 기준.
 
@@ -165,6 +163,24 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- **일기 개봉 → 자동 챕터 종료 연결(사람 지시 "이어서 처리해줘",
+  2026-09-07)**: 직전 항목("챕터 1 메인 퍼즐 구현")에서 미완성으로 남겨둔
+  "WakeTrigger 게이팅" 문제를 WakeTrigger를 건드리지 않는 방식으로 해결.
+  `floorboard.gd`의 `_open_diary()`가 대화를 시작하면서
+  `DialogueSystem.dialogue_ended`에 `CONNECT_ONE_SHOT`으로 콜백을 걸어,
+  일기 대사가 끝나는 순간 자동으로 `FadeOverlay.fade_to_scene()`을 호출해
+  새로 만든 `scenes/chapter1_end.tscn`(검은 배경 + "챕터 1 종료..." 텍스트
+  한 줄뿐인 최소 임시 종료 화면)으로 전환하도록 만들었다. 이 방식을 고른
+  이유: 꿈 씬의 WakeTrigger는 원래 역할(1~3단계 진행용 "각성" 입력)을
+  그대로 유지해야 해서, 그걸 `diary_opened` 조건으로 막아버리면 오히려
+  정상 진행이 막힐 위험이 있었음 — 그래서 "챕터 종료"를 WakeTrigger 재사용이
+  아니라 완전히 독립된 새 전환으로 분리(다음 할 일 큐에 있던 "결정 필요"
+  항목의 두 선택지 중 후자를 택함). `qa/run_all.sh`에 `chapter1_end` 씬
+  추가, `tests/test_chapter1_puzzle.gd`에 자동 전환 확인(대화 종료 후
+  `current_scene.name == "Chapter1End"`) + 개봉 후 씬을 다시 불러와도
+  "이미 열림" 분기가 크래시 없이 안정적으로 동작하는지 확인하는 항목
+  추가(총 19개 어서션 전부 통과). `tests/run_all.sh` 12종 + QA
+  `chapter1_end` 캡처 재확인.
 - **챕터 1 메인 퍼즐 "닫힌 일기장" 구현(INBOX.md 스토리 결정 반영,
   2026-09-07)**: `docs/DESIGN.md` §7.1을 기존 "둘이었다 흔적 모으기"
   (리신 중독 설정 시절 소재, 폐기)에서 일기장 하나를 중심으로 한 4단계

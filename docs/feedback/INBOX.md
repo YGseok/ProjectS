@@ -29,12 +29,15 @@
   `docs/DESIGN.md` §7.1을 지시대로 4단계 수집 퍼즐로 다시 쓰고, 이후
   실제 오브젝트 구현까지 완료(마루 밑 판자/공기돌/사방치기 열쇠/장독
   나무패, `Chapter1Progress` 오토로드로 순환마다 단계 진행,
-  `tests/test_chapter1_puzzle.gd`로 전 단계 자동 검증). 자세한 내용은
-  STATUS.md 완료 기록 참고. **남은 부분**: 지시에 있던 "일기 개봉이
-  각성(챕터 종료)을 유발"하는 진짜 트리거는 아직 구현 안 됨 — 각성은
-  여전히 Enter 임시 트리거이고, 지금은 그 각성이 "다음 순환으로 진행"
-  용도로도 같이 쓰이고 있어서 두 역할을 갈라야 함(STATUS.md 다음 할 일
-  큐 1번). 오브젝트 아트도 전부 `ColorRect` 그레이박스 상태.
+  `tests/test_chapter1_puzzle.gd`로 전 단계 자동 검증). "일기 개봉이
+  각성(챕터 종료)을 유발"하는 트리거도 이어서 구현 완료 — 꿈의
+  WakeTrigger를 게이팅하는 대신, 일기 대사가 끝나는 순간
+  `DialogueSystem.dialogue_ended` 신호로 자동으로 새 임시 종료 화면
+  (`scenes/chapter1_end.tscn`)으로 전환하도록 분리 구현(WakeTrigger는
+  1~3단계 진행용 역할 그대로 유지). 자세한 내용은 STATUS.md 완료 기록
+  참고. **남은 부분**: 오브젝트 아트는 전부 `ColorRect` 그레이박스 상태,
+  `chapter1_end.tscn`은 챕터 2가 없어서 의도적으로 텍스트 한 줄짜리
+  최소 화면.
 - [처리됨] (2026-09-01) 대화 시스템을 만든다 — `scripts/dialogue_system.gd` +
   `scenes/common/DialogueSystem.tscn`(전역 오토로드)로 구현. 하단 대화창,
   `ui_accept`(Enter/Space)로 진행/종료. `tests/test_dialogue_interaction.gd`

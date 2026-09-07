@@ -85,11 +85,38 @@ func _initialize() -> void:
 	await _interact()
 	_assert(_progress.diary_opened, "4단계 + 열쇠 + 나무패 모두 갖춘 뒤 판자 조사하면 일기 개봉됨")
 
-	# 재조사해도 재오픈 로직이 다시 실행되지 않고 안정적으로 유지됨.
+	# 일기 개봉(대화 종료) 자체가 각성(챕터 종료)을 유발해야 한다
+	# (DESIGN.md §7.1 "트리거" 항목) — WakeTrigger를 따로 안 걸어가도
+	# 자동으로 Chapter1End로 전환되는지 확인.
+	await _wait_scene_change("Chapter1End", 3.0)
+	_assert(current_scene != null and current_scene.name == "Chapter1End",
+		"일기 개봉 후 자동으로 챕터 종료 화면(Chapter1End)으로 전환됨, 실제: %s" %
+			[current_scene.name if current_scene else "null"])
+
+	# diary_opened == true 상태에서 챕터 1을 다시 열어 판자를 재조사해도
+	# (Chapter1Progress는 오토로드라 값이 그대로 유지됨) 재오픈 로직이
+	# 다시 실행되거나 크래시하지 않고 "다시 읽기" 대사만 뜨는지 확인.
+	change_scene_to_file("res://scenes/chapter1_real.tscn")
+	await process_frame
+	for i in range(10):
+		await process_frame
+	_player = get_first_node_in_group("player")
+	var floorboard_again: Node2D = current_scene.get_node("Floorboard")
+	await _move_to(floorboard_again.position)
 	await _interact()
-	_assert(_progress.diary_opened, "일기 개봉 후 다시 조사해도 상태 유지")
+	_assert(_progress.diary_opened, "일기 개봉 후 다시 조사해도 상태 유지, 크래시 없음")
 
 	_finish()
+
+
+func _wait_scene_change(expected_name: String, timeout_sec: float) -> void:
+	var elapsed := 0.0
+	var step := 0.05
+	while elapsed < timeout_sec:
+		if current_scene != null and current_scene.name == expected_name:
+			return
+		await create_timer(step).timeout
+		elapsed += step
 
 
 func _move_to(target: Vector2) -> void:

@@ -22,6 +22,7 @@ SCENES=(
   "dungeon|"
   "chapter1_real|"
   "chapter1_dream|"
+  "chapter1_end|"
   "pipeline_test|res://scenes/test/pipeline_test.tscn"
   "main_tileset_test|res://scenes/test/main_tileset_test.tscn"
 )

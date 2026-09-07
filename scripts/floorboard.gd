@@ -24,6 +24,7 @@ func _on_interact() -> void:
 
 func _open_diary() -> void:
 	Chapter1Progress.diary_opened = true
+	DialogueSystem.dialogue_ended.connect(_on_diary_dialogue_ended, CONNECT_ONE_SHOT)
 	DialogueSystem.start_dialogue([
 		"열쇠와 나무패를 함께 넣자, 딸깍 소리와 함께 자물쇠가 풀린다.",
 		"판자를 들어올리자 눅눅한 일기장이 나온다.",
@@ -37,3 +38,13 @@ func _open_diary() -> void:
 		var mark := get_node_or_null(wall_mark_path)
 		if mark:
 			mark.flash()
+
+## DESIGN.md §7.1 "트리거(챕터 종료)": 일기 페이지를 다 읽고 나면 그
+## 자체로 각성(챕터 종료)이 일어나야 한다 — 별도로 WakeTrigger까지 걸어가
+## Enter를 또 누를 필요 없이, 대화가 끝나는 순간 자동으로 전환한다.
+func _on_diary_dialogue_ended() -> void:
+	var fade := get_tree().get_first_node_in_group("fade_overlay")
+	if fade:
+		fade.fade_to_scene("res://scenes/chapter1_end.tscn")
+	else:
+		get_tree().change_scene_to_file("res://scenes/chapter1_end.tscn")
