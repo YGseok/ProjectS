@@ -167,6 +167,13 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- **이터레이션 배치 4/10 — 코드/문서 위생 점검**: `scripts/`에 TODO/
+  FIXME/디버그 print 잔재 없음 확인. `tools/README.md` 표가 실제
+  `tools/*.gd` 파일 목록과 정확히 일치함 확인(8개 전부). 작은 수정:
+  `floorboard.gd`에서 `Chapter1Progress.MAX_STAGE`로 쓰던 걸 이미
+  로컬 변수로 별칭해둔 `p.MAX_STAGE`로 통일. 루트 `README.md`의 구조
+  트리가 최근 추가된 `shaders/`, `scenes/chapter1_end.tscn`,
+  `assets/props/main_tileset_props/`를 전혀 반영 안 하고 있어서 추가.
 - **이터레이션 배치 3/10 — DESIGN.md §9(미정 사항) 정확성 점검**: §7.1
   재작성 후 남은 참조 오류가 있는지 전체를 훑음 — 옛 퍼즐 소재("둘이었다",
   "밥그릇 두 벌" 등)에 대한 참조는 없었음(§7.1 자체의 "폐기됨" 언급

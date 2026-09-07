@@ -12,7 +12,7 @@ func _on_interact() -> void:
 		DialogueSystem.start_dialogue(["떼어낸 페이지를 다시 읽어본다.", "\"미워.\"", "...그 외엔 아무것도 알아볼 수 없다."])
 		return
 	if p.has_key and p.has_stamp:
-		if p.stage >= Chapter1Progress.MAX_STAGE:
+		if p.stage >= p.MAX_STAGE:
 			_open_diary()
 		else:
 			DialogueSystem.start_dialogue(["열쇠와 나무패를 함께 넣어본다.", "...아직 뭔가 맞지 않는 느낌이다."])
