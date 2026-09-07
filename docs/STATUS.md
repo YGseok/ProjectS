@@ -111,6 +111,10 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- `assets/props/nature/` 신설: `Outside.png`(불규칙 자연 오브젝트 시트,
+  지금까지 미사용)에서 나무 2종(`tree_green`, `tree_small`)과 열매
+  덤불(`bush_berry`)을 손으로 잘라 저장. `tools/crop_outside_props.gd`로
+  좌표 지정, README에 좌표 기록. 다음: 실제 씬(마당)에 배치.
 - 회귀 스윕 2: 자동 테스트 6종(대화, 낮잠/각성 왕복, 이동 경계, NPC 방향
   체크, 낮잠/각성 트리거 사정거리) 전부 재통과 + QA 시각 캡처 5종 전부
   exit 0. 큐에서 해결된 지붕 항목 정리.
