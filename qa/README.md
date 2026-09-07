@@ -145,3 +145,15 @@ godot4 --headless --script res://tests/test_dialogue_interaction.gd --path .
   프로세스가 exit 하지 않고 그대로 멈춘다(타임아웃 전까지 응답 없음).
   깔끔하게 실패하지 않으니 헷갈리기 쉽다 — `var x: Array[String] = []`
   처럼 변수에 타입을 명시해서 넘길 것.
+- **`get_first_node_in_group()`을 `_ready()`에서 한 번만 호출하면 씬
+  트리 노드 순서에 몰래 의존하게 된다**: `_ready()`는 씬에 선언된
+  순서대로 호출되므로, 찾으려는 그룹(예: `"player"`)의 노드가 아직
+  `add_to_group()`을 안 한 시점(= 그 노드가 이 스크립트보다 씬 파일에서
+  더 아래에 선언된 경우)이면 조회 결과가 계속 `null`로 고정된다. 크래시도
+  안 나고 에러도 안 찍혀서 눈치채기 어렵다 — 이 프로젝트에서 최소 두 번
+  겪었다(`occlusion_reveal_manager.gd`, `interactable_base.gd` — 둘 다
+  나중에 씬에서 다른 노드 재배치를 하다가 우연히 드러남, STATUS.md
+  2026-09-07 참고). **기본 패턴으로 삼을 것**: `_ready()`에서 한 번
+  조회하지 말고, `_process()`에서 `if _x == null: _x =
+  get_tree().get_first_node_in_group(...)`처럼 값이 없을 때마다
+  다시 찾도록 짤 것 — 노드 선언 순서가 나중에 바뀌어도 안전하다.

@@ -17,9 +17,10 @@ var _collision_map: Node
 func _ready() -> void:
 	add_to_group("player")
 	_target_position = position
-	_collision_map = get_tree().get_first_node_in_group("collision_map")
 
 func _process(delta: float) -> void:
+	if _collision_map == null:
+		_collision_map = get_tree().get_first_node_in_group("collision_map")
 	if _moving:
 		position = position.move_toward(_target_position, MOVE_SPEED * delta)
 		if position.is_equal_approx(_target_position):

@@ -22,9 +22,10 @@ var _player: Node2D
 func _ready() -> void:
 	_prompt_label.text = prompt_text
 	_prompt_label.visible = false
-	_player = get_tree().get_first_node_in_group("player")
 
 func _process(_delta: float) -> void:
+	if _player == null:
+		_player = get_tree().get_first_node_in_group("player")
 	if _player == null or target_scene.is_empty():
 		return
 
