@@ -109,6 +109,9 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- `tests/test_wake_trigger_range.gd` 추가: `test_nap_trigger_range.gd`와
+  대칭으로 `chapter1_dream.tscn`의 각성 트리거도 사정거리 밖 미반응 +
+  프롬프트 표시/숨김을 검증. 첫 시도에 바로 통과.
 - `tools/README.md` 작성 — 늘어난 헤드리스 도구 스크립트들(용도, 상태,
   `--script` 모드 오토로드 함정)을 표로 정리. `gen_player_sprite.gd`는
   중단된 접근임을 명시.
