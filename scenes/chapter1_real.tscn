@@ -57,70 +57,6 @@ blocked_rects = Array[Rect2]([Rect2(160, 0, 960, 128), Rect2(832, 352, 288, 64),
 script = ExtResource("12_reveal_manager")
 shader_material = SubResource("ShaderMaterial_reveal")
 
-[node name="YSortObjects" type="Node2D" parent="."]
-y_sort_enabled = true
-
-[node name="TreeGreen" type="Sprite2D" parent="YSortObjects"]
-position = Vector2(700, 470)
-texture = ExtResource("7_tree_green")
-material = SubResource("ShaderMaterial_reveal")
-centered = false
-offset = Vector2(-70, -215)
-
-[node name="TreeSmall" type="Sprite2D" parent="YSortObjects"]
-position = Vector2(100, 660)
-texture = ExtResource("8_tree_small")
-material = SubResource("ShaderMaterial_reveal")
-centered = false
-offset = Vector2(-75, -165)
-
-[node name="BushBerry" type="Sprite2D" parent="YSortObjects"]
-position = Vector2(1150, 660)
-texture = ExtResource("9_bush_berry")
-material = SubResource("ShaderMaterial_reveal")
-centered = false
-offset = Vector2(-70, -170)
-
-[node name="TitleLabel" type="Label" parent="."]
-offset_left = 20.0
-offset_top = 4.0
-offset_right = 1000.0
-offset_bottom = 28.0
-text = "chapter1_real.tscn — 챕터 1 현실 (타일 배경 1차 적용, 방향키로 이동)"
-label_settings = SubResource("LabelSettings_title")
-
-[node name="HouseLabel" type="Label" parent="."]
-offset_left = 180.0
-offset_top = 40.0
-offset_right = 400.0
-offset_bottom = 64.0
-text = "기와집"
-label_settings = SubResource("LabelSettings_zone")
-
-[node name="PorchLabel" type="Label" parent="."]
-offset_left = 180.0
-offset_top = 136.0
-offset_right = 400.0
-offset_bottom = 160.0
-text = "툇마루"
-label_settings = SubResource("LabelSettings_zone")
-
-[node name="FieldLabel" type="Label" parent="."]
-offset_left = 220.0
-offset_top = 300.0
-offset_right = 440.0
-offset_bottom = 324.0
-text = "밭 (마당)"
-label_settings = SubResource("LabelSettings_zone")
-
-[node name="GazeboLabel" type="Label" parent="."]
-offset_left = 890.0
-offset_top = 392.0
-offset_right = 1080.0
-offset_bottom = 416.0
-text = "원두막"
-label_settings = SubResource("LabelSettings_zone")
-
 [node name="Floorboard" type="Node2D" parent="."]
 position = Vector2(480, 160)
 script = ExtResource("13_floorboard")
@@ -207,6 +143,70 @@ offset_right = 16.0
 offset_bottom = 16.0
 mouse_filter = 2
 color = Color(0.9, 0.9, 0.85, 0.55)
+
+[node name="YSortObjects" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="TreeGreen" type="Sprite2D" parent="YSortObjects"]
+position = Vector2(700, 470)
+texture = ExtResource("7_tree_green")
+material = SubResource("ShaderMaterial_reveal")
+centered = false
+offset = Vector2(-70, -215)
+
+[node name="TreeSmall" type="Sprite2D" parent="YSortObjects"]
+position = Vector2(100, 660)
+texture = ExtResource("8_tree_small")
+material = SubResource("ShaderMaterial_reveal")
+centered = false
+offset = Vector2(-75, -165)
+
+[node name="BushBerry" type="Sprite2D" parent="YSortObjects"]
+position = Vector2(1150, 660)
+texture = ExtResource("9_bush_berry")
+material = SubResource("ShaderMaterial_reveal")
+centered = false
+offset = Vector2(-70, -170)
+
+[node name="TitleLabel" type="Label" parent="."]
+offset_left = 20.0
+offset_top = 4.0
+offset_right = 1000.0
+offset_bottom = 28.0
+text = "chapter1_real.tscn — 챕터 1 현실 (타일 배경 1차 적용, 방향키로 이동)"
+label_settings = SubResource("LabelSettings_title")
+
+[node name="HouseLabel" type="Label" parent="."]
+offset_left = 180.0
+offset_top = 40.0
+offset_right = 400.0
+offset_bottom = 64.0
+text = "기와집"
+label_settings = SubResource("LabelSettings_zone")
+
+[node name="PorchLabel" type="Label" parent="."]
+offset_left = 180.0
+offset_top = 136.0
+offset_right = 400.0
+offset_bottom = 160.0
+text = "툇마루"
+label_settings = SubResource("LabelSettings_zone")
+
+[node name="FieldLabel" type="Label" parent="."]
+offset_left = 220.0
+offset_top = 300.0
+offset_right = 440.0
+offset_bottom = 324.0
+text = "밭 (마당)"
+label_settings = SubResource("LabelSettings_zone")
+
+[node name="GazeboLabel" type="Label" parent="."]
+offset_left = 890.0
+offset_top = 392.0
+offset_right = 1080.0
+offset_bottom = 416.0
+text = "원두막"
+label_settings = SubResource("LabelSettings_zone")
 
 [node name="Player" type="Node2D" parent="YSortObjects"]
 position = Vector2(608, 160)

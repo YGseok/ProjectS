@@ -16,7 +16,6 @@ func _ready() -> void:
 	if _prompt_label:
 		_prompt_label.text = prompt_text
 		_prompt_label.visible = false
-	_player = get_tree().get_first_node_in_group("player")
 
 func _is_visible_now() -> bool:
 	return true
@@ -25,6 +24,8 @@ func _on_interact() -> void:
 	pass
 
 func _process(_delta: float) -> void:
+	if _player == null:
+		_player = get_tree().get_first_node_in_group("player")
 	var show_now := _is_visible_now()
 	visible = show_now
 	if not show_now or _player == null or DialogueSystem.is_active() or DialogueSystem.just_ended_this_frame():

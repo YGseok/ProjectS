@@ -167,6 +167,33 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- **이터레이션 배치 5/10 — 퍼즐 오브젝트 z-order 버그 + 재발 방지**:
+  플레이어가 공기돌/장독 등 바닥 소품 위로 걸어가면 소품이 플레이어보다
+  **위에** 그려지는 버그 발견(실제 창 캡처로 확인 — `Floorboard`,
+  `GonggiStones`, `HopscotchKey`, `JarStamp`, `WallMarkFlash`가
+  `chapter1_real.tscn`에서 `YSortObjects`(플레이어가 들어있음)보다
+  씬 트리 뒤쪽(= 나중에 그려짐)에 선언돼 있었음 — Y-sort는
+  `YSortObjects` *안*에서만 작동하고, 그 바깥의 형제 노드 순서는 그냥
+  선언 순서대로 그려진다). **수정**: 다섯 노드를 `OcclusionRevealManager`
+  뒤, `YSortObjects` 앞으로 옮겨서 항상 바닥에 붙어 플레이어보다 먼저(=
+  아래에) 그려지게 함.
+  이 재배치 과정에서 **두 번째, 더 근본적인 버그를 발견**:
+  `interactable_base.gd`의 `_player` 조회가 `_ready()`에서 딱 한 번만
+  실행되고 있었다 — `OcclusionRevealManager`(이전 이터레이션에서 이미
+  겪은 버그, `_ready()`→`_process()` lazy 조회로 고쳤던 것)와 **완전히
+  같은 클래스의 버그**를 여기서도 그대로 재현하고 있었던 것. 노드를
+  Player보다 앞으로 옮기자 `_player`가 계속 `null`로 고정돼, 상호작용
+  자체(대화 시작)는 자동 테스트가 이미 잡아냈겠지만(가디언 조건이
+  `_on_interact()` 호출 자체를 막으므로) **프롬프트 라벨("Enter:
+  살펴보기")만 영원히 안 뜨는** 조용한 버그가 됐을 것 — 이번엔 z-order
+  수정 직후 실제 창 캡처로 우연히 발견. `interactable_base.gd`도
+  동일하게 `_process()`에서 `_player`가 null일 때마다 재조회하도록 고쳐
+  노드 순서 의존성을 구조적으로 제거(occlusion_reveal_manager.gd와
+  똑같은 패턴 — 이 프로젝트에 반복되는 버그 유형이니 새 매니저/컴포넌트
+  스크립트를 쓸 때마다 그룹 조회는 `_ready()`가 아니라 `_process()`에서
+  lazy하게 하는 걸 기본으로 삼을 것). `tests/test_chapter1_puzzle.gd`에
+  프롬프트 라벨 `.visible` 직접 확인 어서션 추가해서 재발 방지. 전체
+  12종 + QA 재확인.
 - **이터레이션 배치 4/10 — 코드/문서 위생 점검**: `scripts/`에 TODO/
   FIXME/디버그 print 잔재 없음 확인. `tools/README.md` 표가 실제
   `tools/*.gd` 파일 목록과 정확히 일치함 확인(8개 전부). 작은 수정:

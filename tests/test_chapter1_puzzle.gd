@@ -42,6 +42,13 @@ func _initialize() -> void:
 
 	# 판자로 이동해서 조사 — 아직 잠겨있다는 대사만 뜨고 상태 변화 없음.
 	await _move_to(floorboard.position)
+	# 상호작용 프롬프트("Enter: 살펴보기")가 실제로 보이는지도 확인한다 —
+	# InteractableBase._player 조회가 씬 트리 노드 순서에 우연히 의존하게
+	# 되면(예: 이 오브젝트가 Player보다 먼저 _ready()되는 순서로 바뀌면)
+	# 상호작용 자체는 되더라도 프롬프트 라벨만 영원히 안 뜨는 회귀가 생긴
+	# 적이 있다(chapter1_real.tscn z-order 수정 중 발견, STATUS.md 참고).
+	var floorboard_prompt: Label = floorboard.get_node("PromptLabel")
+	_assert(floorboard_prompt.visible, "판자 옆에 있으면 상호작용 프롬프트가 보임")
 	await _interact()
 	_assert(not _progress.has_key and not _progress.has_stamp,
 		"1단계에서 판자 조사해도 열쇠/나무패 상태 변화 없음")
