@@ -1,0 +1,173 @@
+extends SceneTree
+## 자동 상호작용 테스트 — 챕터 1 메인 퍼즐 "닫힌 일기장"(DESIGN.md §7.1,
+## 2026-09-07 확정)의 4단계 순환 진행을 검증한다.
+##
+## 실행: godot4 --headless --script res://tests/test_chapter1_puzzle.gd --path <project>
+##
+## Chapter1Progress는 오토로드라 change_scene_to_file()로 씬을 다시 불러도
+## 값이 유지된다 — 여기서는 실제 낮잠/각성 씬 전환 대신
+## Chapter1Progress.advance_cycle()을 직접 호출해 순환을 시뮬레이션한다
+## (씬 전환 자체는 test_nap_wake_roundtrip.gd가 이미 검증함).
+
+var _player: Node2D
+var _progress: Node
+var _all_passed := true
+
+func _initialize() -> void:
+	change_scene_to_file("res://scenes/chapter1_real.tscn")
+	await process_frame
+	await process_frame
+
+	_player = get_first_node_in_group("player")
+	_progress = root.get_node_or_null("Chapter1Progress")
+	_assert(_player != null, "player 그룹 노드를 찾음")
+	_assert(_progress != null, "Chapter1Progress 오토로드 노드를 /root 에서 찾음")
+	if _player == null or _progress == null:
+		_finish()
+		return
+
+	_assert(_progress.stage == 1, "초기 진행 단계는 1, 실제: %d" % _progress.stage)
+
+	var floorboard: Node2D = current_scene.get_node("Floorboard")
+	var hopscotch: Node2D = current_scene.get_node("HopscotchKey")
+	var jar: Node2D = current_scene.get_node("JarStamp")
+
+	# 새로 추가된 오브젝트들의 _process()가 한 번 이상 돌 시간을 준다
+	# (씬 로드 직후 2프레임만으로는 부족할 때가 있었음 — visible 갱신은
+	# _process에서 일어나므로).
+	for i in range(10):
+		await process_frame
+	_assert(not hopscotch.visible, "1단계에서는 사방치기(열쇠) 안 보임")
+	_assert(not jar.visible, "1단계에서는 장독(나무패) 안 보임")
+
+	# 판자로 이동해서 조사 — 아직 잠겨있다는 대사만 뜨고 상태 변화 없음.
+	await _move_to(floorboard.position)
+	await _interact()
+	_assert(not _progress.has_key and not _progress.has_stamp,
+		"1단계에서 판자 조사해도 열쇠/나무패 상태 변화 없음")
+
+	# 순환 1회(각성 시뮬레이션) -> 2단계, 사방치기 등장.
+	_progress.advance_cycle()
+	await process_frame
+	_assert(_progress.stage == 2, "순환 1회 후 2단계, 실제: %d" % _progress.stage)
+	_assert(hopscotch.visible, "2단계부터 사방치기 보임")
+	_assert(not jar.visible, "2단계에서는 아직 장독 안 보임")
+
+	await _move_to(hopscotch.position)
+	await _interact()
+	_assert(_progress.has_key, "2단계 사방치기 조사 후 열쇠 획득")
+
+	await _move_to(floorboard.position)
+	await _interact()
+	_assert(not _progress.diary_opened, "열쇠만 있고 나무패 없으면 아직 안 열림")
+
+	# 순환 2회 -> 3단계, 장독 등장.
+	_progress.advance_cycle()
+	await process_frame
+	_assert(_progress.stage == 3, "순환 2회 후 3단계, 실제: %d" % _progress.stage)
+	_assert(jar.visible, "3단계부터 장독 보임")
+
+	await _move_to(jar.position)
+	await _interact()
+	_assert(_progress.has_stamp, "3단계 장독 조사 후 나무패 획득")
+
+	await _move_to(floorboard.position)
+	await _interact()
+	_assert(not _progress.diary_opened,
+		"열쇠+나무패 모두 있어도 4단계 전에는 아직 안 열림 (실제: stage=%d)" % _progress.stage)
+
+	# 순환 3회 -> 4단계, 이제 열림.
+	_progress.advance_cycle()
+	await process_frame
+	_assert(_progress.stage == 4, "순환 3회 후 4단계, 실제: %d" % _progress.stage)
+
+	await _move_to(floorboard.position)
+	await _interact()
+	_assert(_progress.diary_opened, "4단계 + 열쇠 + 나무패 모두 갖춘 뒤 판자 조사하면 일기 개봉됨")
+
+	# 재조사해도 재오픈 로직이 다시 실행되지 않고 안정적으로 유지됨.
+	await _interact()
+	_assert(_progress.diary_opened, "일기 개봉 후 다시 조사해도 상태 유지")
+
+	_finish()
+
+
+func _move_to(target: Vector2) -> void:
+	while not _player.position.is_equal_approx(target):
+		var dir := Vector2.ZERO
+		var diff := target - _player.position
+		if absf(diff.x) > 0.01:
+			dir = Vector2.RIGHT if diff.x > 0 else Vector2.LEFT
+		elif absf(diff.y) > 0.01:
+			dir = Vector2.DOWN if diff.y > 0 else Vector2.UP
+		else:
+			break
+		var action := "ui_right"
+		if dir == Vector2.LEFT:
+			action = "ui_left"
+		elif dir == Vector2.DOWN:
+			action = "ui_down"
+		elif dir == Vector2.UP:
+			action = "ui_up"
+		await _move_one_tile(action)
+
+
+func _move_one_tile(action: String) -> void:
+	var press := InputEventAction.new()
+	press.action = action
+	press.pressed = true
+	Input.parse_input_event(press)
+	var start_guard := 0
+	while not _player._moving and start_guard < 10:
+		await process_frame
+		start_guard += 1
+	var release := InputEventAction.new()
+	release.action = action
+	release.pressed = false
+	Input.parse_input_event(release)
+	var move_guard := 0
+	while _player._moving and move_guard < 60:
+		await process_frame
+		move_guard += 1
+
+
+func _interact() -> void:
+	await _send_action("ui_accept")
+	# 대화가 열렸다면 한 줄씩 넘겨서 닫는다 (다음 상호작용을 막지 않도록).
+	var dialogue: Node = root.get_node_or_null("DialogueSystem")
+	var guard := 0
+	while dialogue and dialogue.is_active() and guard < 20:
+		await _send_action("ui_accept")
+		guard += 1
+
+
+func _send_action(action: String) -> void:
+	var press := InputEventAction.new()
+	press.action = action
+	press.pressed = true
+	Input.parse_input_event(press)
+	await process_frame
+	await process_frame
+	var release := InputEventAction.new()
+	release.action = action
+	release.pressed = false
+	Input.parse_input_event(release)
+	await process_frame
+	await process_frame
+
+
+func _assert(condition: bool, description: String) -> void:
+	if condition:
+		print("[TEST] PASS - %s" % description)
+	else:
+		printerr("[TEST] FAIL - %s" % description)
+		_all_passed = false
+
+
+func _finish() -> void:
+	if _all_passed:
+		print("[TEST] ALL PASSED")
+		quit(0)
+	else:
+		printerr("[TEST] SOME FAILED")
+		quit(1)

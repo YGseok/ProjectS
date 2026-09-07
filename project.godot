@@ -14,6 +14,7 @@ config/features=PackedStringArray("4.3", "Forward Plus")
 [autoload]
 
 DialogueSystem="*res://scenes/common/DialogueSystem.tscn"
+Chapter1Progress="*res://scripts/chapter1_progress.gd"
 
 [display]
 

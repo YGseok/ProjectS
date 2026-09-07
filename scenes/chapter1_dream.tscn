@@ -181,5 +181,6 @@ color = Color(0.05, 0.05, 0.05, 0.8)
 position = Vector2(608, 160)
 target_scene = "res://scenes/chapter1_real.tscn"
 prompt_text = "Enter: 깨어나기 (임시)"
+advances_chapter1_cycle = true
 
 [node name="FadeOverlay" parent="." instance=ExtResource("2_fade")]
