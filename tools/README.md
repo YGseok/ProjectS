@@ -27,6 +27,7 @@
 | `build_main_tileset.gd` | `assets/tiles/main/`(A4·A5 시트)에서 고른 셀들로 `main_tileset.tres` 조립. 새 좌표를 추가하려면 여기 좌표 배열을 수정하고 재실행 | 재사용 중, `assets/tiles/main/main_tileset.tres` 생성원 |
 | `build_interior_tileset.gd` | `assets/tiles/interior_test/`(엘프 소녀 데모 팩, 개별 PNG 파일들)로 `interior_test.tres` 조립 | `pipeline_test.tscn` 전용, 팩 자체가 파이프라인 검증용이라 더 안 씀 |
 | `crop_outside_props.gd` | `assets/tiles/main/Outside.png`(불규칙 크기 자연 오브젝트 시트)에서 나무/덤불 등을 손으로 지정한 사각형으로 잘라 `assets/props/nature/`에 저장 | 재사용 중, 새 오브젝트를 더 자르려면 `_crops` 딕셔너리에 좌표 추가 후 재실행. 결과 좌표는 `assets/props/nature/README.md`에 기록됨 |
+| `crop_props_from_inside_c2.gd` | `assets/tiles/main/Inside_C_2.png`(가구/장식 시트, 48px 격자)에서 챕터 1 퍼즐 소품(장독/공기돌)을 잘라 `assets/props/main_tileset_props/`에 저장 | 재사용 중, 같은 패턴(`_crops` 딕셔너리 + 재실행). 결과 좌표는 `assets/props/main_tileset_props/README.md`에 기록됨 |
 | `upscale_preview.gd` | 작은 도트 이미지를 최근접 보간으로 확대 저장 (컨펌용 미리보기) | `gen_player_sprite.gd`와 짝, 아래 참고 |
 | `gen_player_sprite.gd` | 주인공 캐릭터 도트 스프라이트를 절차적(원/사각형 조합)으로 그려서 PNG 저장 | **중단됨** — 진짜 이미지 생성이 아니라 도형 조합이라 한계가 있어 v7까지 반복하다 접음 (STATUS.md 2026-09-04 참고). 캐릭터 아트는 외부 에셋으로 대체 예정. 코드는 도트 그리기 기법 참고용으로만 남겨둠 |
 | `verify_occlusion.gd` | 플레이어를 나무 캐노피/밑둥 뒤로 이동시킨 뒤 실제 창을 캡처해서 오클루전 반투명 리빌 셰이더가 시각적으로 동작하는지 확인 (`res://qa/output/occlusion_check.png` + `occlusion_log.txt`). **창모드 전용**(헤드리스 불가), 실행 시 `--script` 플래그 필수 | 재사용 중 — 나무 오클루전 확인용으로 작성했지만 건물/원두막 지붕 등 다른 오브젝트 검증에도 좌표만 바꿔서 재사용 가능 |

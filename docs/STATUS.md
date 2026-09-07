@@ -120,9 +120,13 @@
 
 > INBOX.md에 새 지시가 있으면 이 큐보다 항상 먼저 처리한다.
 
-1. `floorboard.gd`/`gonggi_stones.gd`/`hopscotch_key.gd`/`jar_stamp.gd`의
-   `ColorRect` 그레이박스를 실제 스프라이트로 교체 (판자/공기돌/사방치기/
-   장독대 — `assets/tiles/main/`의 Inside 시트나 별도 크롭 대상 확인).
+1. `floorboard.gd`(마루 판자)/`hopscotch_key.gd`(사방치기)는 여전히
+   `ColorRect` 그레이박스다 — `assets/tiles/main/` 어디에도 한국식 마루
+   판자·흙바닥 사방치기 칸에 맞는 소재가 없어서(RPG Maker 실내 가구
+   팩이라 장르가 안 맞음) 보류 중. `gonggi_stones.gd`/`jar_stamp.gd`는
+   `Inside_C_2.png`에서 크롭한 실제 스프라이트로 이미 교체됨(아래 완료
+   기록 참고). 이 둘도 실제 아트가 필요해지면 별도 제작이나 다른 팩
+   확보가 필요하다.
 2. `scenes/chapter1_end.tscn`은 의도적으로 최소한의 임시 종료 화면이다
    (검은 배경 + 텍스트 한 줄, 그 이상 없음) — 챕터 2가 아직 없어서 그
    너머로 갈 곳도 없다. 사람이 실제로 더 채워 넣고 싶다면(엔딩 연출,
@@ -163,6 +167,18 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- **이터레이션 배치 1/10 — 공기돌/장독 실제 스프라이트 교체**: 다음 할
+  일 큐 1번을 부분적으로 처리. `assets/tiles/main/Inside_C_2.png`(가구/
+  장식 시트)를 훑어서 둥근 항아리(장독 후보)와 조약돌(공기돌 후보)을
+  찾아 `tools/crop_props_from_inside_c2.gd`로 `assets/props/
+  main_tileset_props/{jar,gonggi_stone}.png`로 크롭, `chapter1_real.tscn`의
+  `GonggiStones`/`JarStamp` 노드의 `Visual` 자식을 `ColorRect`에서
+  `Sprite2D`로 교체. **판자(floorboard)/사방치기(hopscotch)는 그대로
+  둠** — 같은 시트를 다 훑어봤지만 한국식 마루 밑 판자나 흙바닥
+  사방치기 칸에 맞는 소재가 전혀 없었다(RPG Maker 실내 가구 팩이라
+  장르 자체가 다름) — 억지로 안 맞는 걸 쓰기보다 그레이박스가 낫다고
+  판단. `tests/test_chapter1_puzzle.gd`(19개) + 전체 12종 재통과, QA로
+  공기돌 스프라이트 렌더링 확인.
 - **일기 개봉 → 자동 챕터 종료 연결(사람 지시 "이어서 처리해줘",
   2026-09-07)**: 직전 항목("챕터 1 메인 퍼즐 구현")에서 미완성으로 남겨둔
   "WakeTrigger 게이팅" 문제를 WakeTrigger를 건드리지 않는 방식으로 해결.

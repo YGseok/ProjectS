@@ -17,6 +17,8 @@
 [ext_resource type="Script" path="res://scripts/hopscotch_key.gd" id="15_hopscotch"]
 [ext_resource type="Script" path="res://scripts/jar_stamp.gd" id="16_jar"]
 [ext_resource type="Script" path="res://scripts/wall_mark_flash.gd" id="17_wallmark"]
+[ext_resource type="Texture2D" path="res://assets/props/main_tileset_props/gonggi_stone.png" id="18_gonggi_tex"]
+[ext_resource type="Texture2D" path="res://assets/props/main_tileset_props/jar.png" id="19_jar_tex"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 18
@@ -145,13 +147,8 @@ text = "Enter: 살펴보기"
 position = Vector2(416, 160)
 script = ExtResource("14_gonggi")
 
-[node name="Visual" type="ColorRect" parent="GonggiStones"]
-offset_left = -8.0
-offset_top = -4.0
-offset_right = 8.0
-offset_bottom = 4.0
-mouse_filter = 2
-color = Color(0.75, 0.72, 0.65, 0.9)
+[node name="Visual" type="Sprite2D" parent="GonggiStones"]
+texture = ExtResource("18_gonggi_tex")
 
 [node name="PromptLabel" type="Label" parent="GonggiStones"]
 offset_left = -60.0
@@ -187,13 +184,8 @@ text = "Enter: 살펴보기"
 position = Vector2(128, 224)
 script = ExtResource("16_jar")
 
-[node name="Visual" type="ColorRect" parent="JarStamp"]
-offset_left = -14.0
-offset_top = -16.0
-offset_right = 14.0
-offset_bottom = 16.0
-mouse_filter = 2
-color = Color(0.45, 0.3, 0.2, 0.9)
+[node name="Visual" type="Sprite2D" parent="JarStamp"]
+texture = ExtResource("19_jar_tex")
 
 [node name="PromptLabel" type="Label" parent="JarStamp"]
 offset_left = -60.0
