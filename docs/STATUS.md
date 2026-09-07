@@ -167,6 +167,16 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- **이터레이션 배치 2/10 — 순환 진행 회귀 테스트 보강**:
+  `test_wake_trigger_range.gd`/`test_nap_trigger_range.gd`는 사정거리
+  게이팅과 씬 전환만 검증했고 `Chapter1Progress.stage`가 실제로
+  올라가는지는(WakeTrigger) / 안 올라가는지는(NapTrigger) 아무도 안
+  보고 있었다 — `.tscn`의 `advances_chapter1_cycle` 익스포트 값이
+  실수로 지워지거나 반대로 설정돼도 기존 테스트로는 못 잡는 사각지대.
+  두 파일에 `Chapter1Progress` 조회 + 각성 전후 `stage` 비교 어서션을
+  추가(WakeTrigger는 +1 확인, NapTrigger는 불변 확인 + `advances_
+  chapter1_cycle`이 꺼져 있는지도 직접 확인 — 낮잠 쪽에 실수로 켜두면
+  순환이 2배로 빨리 진행되는 버그가 생길 수 있음). 전체 12종 재통과.
 - **이터레이션 배치 1/10 — 공기돌/장독 실제 스프라이트 교체**: 다음 할
   일 큐 1번을 부분적으로 처리. `assets/tiles/main/Inside_C_2.png`(가구/
   장식 시트)를 훑어서 둥근 항아리(장독 후보)와 조약돌(공기돌 후보)을
