@@ -94,6 +94,16 @@ Godot 스크립트로 자동 검증한다 — 사람이 직접 키보드로 눌�
 godot4 --headless --script res://tests/test_dialogue_interaction.gd --path .
 ```
 
+전체 테스트를 한 번에 돌리려면 (테스트가 늘어날수록 유용):
+
+```bash
+./tests/run_all.sh
+# 또는: GODOT_BIN=/c/Path/To/Godot.exe ./tests/run_all.sh
+```
+
+`tests/` 안의 `test_*.gd` 전부를 순서대로 실행하고 마지막에 통과/실패
+개수와 실패한 테스트 이름을 요약해준다. 하나라도 실패하면 exit 1.
+
 - 성공: 각 검증 단계가 `[TEST] PASS - ...`로 출력되고 마지막에
   `[TEST] ALL PASSED`, `exit 0`.
 - 실패: 실패한 항목이 `[TEST] FAIL - ...`로 출력되고 `exit 1`.
