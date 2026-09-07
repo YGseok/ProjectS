@@ -74,41 +74,46 @@
   시뮬레이션해서 **사람 없이 자동으로 검증 가능**. 위 대화 시스템 버그도
   이 방식으로 잡아냈다. 사용법/함정은 `qa/README.md`의 "상호작용 자동
   테스트" 절 참고. 예시: `tests/test_dialogue_interaction.gd`.
-- `res://scenes/chapter1_real.tscn` / `chapter1_dream.tscn` — 그레이박스
-  상태 그대로 (실제 픽셀아트 없음, 의도적 플레이스홀더). 낮잠→꿈 전환은
-  왕복 가능하지만 `chapter1_dream.tscn`의 각성 트리거는 여전히 **임시**
-  (Enter만 누르면 각성 — 진짜 메인 퍼즐로 교체 전).
+- `res://scenes/chapter1_real.tscn` / `chapter1_dream.tscn` — 배경은 이제
+  실제 타일 아트 적용됨(아래 "배경 아트 통합" 참고, 더 이상 그레이박스
+  아님). 낮잠→꿈 전환은 왕복 가능하지만 `chapter1_dream.tscn`의 각성
+  트리거는 여전히 **임시** (Enter만 누르면 각성 — 진짜 메인 퍼즐로 교체 전,
+  §7.1 재구성 대기 중).
 
 ## 2. 다음 할 일 큐 (우선순위 순, 위가 먼저)
 
 > INBOX.md에 새 지시가 있으면 이 큐보다 항상 먼저 처리한다.
 
-1. `chapter1_dream.tscn`도 `main_tileset.tres`로 교체 (꿈 분위기에 맞게
-   톤 조정 — 예: 밭을 더 붉게/어둡게, 벽/바닥도 어두운 색조로).
-2. DESIGN.md §7.1(챕터 1 메인 퍼즐) 재구성 여부는 **사람이 Claude.ai에서
+1. DESIGN.md §7.1(챕터 1 메인 퍼즐) 재구성 여부는 **사람이 Claude.ai에서
    결정 중** — 여기서 먼저 판단하지 말고 결정 결과(INBOX.md 또는
    docs/scenario/ 새 파일)를 기다릴 것.
-3. 캐릭터 아트: `bonus_pack`의 캐릭터들은 최종 디자인(흰 원피스, 10살
+2. 캐릭터 아트: `bonus_pack`의 캐릭터들은 최종 디자인(흰 원피스, 10살
    한국인 여아)과 안 맞음 — 맞는 에셋이 더 필요하거나 별도 제작 필요.
-4. 벽/원두막 지붕에 지금 같은 나무판벽 타일을 재사용 중 — 여유 있으면
-   A4 시트에서 지붕 전용 타일을 찾아 교체 (급하지 않음).
+3. 벽/원두막 지붕에 지금 같은 나무판벽 타일을 재사용 중 — 여유 있으면
+   A4 시트에서 지붕 전용 타일을 찾아 교체 (급하지 않음, 시각적으로는
+   문제 없음).
+4. 사람이 직접 플레이해서 `chapter1_dream.tscn`의 낮잠→꿈→각성 왕복이
+   새 배경에서도 여전히 잘 되는지 확인 (구조상 Player/WakeTrigger/
+   FadeOverlay는 안 건드렸지만, 자동 테스트가 이 씬까지는 커버 안 함).
 5. 각 신규 씬/상호작용 작업 후 `qa/run_qa.sh`(시각) + 해당하면 `tests/`
    자동 상호작용 테스트로 검증 → 사람 눈 확인은 여전히 최종 기준.
 
-> **배경 아트 통합**(2026-09-07): `assets/tiles/main/main_tileset.tres`
-> 생성(source 0=A4 벽 (2,10), source 1=A5 바닥/지면 — 잔디(0,8)/붉은흙(1,8)/
-> 밝은나무(0,5)/중간나무(1,5), 48px 원본을 32px 게임 그리드로 자동 축소).
-> `chapter1_real.tscn`의 그레이박스 ColorRect들을 `TileMapLayer`
-> (`scripts/chapter1_real_background.gd`)로 교체 완료 — 기존 좌표 그대로
-> 유지(기와집 벽/툇마루/밭/원두막). QA 캡처로 시각 확인 + 기존 자동
-> 상호작용 테스트(`tests/test_dialogue_interaction.gd`) 11개 전부 재통과
-> 확인. **다음**: `chapter1_dream.tscn`에도 동일 적용.
+> **배경 아트 통합 완료**(2026-09-07): `assets/tiles/main/main_tileset.tres`
+> 로 `chapter1_real.tscn`과 `chapter1_dream.tscn` 둘 다 그레이박스에서
+> 실제 타일로 교체. 같은 5개 타일(벽/잔디/밭/툇마루나무/원두막나무)을
+> 재사용하되, 꿈 씬은 `TileData.modulate`로 구역별 색 틴트를 다르게 줘서
+> "같은 공간, 다른 분위기"(DESIGN.md §4)를 구현 — 특히 밭은 진한 빨강
+> 틴트로 피마자밭 느낌을 강조. QA 캡처 둘 다 확인, `chapter1_real` 쪽은
+> 자동 상호작용 테스트 11개도 재통과.
 
 > 이동 사양 확정(2026-09-01): `play_area` 는 화면 전체이며, 벽/구역 경계
 > 충돌 처리는 아직 요청되지 않았으므로 구현하지 않는다.
 
 ## 3. 완료 기록 (최신이 위)
 
+- 배경 아트 통합 3단계: `chapter1_dream.tscn`에도 같은 타일셋 적용,
+  `TileData.modulate`로 구역별 색 틴트(밭=진한 빨강 등)를 줘서 꿈 분위기
+  표현. QA 캡처 확인.
 - 배경 아트 통합 2단계: `chapter1_real.tscn`의 그레이박스 ColorRect를
   실제 타일(`TileMapLayer` + `chapter1_real_background.gd`)로 교체.
   좌표/레이아웃은 그대로 유지. QA 캡처 확인 + 자동 상호작용 테스트
