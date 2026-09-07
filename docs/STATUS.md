@@ -170,6 +170,12 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- **이터레이션 배치 9/10 — 재조사(이미 획득함) 분기 커버리지 추가**:
+  `hopscotch_key.gd`/`jar_stamp.gd`의 "이미 획득한 뒤 다시 조사하면
+  상태만 유지하고 재지급 안 함" 분기가 지금까지 한 번도 자동 테스트로
+  실행된 적이 없었다(항상 첫 조사 케이스만 검증). `test_chapter1_puzzle.gd`
+  에 각 오브젝트를 획득 직후 한 번 더 조사하는 단계를 추가(총 23개
+  어서션으로 증가). 전체 12종 재통과.
 - **이터레이션 배치 7/10 — 전체 회귀 스윕**: `qa/run_all.sh`로 알려진
   6개 씬(dungeon, chapter1_real, chapter1_dream, chapter1_end,
   pipeline_test, main_tileset_test) 전부 캡처 + 직접 눈으로 확인.

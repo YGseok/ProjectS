@@ -64,6 +64,11 @@ func _initialize() -> void:
 	await _interact()
 	_assert(_progress.has_key, "2단계 사방치기 조사 후 열쇠 획득")
 
+	# 이미 파낸 뒤 다시 조사해도 크래시 없이 "이미 비어있다" 분기만 타고
+	# 상태는 그대로 유지되는지 확인 (hopscotch_key.gd의 has_key 분기).
+	await _interact()
+	_assert(_progress.has_key, "사방치기를 다시 조사해도 열쇠 상태는 그대로 유지")
+
 	await _move_to(floorboard.position)
 	await _interact()
 	_assert(not _progress.diary_opened, "열쇠만 있고 나무패 없으면 아직 안 열림")
@@ -77,6 +82,11 @@ func _initialize() -> void:
 	await _move_to(jar.position)
 	await _interact()
 	_assert(_progress.has_stamp, "3단계 장독 조사 후 나무패 획득")
+
+	# 장독도 마찬가지로 재조사 시 안전한지 확인 (jar_stamp.gd의
+	# has_stamp 분기).
+	await _interact()
+	_assert(_progress.has_stamp, "장독을 다시 조사해도 나무패 상태는 그대로 유지")
 
 	await _move_to(floorboard.position)
 	await _interact()
