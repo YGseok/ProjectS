@@ -83,32 +83,36 @@
 
 > INBOX.md에 새 지시가 있으면 이 큐보다 항상 먼저 처리한다.
 
-1. `chapter1_real.tscn`의 그레이박스 ColorRect를 `assets/tiles/main/
-   main_tileset.tres`로 교체 (아래 "배경 아트 통합" 참고 — TileSet은
-   준비 완료, 씬 적용이 다음 단계).
-2. `chapter1_dream.tscn`도 동일하게 교체 (꿈 분위기에 맞는 톤 유지).
-3. DESIGN.md §7.1(챕터 1 메인 퍼즐) 재구성 여부는 **사람이 Claude.ai에서
+1. `chapter1_dream.tscn`도 `main_tileset.tres`로 교체 (꿈 분위기에 맞게
+   톤 조정 — 예: 밭을 더 붉게/어둡게, 벽/바닥도 어두운 색조로).
+2. DESIGN.md §7.1(챕터 1 메인 퍼즐) 재구성 여부는 **사람이 Claude.ai에서
    결정 중** — 여기서 먼저 판단하지 말고 결정 결과(INBOX.md 또는
    docs/scenario/ 새 파일)를 기다릴 것.
-4. 캐릭터 아트: `bonus_pack`의 캐릭터들은 최종 디자인(흰 원피스, 10살
+3. 캐릭터 아트: `bonus_pack`의 캐릭터들은 최종 디자인(흰 원피스, 10살
    한국인 여아)과 안 맞음 — 맞는 에셋이 더 필요하거나 별도 제작 필요.
+4. 벽/원두막 지붕에 지금 같은 나무판벽 타일을 재사용 중 — 여유 있으면
+   A4 시트에서 지붕 전용 타일을 찾아 교체 (급하지 않음).
 5. 각 신규 씬/상호작용 작업 후 `qa/run_qa.sh`(시각) + 해당하면 `tests/`
    자동 상호작용 테스트로 검증 → 사람 눈 확인은 여전히 최종 기준.
 
-> **배경 아트 통합 진행 중**(2026-09-07): `tools/build_main_tileset.gd`로
-> `assets/tiles/main/main_tileset.tres` 생성 완료 — source 0 = A4.png
-> (벽, 좌표 (2,10) 어두운 나무 판벽), source 1 = A5.png (바닥/지면: (0,8)
-> 잔디, (1,8) 붉은 흙, (0,5) 밝은 나무 바닥, (1,5) 중간톤 나무 바닥).
-> 원본 48px 타일을 게임 그리드 32px로 자동 축소 렌더링(TileSet.tile_size=32,
-> texture_region_size=48). `scenes/test/main_tileset_test.tscn`으로 QA
-> 캡처 검증 완료 — 5종 타일 모두 이음매 없이 잘 반복됨. **다음 단계**:
-> 이 좌표들을 실제 챕터 1 씬에 적용.
+> **배경 아트 통합**(2026-09-07): `assets/tiles/main/main_tileset.tres`
+> 생성(source 0=A4 벽 (2,10), source 1=A5 바닥/지면 — 잔디(0,8)/붉은흙(1,8)/
+> 밝은나무(0,5)/중간나무(1,5), 48px 원본을 32px 게임 그리드로 자동 축소).
+> `chapter1_real.tscn`의 그레이박스 ColorRect들을 `TileMapLayer`
+> (`scripts/chapter1_real_background.gd`)로 교체 완료 — 기존 좌표 그대로
+> 유지(기와집 벽/툇마루/밭/원두막). QA 캡처로 시각 확인 + 기존 자동
+> 상호작용 테스트(`tests/test_dialogue_interaction.gd`) 11개 전부 재통과
+> 확인. **다음**: `chapter1_dream.tscn`에도 동일 적용.
 
 > 이동 사양 확정(2026-09-01): `play_area` 는 화면 전체이며, 벽/구역 경계
 > 충돌 처리는 아직 요청되지 않았으므로 구현하지 않는다.
 
 ## 3. 완료 기록 (최신이 위)
 
+- 배경 아트 통합 2단계: `chapter1_real.tscn`의 그레이박스 ColorRect를
+  실제 타일(`TileMapLayer` + `chapter1_real_background.gd`)로 교체.
+  좌표/레이아웃은 그대로 유지. QA 캡처 확인 + 자동 상호작용 테스트
+  11개 재통과 확인.
 - 배경 아트 통합 1단계: `assets/tiles/main/main_tileset.tres` 조립(벽/잔디/
   흙/나무바닥 5종), 48px→32px 자동 축소 렌더링 확인, QA 캡처로 5종 타일
   이음매 검증 완료. (다음: 실제 챕터 1 씬 적용)
