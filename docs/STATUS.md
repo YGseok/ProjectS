@@ -111,6 +111,9 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- `chapter1_dream.tscn`에도 같은 나무/덤불을 같은 위치에 배치하되
+  `modulate`로 칙칙한 톤(나무는 회녹색, 덤불은 녹슨 듯한 붉은기)을 줘서
+  "같은 공간, 다른 분위기" 유지. QA 캡처 확인.
 - `chapter1_real.tscn` 마당에 나무 2그루 + 열매 덤불 배치 (`assets/props/
   nature/` 스프라이트, `Sprite2D` + `centered=false`/`offset`로 밑동
   기준 배치). QA 캡처로 배치 확인, 자동 테스트 회귀 없음 확인.
