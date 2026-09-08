@@ -9,6 +9,12 @@ extends Node2D
 ## 여전히 Enter만 누르면 되는 **임시** 트리거이고(진짜로는 마지막 단계
 ## 일기 개봉이 각성을 유발해야 함, DESIGN.md §8.1 참고), 지금은 왕복 자체가
 ## 막히지 않도록 열어둔 상태다.
+##
+## 대화창/아이템 팝업이 열려 있거나 막 닫힌 프레임에는 반응하지 않는다 —
+## 지금 오브젝트 배치상 실제로 겹치는 자리는 없지만(NapTrigger가 정확히
+## 플레이어 스폰 위치라 특히 조심), 같은 종류의 "닫는 입력이 같은 프레임에
+## 다른 걸 재트리거" 버그를 `interactable_base.gd`/`item_popup.gd`에서
+## 이미 두 번 겪어서(2026-09-08) 여기도 방어적으로 막아둔다.
 
 @export var target_scene: String = ""
 @export var interact_radius: float = 24.0
@@ -32,7 +38,9 @@ func _process(_delta: float) -> void:
 	var in_range := global_position.distance_to(_player.global_position) <= interact_radius
 	_prompt_label.visible = in_range
 
-	if in_range and Input.is_action_just_pressed("ui_accept"):
+	var blocked := DialogueSystem.is_active() or DialogueSystem.just_ended_this_frame() \
+		or ItemPopup.is_active() or ItemPopup.just_closed_this_frame()
+	if in_range and not blocked and Input.is_action_just_pressed("ui_accept"):
 		if advances_chapter1_cycle:
 			Chapter1Progress.advance_cycle()
 		var fade := get_tree().get_first_node_in_group("fade_overlay")

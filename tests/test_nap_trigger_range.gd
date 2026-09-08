@@ -34,6 +34,23 @@ func _initialize() -> void:
 
 	var prompt_label: Label = _nap_trigger.get_node("PromptLabel")
 
+	# 플레이어 스폰 위치가 정확히 NapTrigger 자리라서, 대화를 닫는 Enter가
+	# 같은 프레임에 낮잠까지 같이 트리거해버리면 안 된다 — 같은 종류의
+	# "닫는 입력이 같은 프레임에 다른 걸 재트리거" 버그를
+	# interactable_base.gd/item_popup.gd에서 이미 두 번 겪어서
+	# nap_trigger.gd에도 방어적으로 가드를 추가했다(2026-09-08). 실제
+	# 오브젝트 배치상 지금은 겹치는 자리가 없어서 대화를 직접 열어서
+	# 인위적으로 재현한다.
+	var dialogue: Node = root.get_node("DialogueSystem")
+	var test_line: Array[String] = ["테스트 대사"]
+	dialogue.start_dialogue(test_line)
+	await process_frame
+	await process_frame
+	await _send_action("ui_accept")
+	_assert(not dialogue.is_active(), "테스트 대사가 정상적으로 닫힘")
+	_assert(current_scene.name == "Chapter1Real",
+		"대화를 닫는 Enter가 같은 프레임에 낮잠까지 재트리거하지 않음, 실제: %s" % [current_scene.name])
+
 	# 시작 위치(608,160)는 트리거 바로 위 -> 사정거리 안
 	await process_frame
 	_assert(prompt_label.visible, "트리거 위치에 있을 때 프롬프트 라벨이 보임")
