@@ -1,0 +1,55 @@
+[gd_scene load_steps=5 format=3 uid="uid://inventory_ui_scene"]
+
+[ext_resource type="Script" path="res://scripts/inventory_ui.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/props/ui_icons/key_icon.png" id="2_key_tex"]
+[ext_resource type="Texture2D" path="res://assets/props/ui_icons/stamp_icon.png" id="3_stamp_tex"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slot"]
+bg_color = Color(0.05, 0.05, 0.07, 0.75)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.8, 0.8, 0.75, 0.5)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="InventoryUI" type="CanvasLayer" groups=["inventory_ui"]]
+layer = 40
+script = ExtResource("1_script")
+
+[node name="KeySlot" type="Panel" parent="."]
+visible = false
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 56.0
+offset_bottom = 56.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
+
+[node name="Icon" type="TextureRect" parent="KeySlot"]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 36.0
+offset_bottom = 36.0
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("2_key_tex")
+
+[node name="StampSlot" type="Panel" parent="."]
+visible = false
+offset_left = 64.0
+offset_top = 16.0
+offset_right = 104.0
+offset_bottom = 56.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
+
+[node name="Icon" type="TextureRect" parent="StampSlot"]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 36.0
+offset_bottom = 36.0
+expand_mode = 1
+stretch_mode = 5
+texture = ExtResource("3_stamp_tex")

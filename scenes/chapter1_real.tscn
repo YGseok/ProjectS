@@ -19,6 +19,7 @@
 [ext_resource type="Script" path="res://scripts/wall_mark_flash.gd" id="17_wallmark"]
 [ext_resource type="Texture2D" path="res://assets/props/main_tileset_props/gonggi_stone.png" id="18_gonggi_tex"]
 [ext_resource type="Texture2D" path="res://assets/props/main_tileset_props/jar.png" id="19_jar_tex"]
+[ext_resource type="PackedScene" path="res://scenes/common/InventoryUI.tscn" id="20_inventory_ui"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 18
@@ -244,3 +245,5 @@ target_scene = "res://scenes/chapter1_dream.tscn"
 prompt_text = "Enter: 낮잠"
 
 [node name="FadeOverlay" parent="." instance=ExtResource("2_fade")]
+
+[node name="InventoryUI" parent="." instance=ExtResource("20_inventory_ui")]

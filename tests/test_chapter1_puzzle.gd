@@ -31,6 +31,8 @@ func _initialize() -> void:
 	var floorboard: Node2D = current_scene.get_node("Floorboard")
 	var hopscotch: Node2D = current_scene.get_node("HopscotchKey")
 	var jar: Node2D = current_scene.get_node("JarStamp")
+	var key_slot: Control = current_scene.get_node("InventoryUI/KeySlot")
+	var stamp_slot: Control = current_scene.get_node("InventoryUI/StampSlot")
 
 	# 새로 추가된 오브젝트들의 _process()가 한 번 이상 돌 시간을 준다
 	# (씬 로드 직후 2프레임만으로는 부족할 때가 있었음 — visible 갱신은
@@ -39,6 +41,8 @@ func _initialize() -> void:
 		await process_frame
 	_assert(not hopscotch.visible, "1단계에서는 사방치기(열쇠) 안 보임")
 	_assert(not jar.visible, "1단계에서는 장독(나무패) 안 보임")
+	_assert(not key_slot.visible and not stamp_slot.visible,
+		"아이템 획득 전에는 인벤토리 UI 슬롯이 둘 다 숨겨져 있음")
 
 	# 판자로 이동해서 조사 — 아직 잠겨있다는 대사만 뜨고 상태 변화 없음.
 	await _move_to(floorboard.position)
@@ -63,6 +67,9 @@ func _initialize() -> void:
 	await _move_to(hopscotch.position)
 	await _interact_expect_item("열쇠")
 	_assert(_progress.has_key, "2단계 사방치기 조사 후 열쇠 획득")
+	await process_frame
+	_assert(key_slot.visible and not stamp_slot.visible,
+		"열쇠 획득 후 인벤토리에 열쇠 슬롯만 보임")
 
 	# 이미 파낸 뒤 다시 조사해도 크래시 없이 "이미 비어있다" 분기만 타고
 	# 상태는 그대로 유지되는지 확인 (hopscotch_key.gd의 has_key 분기).
@@ -82,6 +89,9 @@ func _initialize() -> void:
 	await _move_to(jar.position)
 	await _interact_expect_item("나무패")
 	_assert(_progress.has_stamp, "3단계 장독 조사 후 나무패 획득")
+	await process_frame
+	_assert(key_slot.visible and stamp_slot.visible,
+		"나무패까지 획득하면 인벤토리에 두 슬롯 다 보임")
 
 	# 장독도 마찬가지로 재조사 시 안전한지 확인 (jar_stamp.gd의
 	# has_stamp 분기).
@@ -117,6 +127,9 @@ func _initialize() -> void:
 	_assert(wall_mark.visible, "일기 개봉 시퀀스 시작과 동시에 벽 낙서가 flash()됨")
 	await _interact()
 	_assert(_progress.diary_opened, "4단계 + 열쇠 + 나무패 모두 갖춘 뒤 판자 조사하면 일기 개봉됨")
+	await process_frame
+	_assert(not key_slot.visible and not stamp_slot.visible,
+		"일기 개봉(아이템 소진) 후 인벤토리 슬롯이 둘 다 사라짐")
 
 	# 일기 개봉(대화 종료) 자체가 각성(챕터 종료)을 유발해야 한다
 	# (DESIGN.md §8.1 "트리거" 항목) — WakeTrigger를 따로 안 걸어가도
