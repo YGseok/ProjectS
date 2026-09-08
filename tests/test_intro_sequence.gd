@@ -34,6 +34,20 @@ func _initialize() -> void:
 		"Esc로 건너뛰면 바로 챕터 1 현실로 전환됨, 실제: %s" %
 			[current_scene.name if current_scene else "null"])
 
+	# Esc를 한 번도 안 쓰고, Enter만으로 모든 줄을 자연스럽게 다 넘겨도
+	# (LINES 끝에 도달) 정상적으로 챕터 1로 전환되는지 확인 — 지금까지는
+	# Esc로 건너뛰는 경로만 씬 전환을 검증했음.
+	change_scene_to_file("res://scenes/chapter1_intro.tscn")
+	await process_frame
+	await process_frame
+	var line_count: int = current_scene.LINES.size()
+	for i in range(line_count):
+		await _send_action("ui_accept")
+	await _wait_scene_change("Chapter1Real", 3.0)
+	_assert(current_scene != null and current_scene.name == "Chapter1Real",
+		"Enter %d번으로 모든 줄을 자연스럽게 다 넘겨도 챕터 1로 전환됨, 실제: %s" %
+			[line_count, current_scene.name if current_scene else "null"])
+
 	_finish()
 
 
