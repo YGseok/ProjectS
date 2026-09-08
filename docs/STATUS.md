@@ -89,12 +89,15 @@
   테스트" 절 참고. 예시: `tests/test_dialogue_interaction.gd`.
 - `res://scenes/chapter1_real.tscn` / `chapter1_dream.tscn` — 배경은 이제
   실제 타일 아트 적용됨(아래 "배경 아트 통합" 참고, 더 이상 그레이박스
-  아님). 낮잠→꿈 전환은 왕복 가능하지만 `chapter1_dream.tscn`의 각성
-  트리거는 여전히 **임시** (Enter만 누르면 각성) — 이제 각성할 때마다
-  `Chapter1Progress.advance_cycle()`을 호출해 메인 퍼즐 단계를 올리는
-  역할까지는 하지만, "일기 개봉(4단계 완료)이 각성을 유발해야 한다"는
-  진짜 트리거 조건(DESIGN.md §8.1)으로 아직 안 바뀌어 있음 — 다음 할 일
-  큐 참고.
+  아님). 낮잠→꿈 전환은 왕복 가능하고, `chapter1_dream.tscn`의
+  `WakeTrigger`는 Enter로 각성할 때마다 `Chapter1Progress.advance_cycle()`
+  을 호출해 메인 퍼즐 1~3단계를 순환시키는 역할을 한다(이 부분은 의도한
+  최종 동작 — "임시"가 아님). "일기 개봉(4단계+열쇠+나무패 완료)이
+  각성을 유발해야 한다"는 조건은 **WakeTrigger를 게이팅하는 방식 대신**
+  `floorboard.gd`가 일기 대사 종료(`DialogueSystem.dialogue_ended`) 시점에
+  직접 `chapter1_end.tscn`으로 전환하는 별도 경로로 이미 구현
+  완료됐다(2026-09-07, 아래 완료 기록 "챕터 1 메인 퍼즐 확정" 참고) —
+  WakeTrigger는 여전히 1~3단계 순환 전용.
 - **챕터 1 메인 퍼즐 "닫힌 일기장" 구현**(INBOX.md 결정 반영, 2026-09-07):
   DESIGN.md §8.1을 4단계 수집 퍼즐로 교체하고 실제 오브젝트까지 구현.
   `scripts/chapter1_progress.gd`(오토로드 `Chapter1Progress`)가 `stage`
@@ -213,6 +216,15 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- **v0.09 — STATUS.md §1 낡은 메모 정정(코드 변경 없음)**: "지금 위치"
+  섹션에 "일기 개봉(4단계 완료)이 각성을 유발해야 한다는 진짜 트리거
+  조건으로 아직 안 바뀌어 있음"이라는 메모가 남아있었는데, 이건
+  2026-09-07 "챕터 1 메인 퍼즐 확정" 작업에서 **이미 다른 방식으로
+  구현 완료된** 내용이었다(`WakeTrigger`를 게이팅하는 대신
+  `floorboard.gd`가 일기 대사 종료 시 직접 `chapter1_end.tscn`으로
+  전환) — 완료 기록에는 정확히 남아있었는데 §1 요약 쪽만 갱신이 안
+  돼서 서로 모순된 상태였다. §1 문구를 현재 구현과 일치하도록 수정.
+  기능/테스트/QA 변경 없음(문서만).
 - **v0.08 — 꿈 씬에도 나무/덤불 조사 상호작용 확장**: v0.07에서
   `chapter1_real.tscn`(현실)에만 추가했던 examine 트리거를
   `chapter1_dream.tscn`(꿈)에도 동일한 좌표/컴포넌트(`scenery_flavor.gd`)
