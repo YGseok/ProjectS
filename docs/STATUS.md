@@ -193,6 +193,20 @@
 > 원두막 지붕·나무 밑둥은 이제 막힌다(완료 기록의 "이동 콜리전" 항목
 > 참고) — 그 외 나머지 열린 공간은 여전히 자유 이동.
 
+- **이터레이션 11 — `npc.gd`도 같은 재트리거 버그 사각지대였음**:
+  `nap_trigger.gd`를 고친 김에 `Input.is_action_just_pressed("ui_accept")`
+  를 쓰는 모든 스크립트를 훑어봄(`dialogue_system.gd`, `intro_sequence.gd`,
+  `interactable_base.gd`, `item_popup.gd`, `nap_trigger.gd`, `npc.gd`).
+  `npc.gd`가 `DialogueSystem.is_active()`/`just_ended_this_frame()`는
+  체크하면서 `ItemPopup`쪽은 전혀 체크 안 하고 있었음 — 아이템 팝업을
+  닫는 Enter가 같은 프레임에, 마침 인접해서 마주보고 있던 NPC 대화까지
+  같이 열어버릴 수 있는 사각지대. 현재 오브젝트 배치상 실제로 겹치는
+  자리는 없지만(그림자 NPC와 열쇠/나무패 오브젝트가 서로 안 붙어있음)
+  같은 이유로 방어적으로 가드 추가. `test_npc_facing_check.gd`에 NPC와
+  인접+마주보는 상태에서 테스트 팝업을 띄웠다 닫아도 NPC 대화가
+  재트리거되지 않는지 확인하는 어서션 추가. 전체 14종 재통과 — 이걸로
+  `ui_accept`를 쓰는 상호작용 스크립트 6개 전부가 같은 가드 규칙을
+  따르게 됨.
 - **이터레이션 10 — `nap_trigger.gd`도 같은 재트리거 버그에 선제
   방어**: 직전 이터레이션에서 아이템 팝업 닫기가 오브젝트를 재트리거하는
   버그를 잡은 뒤, 같은 클래스 문제가 낮잠/각성 트리거(`nap_trigger.gd`)

@@ -31,6 +31,19 @@ func _initialize() -> void:
 	await _move_one_tile("ui_right")
 	_assert(_player.facing == Vector2.RIGHT, "이동 후 facing RIGHT, 실제: %s" % [_player.facing])
 
+	# 아이템 팝업을 닫는 Enter가 같은 프레임에 NPC까지 재트리거하면 안
+	# 된다 — nap_trigger.gd에서 이미 겪은 것과 같은 클래스의 버그를
+	# npc.gd에도 선제적으로 막아뒀다(2026-09-08). 지금 인접+마주보고
+	# 있는 상태를 이용해 인위적으로 재현한다.
+	var popup: Node = root.get_node("ItemPopup")
+	popup.show_item("테스트", null)
+	await process_frame
+	await process_frame
+	await _send_action("ui_accept")
+	_assert(not popup.is_active(), "테스트 팝업이 정상적으로 닫힘")
+	_assert(not _dialogue.is_active(),
+		"팝업을 닫는 Enter가 같은 프레임에 인접한 NPC까지 재트리거하지 않음")
+
 	# 위로 갔다가 아래로 내려와서 같은 자리(672,160)로 돌아오되 facing은 DOWN으로
 	await _move_one_tile("ui_up")
 	await _move_one_tile("ui_down")

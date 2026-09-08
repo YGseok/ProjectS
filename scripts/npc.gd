@@ -13,7 +13,8 @@ var _player: Node2D
 func _process(_delta: float) -> void:
 	if _player == null:
 		_player = get_tree().get_first_node_in_group("player")
-	if _player == null or DialogueSystem.is_active() or DialogueSystem.just_ended_this_frame():
+	if _player == null or DialogueSystem.is_active() or DialogueSystem.just_ended_this_frame() \
+			or ItemPopup.is_active() or ItemPopup.just_closed_this_frame():
 		return
 	if not Input.is_action_just_pressed("ui_accept"):
 		return
