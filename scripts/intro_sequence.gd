@@ -12,8 +12,14 @@ extends Node2D
 ## 텍스트는 DESIGN.md §8에 이미 확정된 사실(10세 여자아이, 매년 여름
 ## 시골 옛집 방문, 가족과 함께, 도착한 날 낮잠)만 사용한 **임시
 ## 자리표시 텍스트**다 — 실제 대사/연출은 스토리 세션에서 확정 후 교체할 것.
+##
+## 타자기 효과: `dialogue_system.gd`와 같은 방식(`Label.visible_ratio`)
+## 으로 글자가 순차적으로 나타난다(2026-09-08 추가). 진행 로직(ui_accept
+## 한 줄 스킵, 3초 자동 진행, Esc 전체 스킵)은 전혀 안 바꿨다 — 순수
+## 시각 효과만 얹었다.
 
 const AUTO_ADVANCE_SECONDS := 3.0
+const CHARS_PER_SECOND := 40.0
 const NEXT_SCENE := "res://scenes/chapter1_real.tscn"
 
 const LINES: Array[String] = [
@@ -29,6 +35,7 @@ const LINES: Array[String] = [
 
 var _index := 0
 var _timer := 0.0
+var _reveal_progress := 0.0
 var _finished := false
 
 func _ready() -> void:
@@ -37,6 +44,10 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if _finished:
 		return
+	if _label.visible_ratio < 1.0:
+		_reveal_progress += CHARS_PER_SECOND * delta
+		var total := _label.text.length()
+		_label.visible_ratio = 1.0 if total <= 0 else clampf(_reveal_progress / float(total), 0.0, 1.0)
 	if Input.is_action_just_pressed("ui_cancel"):
 		_finish()
 		return
@@ -53,6 +64,8 @@ func _advance() -> void:
 
 func _show_line(i: int) -> void:
 	_label.text = LINES[i]
+	_label.visible_ratio = 0.0
+	_reveal_progress = 0.0
 	_timer = 0.0
 
 func _finish() -> void:
