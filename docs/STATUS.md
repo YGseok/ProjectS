@@ -180,6 +180,21 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- **이터레이션(4차) 1/5 — 프롤로그 구현(사람 피드백, 2026-09-08)**:
+  `scenes/chapter1_intro.tscn` + `scripts/intro_sequence.gd` 신설.
+  `project.godot`의 `run/main_scene`을 `chapter1_real.tscn`에서 이
+  씬으로 바꿔서 실제 게임의 첫 화면이 되게 함(기존 테스트들은 전부
+  자기가 필요한 씬을 `change_scene_to_file()`로 직접 불러오므로 이
+  변경에 영향 안 받음 — 확인 완료). 한 줄이 3초 뒤 자동으로 넘어가고
+  (자동 재생), `ui_accept`(Enter)로 그 줄만 즉시 스킵, `ui_cancel`
+  (Esc, Godot 기본 액션이라 별도 입력맵 설정 불필요)으로 전체를 한
+  번에 건너뛰어 바로 `chapter1_real.tscn`으로 전환된다. **텍스트는
+  임시 자리표시** — DESIGN.md §8에 이미 확정된 사실(10세 여자아이,
+  매년 여름 시골 옛집 방문, 가족과 함께, 도착한 날 낮잠)만 썼고 새
+  스토리 내용은 만들지 않음, 실제 대사는 스토리 세션 확정 후 교체
+  필요. `tests/test_intro_sequence.gd` 신설(자동 재생/한 줄 스킵/전체
+  스킵/전환 검증, 4개 어서션), `qa/run_all.sh`에 `chapter1_intro` 추가.
+  전체 13종 + QA 7개 씬 재통과, 인트로 화면 실제 캡처로도 확인.
 - **이터레이션(3차) 2/2 — 인벤토리 UI 구현(사람 피드백, 2026-09-08)**:
   `scenes/common/InventoryUI.tscn` + `scripts/inventory_ui.gd`를
   `chapter1_real.tscn`에 배치 — 화면 좌상단에 열쇠/나무패 슬롯을 두고,

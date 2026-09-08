@@ -8,7 +8,7 @@ config_version=5
 [application]
 
 config/name="ProjectS"
-run/main_scene="res://scenes/chapter1_real.tscn"
+run/main_scene="res://scenes/chapter1_intro.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 
 [autoload]

@@ -20,6 +20,7 @@ PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # 새 씬을 추가하면 여기에 한 줄만 추가하면 된다.
 SCENES=(
   "dungeon|"
+  "chapter1_intro|"
   "chapter1_real|"
   "chapter1_dream|"
   "chapter1_end|"
