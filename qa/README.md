@@ -157,3 +157,11 @@ godot4 --headless --script res://tests/test_dialogue_interaction.gd --path .
   조회하지 말고, `_process()`에서 `if _x == null: _x =
   get_tree().get_first_node_in_group(...)`처럼 값이 없을 때마다
   다시 찾도록 짤 것 — 노드 선언 순서가 나중에 바뀌어도 안전하다.
+- **테스트 안에서 시그널 카운터로 지역 `int` 변수를 쓰면 람다가 카운트를
+  못 늘린다**: `var count := 0; signal.connect(func(): count += 1)`
+  처럼 짜면, 람다가 실행돼서 `count`를 늘려도 바깥 스코프의 `count`는
+  계속 0으로 보인다 — GDScript 람다가 지역 변수를 **값으로 캡처**하지
+  참조로 공유하지 않기 때문(`test_pressure_plate.gd` 작성 중 발견,
+  2026-09-08). 눌린 횟수/호출 횟수 같은 걸 시그널 콜백에서 세야 하면
+  `var count := [0]`처럼 배열(참조 타입)에 담아 `count[0] += 1`로
+  늘리고 `count[0]`으로 읽을 것.
