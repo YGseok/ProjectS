@@ -213,6 +213,19 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- **v0.08 — 꿈 씬에도 나무/덤불 조사 상호작용 확장**: v0.07에서
+  `chapter1_real.tscn`(현실)에만 추가했던 examine 트리거를
+  `chapter1_dream.tscn`(꿈)에도 동일한 좌표/컴포넌트(`scenery_flavor.gd`)
+  로 추가. 두 씬의 나무/덤불 위치와 `CollisionMap.blocked_rects`가
+  완전히 동일해서 도달 가능성 재검증은 필요 없었음(v0.07에서 이미
+  검증). 대사만 꿈 쪽 분위기(이미 있던 `MoodLabel`의 "정적 — 매미 소리가
+  들리지 않는다" 톤)에 맞춰 "나무는 그대로인데 그늘이 지지 않는다" 등
+  미묘하게 어긋난 느낌으로 다르게 씀 — 새로운 진상/사건 정보는 없음,
+  순수 감각적 이상함 묘사만. `LabelSettings_action_prompt`가
+  `chapter1_dream.tscn`에는 없어서 `chapter1_real.tscn`과 동일한 값으로
+  새로 하나 추가(공유 리소스 아님, 씬별 sub_resource라 문제 없음).
+  `tests/test_scenery_flavor.gd`에 꿈 씬 쪽 어서션 3개 추가(총 7개) —
+  전체 18종 + QA 7개 씬 재통과, 실제 창 캡처로 꿈 씬 렌더링도 정상 확인.
 - **v0.07 — 마당 나무/덤불 조사 상호작용 추가("재미 요소" 대응 일부)**:
   `InteractableBase`를 상속하는 재사용 컴포넌트 `scripts/scenery_flavor.gd`
   (`@export var lines: Array[String]`로 인스펙터에서 대사만 지정하면

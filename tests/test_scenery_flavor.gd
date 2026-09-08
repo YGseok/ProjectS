@@ -34,6 +34,29 @@ func _initialize() -> void:
 	await _interact_close()
 	_assert(_dialogue_saw("그늘이 시원하다"), "TreeGreen 조사 시 지정한 대사가 뜸")
 
+	# 꿈 씬(chapter1_dream.tscn)에도 같은 자리에 같은 컴포넌트로 examine
+	# 트리거를 추가했다 — 좌표/충돌은 동일하므로 상호작용만 재확인.
+	change_scene_to_file("res://scenes/chapter1_dream.tscn")
+	await process_frame
+	await process_frame
+
+	_player = get_first_node_in_group("player")
+	_dialogue = root.get_node_or_null("DialogueSystem")
+	_assert(_player != null, "(꿈 씬) player 그룹 노드를 찾음")
+	if _player == null:
+		_finish()
+		return
+
+	for i in range(3):
+		await _move_one_tile("ui_right")
+	for i in range(9):
+		await _move_one_tile("ui_down")
+	_assert(_player.position.is_equal_approx(Vector2(704, 448)),
+		"(꿈 씬) TreeGreen 옆까지 정상 이동, 실제: %s" % [_player.position])
+
+	await _interact_close()
+	_assert(_dialogue_saw("그늘이 지지 않는다"), "(꿈 씬) TreeGreen 조사 시 지정한 대사가 뜸")
+
 	_finish()
 
 

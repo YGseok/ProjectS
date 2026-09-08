@@ -12,6 +12,11 @@
 [ext_resource type="Shader" path="res://shaders/occlusion_reveal.gdshader" id="10_reveal_shader"]
 [ext_resource type="Script" path="res://scripts/occlusion_reveal_manager.gd" id="11_reveal_manager"]
 [ext_resource type="PackedScene" path="res://scenes/common/InventoryUI.tscn" id="12_inventory_ui"]
+[ext_resource type="Script" path="res://scripts/scenery_flavor.gd" id="13_scenery"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_action_prompt"]
+font_size = 16
+font_color = Color(0.95, 0.85, 0.35, 0.9)
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 18
@@ -83,6 +88,48 @@ blocked_rects = Array[Rect2]([Rect2(160, 0, 960, 128), Rect2(832, 352, 288, 64),
 [node name="OcclusionRevealManager" type="Node" parent="."]
 script = ExtResource("11_reveal_manager")
 shader_material = SubResource("ShaderMaterial_reveal")
+
+[node name="TreeGreenExamine" type="Node2D" parent="."]
+position = Vector2(700, 470)
+script = ExtResource("13_scenery")
+lines = Array[String](["나무는 그대로인데, 그늘이 지지 않는다."])
+
+[node name="PromptLabel" type="Label" parent="TreeGreenExamine"]
+offset_left = -60.0
+offset_top = -40.0
+offset_right = 60.0
+offset_bottom = -16.0
+horizontal_alignment = 1
+label_settings = SubResource("LabelSettings_action_prompt")
+text = "Enter: 살펴보기"
+
+[node name="TreeSmallExamine" type="Node2D" parent="."]
+position = Vector2(100, 660)
+script = ExtResource("13_scenery")
+lines = Array[String](["작은 나무. 잎이 하나도 흔들리지 않는다."])
+
+[node name="PromptLabel" type="Label" parent="TreeSmallExamine"]
+offset_left = -60.0
+offset_top = -40.0
+offset_right = 60.0
+offset_bottom = -16.0
+horizontal_alignment = 1
+label_settings = SubResource("LabelSettings_action_prompt")
+text = "Enter: 살펴보기"
+
+[node name="BushBerryExamine" type="Node2D" parent="."]
+position = Vector2(1150, 660)
+script = ExtResource("13_scenery")
+lines = Array[String](["열매가 달려 있지만, 색이 흐릿하게 바래 보인다."])
+
+[node name="PromptLabel" type="Label" parent="BushBerryExamine"]
+offset_left = -60.0
+offset_top = -40.0
+offset_right = 60.0
+offset_bottom = -16.0
+horizontal_alignment = 1
+label_settings = SubResource("LabelSettings_action_prompt")
+text = "Enter: 살펴보기"
 
 [node name="YSortObjects" type="Node2D" parent="."]
 y_sort_enabled = true
