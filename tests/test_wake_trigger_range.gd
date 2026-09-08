@@ -5,7 +5,7 @@ extends SceneTree
 ## 그 간섭 문제는 없다 (참고: 그 테스트를 만들며 발견한 함정).
 ##
 ## 또한 이 WakeTrigger 인스턴스는 `advances_chapter1_cycle = true`로
-## 설정돼 있어야 하므로(DESIGN.md §7.1, chapter1_dream.tscn 참고), 실제
+## 설정돼 있어야 하므로(DESIGN.md §8.1, chapter1_dream.tscn 참고), 실제
 ## 각성 성공 시 `Chapter1Progress.stage`가 1 올라가는지도 함께 검증한다
 ## — `Chapter1Progress.advance_cycle()`을 직접 호출하는 방식(예:
 ## test_chapter1_puzzle.gd)만으로는 .tscn의 익스포트 값이 실제로 true로

@@ -1,5 +1,5 @@
 extends InteractableBase
-## 장독대 항아리 — 3단계부터 등장(DESIGN.md §7.1). 표식 새겨진 나무패를
+## 장독대 항아리 — 3단계부터 등장(DESIGN.md §8.1). 표식 새겨진 나무패를
 ## 발견한다(1회성). 순수 퍼즐 단서로만 쓰고 별도 공포 디테일은 없음.
 
 func _is_visible_now() -> bool:

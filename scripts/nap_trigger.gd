@@ -5,9 +5,9 @@ extends Node2D
 ## 챕터 1 현실→꿈 낮잠 트리거, 꿈→현실 각성 트리거 둘 다 이 스크립트를
 ## 재사용한다. 각성 쪽 인스턴스(WakeTrigger)는 `advances_chapter1_cycle`을
 ## true로 켜서, 각성할 때마다 `Chapter1Progress.advance_cycle()`로 메인
-## 퍼즐 "닫힌 일기장"(DESIGN.md §7.1) 진행 단계를 1씩 올린다. 각성 자체는
+## 퍼즐 "닫힌 일기장"(DESIGN.md §8.1) 진행 단계를 1씩 올린다. 각성 자체는
 ## 여전히 Enter만 누르면 되는 **임시** 트리거이고(진짜로는 마지막 단계
-## 일기 개봉이 각성을 유발해야 함, DESIGN.md §7.1 참고), 지금은 왕복 자체가
+## 일기 개봉이 각성을 유발해야 함, DESIGN.md §8.1 참고), 지금은 왕복 자체가
 ## 막히지 않도록 열어둔 상태다.
 
 @export var target_scene: String = ""

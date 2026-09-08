@@ -5,7 +5,7 @@
 좌표를 더 다듬거나 다른 오브젝트를 추가하려면 그 스크립트의 `_crops`
 딕셔너리에 `이름: Rect2i(x, y, w, h)`를 추가하고 재실행.
 
-챕터 1 메인 퍼즐 "닫힌 일기장"(DESIGN.md §7.1)의 오브젝트 아트를
+챕터 1 메인 퍼즐 "닫힌 일기장"(DESIGN.md §8.1)의 오브젝트 아트를
 `ColorRect` 그레이박스에서 교체하려고 만들었다 — `scripts/jar_stamp.gd`,
 `scripts/gonggi_stones.gd` 참고.
 

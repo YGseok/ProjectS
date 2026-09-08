@@ -1,5 +1,5 @@
 extends InteractableBase
-## 밭의 사방치기 흔적 — 2단계부터 등장(DESIGN.md §7.1). 하늘칸 자리를
+## 밭의 사방치기 흔적 — 2단계부터 등장(DESIGN.md §8.1). 하늘칸 자리를
 ## 파보면 열쇠가 나온다(1회성). 순환 1의 자물쇠엔 안 맞음(floorboard.gd 참고).
 
 func _is_visible_now() -> bool:

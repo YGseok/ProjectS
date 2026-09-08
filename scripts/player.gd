@@ -1,6 +1,6 @@
 extends Node2D
 ## 챕터 1 현실 파트 플레이어 — 그리드 단위 4방향 이동 (키보드 방향키 전용).
-## DESIGN.md §5: 부드러운 자유이동이 아니라 타일 단위 이동이어야 한다.
+## DESIGN.md §6: 부드러운 자유이동이 아니라 타일 단위 이동이어야 한다.
 
 const TILE_SIZE := 32.0
 const TILE_MOVE_SECONDS := 0.12

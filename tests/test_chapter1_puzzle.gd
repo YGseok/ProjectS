@@ -1,5 +1,5 @@
 extends SceneTree
-## 자동 상호작용 테스트 — 챕터 1 메인 퍼즐 "닫힌 일기장"(DESIGN.md §7.1,
+## 자동 상호작용 테스트 — 챕터 1 메인 퍼즐 "닫힌 일기장"(DESIGN.md §8.1,
 ## 2026-09-07 확정)의 4단계 순환 진행을 검증한다.
 ##
 ## 실행: godot4 --headless --script res://tests/test_chapter1_puzzle.gd --path <project>
@@ -103,7 +103,7 @@ func _initialize() -> void:
 	_assert(_progress.diary_opened, "4단계 + 열쇠 + 나무패 모두 갖춘 뒤 판자 조사하면 일기 개봉됨")
 
 	# 일기 개봉(대화 종료) 자체가 각성(챕터 종료)을 유발해야 한다
-	# (DESIGN.md §7.1 "트리거" 항목) — WakeTrigger를 따로 안 걸어가도
+	# (DESIGN.md §8.1 "트리거" 항목) — WakeTrigger를 따로 안 걸어가도
 	# 자동으로 Chapter1End로 전환되는지 확인.
 	await _wait_scene_change("Chapter1End", 3.0)
 	_assert(current_scene != null and current_scene.name == "Chapter1End",
