@@ -98,6 +98,12 @@ func _initialize() -> void:
 	await process_frame
 	_assert(_progress.stage == 4, "순환 3회 후 4단계, 실제: %d" % _progress.stage)
 
+	# MAX_STAGE(4)를 넘어서까지 순환을 더 시도해도 5, 6...으로 안 올라가고
+	# 4에서 멈추는지 확인 (chapter1_progress.gd의 상한 체크).
+	_progress.advance_cycle()
+	_progress.advance_cycle()
+	_assert(_progress.stage == 4, "MAX_STAGE를 넘겨 호출해도 4에서 멈춤, 실제: %d" % _progress.stage)
+
 	await _move_to(floorboard.position)
 	await _interact()
 	_assert(_progress.diary_opened, "4단계 + 열쇠 + 나무패 모두 갖춘 뒤 판자 조사하면 일기 개봉됨")
