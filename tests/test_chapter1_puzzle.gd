@@ -33,6 +33,7 @@ func _initialize() -> void:
 	var jar: Node2D = current_scene.get_node("JarStamp")
 	var key_slot: Control = current_scene.get_node("InventoryUI/KeySlot")
 	var stamp_slot: Control = current_scene.get_node("InventoryUI/StampSlot")
+	var hint_label: Label = current_scene.get_node("ObjectiveHint/Label")
 
 	# 새로 추가된 오브젝트들의 _process()가 한 번 이상 돌 시간을 준다
 	# (씬 로드 직후 2프레임만으로는 부족할 때가 있었음 — visible 갱신은
@@ -43,6 +44,7 @@ func _initialize() -> void:
 	_assert(not jar.visible, "1단계에서는 장독(나무패) 안 보임")
 	_assert(not key_slot.visible and not stamp_slot.visible,
 		"아이템 획득 전에는 인벤토리 UI 슬롯이 둘 다 숨겨져 있음")
+	_assert(hint_label.text != "", "1단계 목표 힌트가 비어있지 않음, 실제: '%s'" % hint_label.text)
 
 	# 판자로 이동해서 조사 — 아직 잠겨있다는 대사만 뜨고 상태 변화 없음.
 	await _move_to(floorboard.position)
@@ -64,12 +66,15 @@ func _initialize() -> void:
 	_assert(hopscotch.visible, "2단계부터 사방치기 보임")
 	_assert(not jar.visible, "2단계에서는 아직 장독 안 보임")
 
+	var hint_stage1 := hint_label.text
 	await _move_to(hopscotch.position)
 	await _interact_expect_item("열쇠")
 	_assert(_progress.has_key, "2단계 사방치기 조사 후 열쇠 획득")
 	await process_frame
 	_assert(key_slot.visible and not stamp_slot.visible,
 		"열쇠 획득 후 인벤토리에 열쇠 슬롯만 보임")
+	_assert(hint_label.text != hint_stage1,
+		"열쇠 획득 후 목표 힌트가 바뀜, 실제: '%s'" % hint_label.text)
 
 	# 이미 파낸 뒤 다시 조사해도 크래시 없이 "이미 비어있다" 분기만 타고
 	# 상태는 그대로 유지되는지 확인 (hopscotch_key.gd의 has_key 분기).
@@ -130,6 +135,7 @@ func _initialize() -> void:
 	await process_frame
 	_assert(not key_slot.visible and not stamp_slot.visible,
 		"일기 개봉(아이템 소진) 후 인벤토리 슬롯이 둘 다 사라짐")
+	_assert(hint_label.text == "", "일기 개봉 후 목표 힌트가 비워짐(더 할 일 없음)")
 
 	# 일기 개봉(대화 종료) 자체가 각성(챕터 종료)을 유발해야 한다
 	# (DESIGN.md §8.1 "트리거" 항목) — WakeTrigger를 따로 안 걸어가도
