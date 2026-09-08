@@ -139,6 +139,15 @@ godot4 --headless --script res://tests/test_dialogue_interaction.gd --path .
   (`scripts/dialogue_system.gd`의 `_started_frame`/`_ended_frame`,
   `scripts/npc.gd`의 `just_ended_this_frame()` 참고). 새 상호작용을 만들
   때도 "시작 프레임/종료 프레임"을 추적해서 같은 프레임 재진입을 막을 것.
+  **이 버그 클래스가 나중에 또 재발했다**(2026-09-08) — 아이템 획득
+  팝업(`item_popup.gd`)을 닫는 Enter가 그 자리에 서 있던 오브젝트를
+  같은 프레임에 재트리거해서, 이미 얻은 아이템의 "다 지워지지 않은
+  사방치기 칸이..." 대화가 팝업을 닫자마자 곧바로 다시 뜨는 버그였다.
+  **"Enter 한 번으로 닫히는 화면 요소"를 새로 만들 때마다 매번**
+  `just_closed_this_frame()`류 가드를 넣고, 그걸 참조하는 다른
+  상호작용 스크립트(`interactable_base.gd` 등)의 가드 조건에도
+  포함시켰는지 확인할 것 — 한 군데(DialogueSystem)에서 배운 교훈이
+  자동으로 다른 컴포넌트에 전파되지 않는다.
 - **타입이 안 맞는 배열을 넘기면 조용히 멈춰버린다**: 예를 들어
   `func f(lines: Array[String])`로 선언된 함수에 그냥 `[]`(타입 없는
   빈 배열 리터럴)를 넘기면 `SCRIPT ERROR: Invalid type...`가 찍히지만

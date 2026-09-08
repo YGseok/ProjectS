@@ -16,12 +16,21 @@ signal popup_closed
 
 var _active := false
 var _shown_frame := -1
+var _closed_frame := -1
 
 func _ready() -> void:
 	_panel.visible = false
 
 func is_active() -> bool:
 	return _active
+
+## 이 프레임에 막 팝업이 닫혔는지 — 팝업을 닫는 그 ui_accept 입력을
+## InteractableBase 등이 같은 프레임에 "새 상호작용"으로 잘못 주워듣고
+## 그 자리에서 즉시 재트리거하는 걸 막기 위해 쓴다
+## (dialogue_system.gd의 just_ended_this_frame()과 같은 목적/패턴 —
+## hopscotch_key.gd 등에서 이미 겪은 버그, 2026-09-08 발견).
+func just_closed_this_frame() -> bool:
+	return Engine.get_process_frames() == _closed_frame
 
 func show_item(item_name: String, icon: Texture2D) -> void:
 	if _active:
@@ -42,5 +51,6 @@ func _process(_delta: float) -> void:
 		return
 	if Input.is_action_just_pressed("ui_accept"):
 		_active = false
+		_closed_frame = Engine.get_process_frames()
 		_panel.visible = false
 		popup_closed.emit()

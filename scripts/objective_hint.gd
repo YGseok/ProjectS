@@ -10,6 +10,14 @@ extends CanvasLayer
 @onready var _label: Label = $Label
 
 func _process(_delta: float) -> void:
+	# 대화창/아이템 팝업도 화면 하단을 쓰는데(DialogueSystem 패널이 이
+	# 라벨과 y좌표가 살짝 겹침), 그 위에 힌트가 함께 떠 있으면 대화창
+	# 밑으로 텍스트 한 조각이 삐져나와 보이는 시각 버그가 있었다(실제
+	# 창 캡처로 발견, 2026-09-08). 대화/팝업 중엔 힌트를 그냥 숨긴다.
+	if DialogueSystem.is_active() or ItemPopup.is_active():
+		_label.visible = false
+		return
+	_label.visible = true
 	_label.text = _current_hint()
 
 func _current_hint() -> String:

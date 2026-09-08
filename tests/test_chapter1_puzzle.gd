@@ -55,7 +55,14 @@ func _initialize() -> void:
 	# 적이 있다(chapter1_real.tscn z-order 수정 중 발견, STATUS.md 참고).
 	var floorboard_prompt: Label = floorboard.get_node("PromptLabel")
 	_assert(floorboard_prompt.visible, "판자 옆에 있으면 상호작용 프롬프트가 보임")
+	# 대화가 열려 있는 동안은 목표 힌트를 숨겨야 한다 — 대화창(화면 하단)과
+	# 힌트 라벨(마찬가지로 화면 하단) 위치가 겹쳐서, 숨기지 않으면 대화창
+	# 밑으로 힌트 텍스트 한 조각이 삐져나와 보이는 시각 버그가 있었다
+	# (실제 창 캡처로 발견, 2026-09-08).
+	await _send_action("ui_accept")
+	_assert(not hint_label.visible, "대화가 열려 있는 동안은 목표 힌트가 숨겨짐")
 	await _interact()
+	_assert(hint_label.visible, "대화가 닫히면 목표 힌트가 다시 보임")
 	_assert(not _progress.has_key and not _progress.has_stamp,
 		"1단계에서 판자 조사해도 열쇠/나무패 상태 변화 없음")
 
