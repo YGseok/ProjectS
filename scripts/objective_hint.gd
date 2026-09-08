@@ -9,6 +9,9 @@ extends CanvasLayer
 
 @onready var _label: Label = $Label
 
+var _last_hint := ""
+var _fade_tween: Tween
+
 func _process(_delta: float) -> void:
 	# 대화창/아이템 팝업도 화면 하단을 쓰는데(DialogueSystem 패널이 이
 	# 라벨과 y좌표가 살짝 겹침), 그 위에 힌트가 함께 떠 있으면 대화창
@@ -18,7 +21,19 @@ func _process(_delta: float) -> void:
 		_label.visible = false
 		return
 	_label.visible = true
-	_label.text = _current_hint()
+	var hint := _current_hint()
+	if hint != _last_hint:
+		_last_hint = hint
+		# 목표가 바뀌는 순간 그냥 툭 바뀌는 대신 살짝 페이드로 갈아끼운다
+		# (2026-09-08, "손맛" 개선 — item_popup.gd/dialogue_system.gd와
+		# 같은 계열). `.text`는 여전히 즉시 새 값으로 바뀌어서(애니메이션
+		# 때문에 지연되지 않음) 기존 테스트의 즉시 비교 어서션에 영향 없음.
+		_label.text = hint
+		_label.modulate.a = 0.0
+		if _fade_tween:
+			_fade_tween.kill()
+		_fade_tween = create_tween()
+		_fade_tween.tween_property(_label, "modulate:a", 1.0, 0.25)
 
 func _current_hint() -> String:
 	var p := Chapter1Progress
