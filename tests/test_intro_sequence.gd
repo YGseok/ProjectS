@@ -16,11 +16,27 @@ func _initialize() -> void:
 	var first_line := label.text
 	_assert(first_line != "", "첫 줄이 바로 표시됨")
 
+	# 타자기 효과(v0.03 추가) 회귀 확인: .text는 이미 전체 줄이지만
+	# visible_ratio는 0에서 시작해 시간이 지나며 1.0까지 서서히 올라간다.
+	# (첫 줄 "..."은 너무 짧아 순식간에 다 보이므로, 이 확인은 더 긴
+	# 두 번째 줄로 넘어간 뒤에 한다.)
+	_assert(label.visible_ratio < 1.0, "첫 줄 표시 직후 visible_ratio가 아직 1.0 미만(타자기 효과 시작)")
+
 	# Enter로 한 줄 스킵 -> 3초를 기다리지 않고 즉시 다음 줄로 넘어감.
 	await _send_action("ui_accept")
 	_assert(label.text != first_line,
 		"Enter를 누르면 즉시 다음 줄로 넘어감, 실제: '%s'" % label.text)
+	_assert(label.visible_ratio < 1.0,
+		"다음 줄로 넘어가면 visible_ratio도 다시 처음부터(타자기 효과 초기화), 실제: %f" % label.visible_ratio)
 	var second_line := label.text
+
+	await create_timer(0.15).timeout
+	var ratio_mid: float = label.visible_ratio
+	_assert(ratio_mid > 0.0 and ratio_mid < 1.0,
+		"두 번째 줄에서 0.15초 후 글자 일부만 보임(0<ratio<1), 실제: %f" % ratio_mid)
+	await create_timer(1.0).timeout
+	_assert(is_equal_approx(label.visible_ratio, 1.0),
+		"충분히 기다리면 전체 글자가 다 보임(ratio==1.0), 실제: %f" % label.visible_ratio)
 
 	# 자동 재생: 아무 입력 없이 AUTO_ADVANCE_SECONDS(3초)만 지나도 다음 줄로.
 	await create_timer(3.2).timeout

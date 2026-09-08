@@ -216,6 +216,17 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- **v0.11 — 타자기 효과(v0.03) 회귀 테스트 추가**: `dialogue_system.gd`/
+  `intro_sequence.gd`의 `Label.visible_ratio` 타자기 효과가 v0.03에서
+  `tools/verify_typewriter.gd` 일회성 스크립트로만 검증되고 삭제된 뒤,
+  정식 회귀 테스트가 없었다. 신설 `tests/test_dialogue_typewriter.gd`
+  (DialogueSystem 오토로드 직접 호출, `.text`는 즉시 전체 문자열인데
+  `visible_ratio`는 0→1로 서서히 오르는지, 타이핑 도중에도 ui_accept
+  한 번으로 정상 진행/종료되는지 6개 어서션)와 기존
+  `tests/test_intro_sequence.gd`에 프롤로그 쪽 어서션 4개 추가(첫 줄은
+  너무 짧아 순식간에 다 보이므로, 부분 노출 확인은 두 번째 줄로 넘어간
+  뒤에 함). 코드 변경 없음, 테스트만 추가. `tests/run_all.sh`가 이제
+  20개 파일을 실행함. 전체 20종 + QA 7개 씬 재통과.
 - **v0.10 — occlusion_reveal_manager.gd 회귀 테스트 추가**: 나무 등
   오클루전 오브젝트의 `reveal_center` 셰이더 파라미터를 매 프레임
   플레이어 위치로 갱신하는 로직(`scripts/occlusion_reveal_manager.gd`)이
