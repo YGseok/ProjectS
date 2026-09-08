@@ -228,6 +228,12 @@ offset_bottom = 4.0
 position = Vector2(0, 16)
 color = Color(0.05, 0.05, 0.05, 0.8)
 
+[node name="Camera2D" type="Camera2D" parent="YSortObjects/Player"]
+limit_left = 0
+limit_top = 0
+limit_right = 1280
+limit_bottom = 720
+
 [node name="ShadowNPC" parent="YSortObjects" instance=ExtResource("4_shadow_npc")]
 position = Vector2(704, 160)
 

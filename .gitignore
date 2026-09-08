@@ -6,6 +6,7 @@ export_presets.cfg
 
 # QA 캡처 산출물 (매 이터레이션 갱신되므로 버전관리 대상 아님)
 qa/output/*.png
+qa/output/*.png.import
 
 # 루프 실행 로그 / 제어 파일
 loop/logs/*.log

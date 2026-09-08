@@ -23,6 +23,20 @@ func _initialize() -> void:
 		_finish()
 		return
 
+	# 카메라 limit_*가 play_area(현재는 화면 전체, 0,0,1280,720)와 정확히
+	# 같아야 한다 — 뷰포트 크기와 limit 크기가 같으면 카메라가 움직일
+	# 여지가 없어서(항상 중앙에 고정) 지금은 시각적으로 아무 변화가
+	# 없지만, 나중에 맵이 화면보다 커지면(사람 피드백, 2026-09-08 —
+	# "맵이 과하게 넓으면 스크롤링") 이 limit이 실제 맵 경계 역할을 하게
+	# 된다. 값이 실수로 어긋나면 이 테스트가 잡아낸다.
+	var camera: Camera2D = _player.get_node("Camera2D")
+	_assert(camera != null, "플레이어에 Camera2D가 있음")
+	if camera:
+		_assert(camera.limit_left == 0 and camera.limit_top == 0 and
+				camera.limit_right == 1280 and camera.limit_bottom == 720,
+			"카메라 limit이 play_area(0,0,1280,720)와 일치, 실제: (%d,%d,%d,%d)" %
+				[camera.limit_left, camera.limit_top, camera.limit_right, camera.limit_bottom])
+
 	# 시작 위치 (608,160) 에서 왼쪽으로 19칸(608/32) 이동하면 x=0 (경계)에 도달
 	for i in range(19):
 		await _move_one_tile("ui_left")
