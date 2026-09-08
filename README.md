@@ -25,18 +25,22 @@ loop/
   STOP                # 이 파일이 생기면 루프가 멈춘다 (기본적으로 없음)
   logs/               # 이터레이션별 실행 로그
 scenes/
+  chapter1_intro.tscn # 챕터 1 프롤로그 (자동 재생 + 스킵 가능한 인트로)
   chapter1_real.tscn  # 챕터 1 현실 파트
   chapter1_dream.tscn # 챕터 1 꿈 파트
   chapter1_end.tscn   # 챕터 1 종료 화면 (챕터 2 없어서 최소 임시 상태)
-  common/             # 재사용 컴포넌트 (대화창, NPC, 낮잠/각성 트리거, 페이드)
+  common/             # 재사용 컴포넌트 (대화창, NPC, 낮잠/각성 트리거, 페이드,
+                      #   아이템 팝업, 인벤토리 UI, 목표 힌트)
   test/               # 파이프라인/타일셋 검증용 임시 테스트 씬
   dungeon.tscn        # QA 도구 동작 확인용 최소 플레이스홀더
-scripts/              # 게임 코드 (플레이어, NPC, 대화 시스템, 배경, 챕터 1 퍼즐 등)
+scripts/              # 게임 코드 (플레이어, NPC, 대화 시스템, 배경, 챕터 1 퍼즐,
+                      #   인벤토리/팝업/힌트 UI, 발판 컴포넌트 등)
 shaders/              # 커스텀 셰이더 (나무 오클루전 반투명 리빌 등)
 assets/
   tiles/main/         # 메인 배경 타일셋 (라이선스: THIRD_PARTY_LICENSES 참고)
   props/nature/       # 마당 장식용 자연 오브젝트
   props/main_tileset_props/  # 챕터 1 퍼즐 소품(장독/공기돌 등) 크롭본
+  props/ui_icons/     # 아이템 팝업/인벤토리용 자리표시 아이콘
   sprites/            # 캐릭터 스프라이트 (확정된 주인공 아트는 아직 없음)
   THIRD_PARTY_LICENSES/  # 외부 에셋 라이선스 원문
 tools/

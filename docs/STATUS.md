@@ -193,6 +193,14 @@
 > 원두막 지붕·나무 밑둥은 이제 막힌다(완료 기록의 "이동 콜리전" 항목
 > 참고) — 그 외 나머지 열린 공간은 여전히 자유 이동.
 
+- **이터레이션(4차) 5/5 — 문서 위생: 새 도구/자산 폴더 누락 보완**:
+  `tools/README.md`에 `gen_item_icons.gd` 항목이 빠져있었음(정확히
+  이 README 자신이 경고하는 "도구 추가하고 표를 안 고치는" 실수를
+  또 반복할 뻔함) — 추가. `assets/props/ui_icons/`에도 다른 소품
+  폴더(nature, main_tileset_props)처럼 README가 없어서 신설. 루트
+  `README.md` 구조 트리에 `chapter1_intro.tscn`, `props/ui_icons/`,
+  최근 늘어난 `scenes/common/`·`scripts/` 내용물 설명 갱신. 코드 변경
+  없음, 전체 14종 재통과로 무변경 확인.
 - **이터레이션(4차) 4/5 — 목표 힌트 UI(사람 피드백, 2026-09-08 "어디서
   왜 무엇을 해야하는지 인지하기 어려움")**: `scenes/common/
   ObjectiveHint.tscn` + `scripts/objective_hint.gd`를
