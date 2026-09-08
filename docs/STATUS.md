@@ -180,6 +180,24 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- **이터레이션(3차) 1/2 — 아이템 획득 팝업 구현(사람 피드백,
+  2026-09-08)**: 새 오토로드 `ItemPopup`(`scripts/item_popup.gd` +
+  `scenes/common/ItemPopup.tscn`, `DialogueSystem`과 같은 CanvasLayer
+  패턴)이 아이콘+이름을 화면 중앙에 띄우고 `ui_accept` 한 번으로
+  닫힌다(같은 프레임 재트리거 방지 가드도 `dialogue_system.gd`와 동일
+  패턴 적용). `hopscotch_key.gd`/`jar_stamp.gd`가 열쇠/나무패 최초
+  획득 시 기존 발견 대사가 끝나는 순간(`dialogue_ended` 신호, 이미
+  `floorboard.gd`에서 쓰던 패턴 재사용) 자동으로 팝업을 띄우도록 연결.
+  `player.gd`와 `interactable_base.gd`가 `ItemPopup.is_active()`를
+  `DialogueSystem.is_active()`와 같이 체크해서, 팝업이 떠 있는 동안
+  이동도 다른 오브젝트 재상호작용도 막는다. 아이콘은
+  `tools/gen_item_icons.gd`(일회성 절차적 생성 도구, 32px 단색 사각형
+  + 테두리)로 만든 자리표시용(`assets/props/ui_icons/`) — 캐릭터
+  아트와 같은 정책. `tests/test_chapter1_puzzle.gd`에 팝업 등장 여부·
+  표시된 이름·닫힘까지 확인하는 어서션 6개 추가(총 32개). 실제 창
+  캡처로 레이아웃도 눈으로 확인(골드색 열쇠 아이콘 + "열쇠" + "획득!
+  (Enter로 닫기)" 정상 렌더링). 전체 12종 + QA 6개 씬 재통과.
+
 - **이터레이션 배치(2차) 5/5 — 마무리 회귀 스윕**: `tests/run_all.sh`
   12종(어서션 26개로 늘어난 `test_chapter1_puzzle.gd` 포함) +
   `qa/run_all.sh` 6개 씬 전부 재통과 확인. 5회 배치 요약 — (1)

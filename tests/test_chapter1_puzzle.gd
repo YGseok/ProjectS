@@ -61,7 +61,7 @@ func _initialize() -> void:
 	_assert(not jar.visible, "2단계에서는 아직 장독 안 보임")
 
 	await _move_to(hopscotch.position)
-	await _interact()
+	await _interact_expect_item("열쇠")
 	_assert(_progress.has_key, "2단계 사방치기 조사 후 열쇠 획득")
 
 	# 이미 파낸 뒤 다시 조사해도 크래시 없이 "이미 비어있다" 분기만 타고
@@ -80,7 +80,7 @@ func _initialize() -> void:
 	_assert(jar.visible, "3단계부터 장독 보임")
 
 	await _move_to(jar.position)
-	await _interact()
+	await _interact_expect_item("나무패")
 	_assert(_progress.has_stamp, "3단계 장독 조사 후 나무패 획득")
 
 	# 장독도 마찬가지로 재조사 시 안전한지 확인 (jar_stamp.gd의
@@ -199,6 +199,31 @@ func _interact() -> void:
 	while dialogue and dialogue.is_active() and guard < 20:
 		await _send_action("ui_accept")
 		guard += 1
+	# 대화가 끝나며 아이템 획득 팝업이 떴다면(hopscotch_key.gd/jar_stamp.gd
+	# 참고) 그것도 닫아야 다음 이동/상호작용이 막히지 않는다.
+	var popup: Node = root.get_node_or_null("ItemPopup")
+	if popup and popup.is_active():
+		await _send_action("ui_accept")
+
+
+## _interact()와 같지만, 대화가 끝난 뒤 뜨는 아이템 팝업의 내용(이름)까지
+## 확인하고 닫는다. 첫 발견 시에만 팝업이 뜨므로 재조사 검증에는 안 쓴다.
+func _interact_expect_item(expected_name: String) -> void:
+	await _send_action("ui_accept")
+	var dialogue: Node = root.get_node_or_null("DialogueSystem")
+	var guard := 0
+	while dialogue and dialogue.is_active() and guard < 20:
+		await _send_action("ui_accept")
+		guard += 1
+	var popup: Node = root.get_node_or_null("ItemPopup")
+	_assert(popup != null and popup.is_active(),
+		"'%s' 획득 시 아이템 팝업이 뜸" % expected_name)
+	if popup and popup.is_active():
+		var label: Label = popup.get_node("Panel/Label")
+		_assert(label.text == expected_name,
+			"팝업에 표시된 이름이 '%s', 실제: '%s'" % [expected_name, label.text])
+		await _send_action("ui_accept")
+		_assert(not popup.is_active(), "Enter 입력으로 팝업이 닫힘")
 
 
 func _send_action(action: String) -> void:
