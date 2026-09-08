@@ -40,6 +40,16 @@ func show_item(item_name: String, icon: Texture2D) -> void:
 	_label.text = item_name
 	_icon.texture = icon
 	_panel.visible = true
+	# 그냥 뿅 나타나는 대신 살짝 튀어 오르듯 커지는 연출 — 사람 피드백
+	# (2026-09-08 "지금은 재미가 없음")에 대한 안전한 대응 하나로, 스토리/
+	# 레벨 디자인 결정 없이 할 수 있는 "손맛" 개선.
+	_panel.scale = Vector2(0.7, 0.7)
+	_panel.modulate.a = 0.0
+	var tween := create_tween()
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_BACK)
+	tween.tween_property(_panel, "scale", Vector2.ONE, 0.18)
+	tween.parallel().tween_property(_panel, "modulate:a", 1.0, 0.12)
 	popup_shown.emit()
 
 func _process(_delta: float) -> void:

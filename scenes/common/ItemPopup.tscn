@@ -27,6 +27,7 @@ offset_left = 460.0
 offset_top = 240.0
 offset_right = 820.0
 offset_bottom = 340.0
+pivot_offset = Vector2(180, 50)
 theme_override_styles/panel = SubResource("StyleBoxFlat_box")
 
 [node name="Icon" type="TextureRect" parent="Panel"]
