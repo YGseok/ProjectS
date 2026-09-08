@@ -137,6 +137,14 @@ func _initialize() -> void:
 	# 마저 닫는다.
 	await _send_action("ui_accept")
 	_assert(wall_mark.visible, "일기 개봉 시퀀스 시작과 동시에 벽 낙서가 flash()됨")
+
+	# flash_seconds(기본 0.2초)가 지나면 다시 숨어야 한다 — "딱 한 번만
+	# 스치듯" 요구사항의 나머지 절반(사라지는 쪽)은 지금까지 타이밍
+	# 문제로 테스트한 적이 없었다. 팝업/힌트 애니메이션 테스트에서 쓴 것과
+	# 같은 방식(create_timer로 충분히 기다린 뒤 확인)으로 안전하게 검증.
+	await create_timer(0.35).timeout
+	_assert(not wall_mark.visible, "flash_seconds가 지나면 벽 낙서가 다시 숨겨짐")
+
 	await _interact()
 	_assert(_progress.diary_opened, "4단계 + 열쇠 + 나무패 모두 갖춘 뒤 판자 조사하면 일기 개봉됨")
 	await process_frame
