@@ -216,6 +216,16 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- **v0.10 — occlusion_reveal_manager.gd 회귀 테스트 추가**: 나무 등
+  오클루전 오브젝트의 `reveal_center` 셰이더 파라미터를 매 프레임
+  플레이어 위치로 갱신하는 로직(`scripts/occlusion_reveal_manager.gd`)이
+  지금까지 자동 테스트 커버리지가 전혀 없었다(QA 스크린샷
+  `occlusion_check.png`로 눈으로만 확인). `tests/
+  test_occlusion_reveal_manager.gd` 신설 — 초기 상태에서 `reveal_center`
+  가 플레이어 위치와 일치하는지, 이동 후 실제로 갱신되는지(정적 초기값에
+  머물러 있지 않는지) 3개 어서션으로 확인. 코드 변경 없음, 테스트만
+  추가. `tests/run_all.sh`가 이제 19개 파일을 실행함. 전체 19종 + QA
+  7개 씬 재통과.
 - **v0.09 — STATUS.md §1 낡은 메모 정정(코드 변경 없음)**: "지금 위치"
   섹션에 "일기 개봉(4단계 완료)이 각성을 유발해야 한다는 진짜 트리거
   조건으로 아직 안 바뀌어 있음"이라는 메모가 남아있었는데, 이건
