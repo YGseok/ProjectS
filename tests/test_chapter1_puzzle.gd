@@ -104,7 +104,17 @@ func _initialize() -> void:
 	_progress.advance_cycle()
 	_assert(_progress.stage == 4, "MAX_STAGE를 넘겨 호출해도 4에서 멈춤, 실제: %d" % _progress.stage)
 
+	var wall_mark: Node2D = current_scene.get_node("WallMarkFlash")
+	_assert(not wall_mark.visible, "일기 개봉 전에는 벽 낙서가 숨겨져 있음")
+
 	await _move_to(floorboard.position)
+	# 첫 입력만 따로 보낸다 — floorboard._open_diary()가 대화를 시작하며
+	# wall_mark_flash.gd의 flash()를 동기적으로 호출해 visible=true를
+	# 세팅한 직후(진짜 사라지는 건 flash_seconds 뒤라 타이밍에 안전하게
+	# 검증 가능한 시점) 상태를 확인한 다음, 나머지 대화는 _interact()로
+	# 마저 닫는다.
+	await _send_action("ui_accept")
+	_assert(wall_mark.visible, "일기 개봉 시퀀스 시작과 동시에 벽 낙서가 flash()됨")
 	await _interact()
 	_assert(_progress.diary_opened, "4단계 + 열쇠 + 나무패 모두 갖춘 뒤 판자 조사하면 일기 개봉됨")
 
