@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=3 uid="uid://debug_warp_scene"]
+
+[ext_resource type="Script" path="res://scripts/debug_warp.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_box"]
+bg_color = Color(0.05, 0.05, 0.07, 0.94)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.85, 0.35, 0.95, 0.85)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="DebugWarp" type="CanvasLayer" groups=["debug_warp"]]
+layer = 100
+script = ExtResource("1_script")
+
+[node name="Panel" type="Panel" parent="."]
+offset_left = 340.0
+offset_top = 200.0
+offset_right = 940.0
+offset_bottom = 400.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_box")
+
+[node name="ListLabel" type="Label" parent="Panel"]
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 584.0
+offset_bottom = 188.0
+text = ""
