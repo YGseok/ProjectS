@@ -1,6 +1,7 @@
 extends SceneTree
 ## 통합 테스트 — 프롤로그(chapter1_intro)에서 시작해서 챕터 1 현실 →
-## 낮잠으로 꿈에 들어가 퍼즐을 전부 풀고 → 챕터 종료 화면까지 한 번에
+## 낮잠으로 꿈에 들어가 퍼즐을 전부 풀고 → 챕터 종료 화면 → 다시
+## 현실("일상")까지 챕터 1의 전체 경로가 처음부터 끝까지 한 번에
 ## 이어지는지 검증한다. 지금까지의 테스트는 각 씬/시스템을 따로따로
 ## 검증했지, 프롤로그부터 끝까지 이어지는 전체 경로를 한 번에 확인한
 ## 적은 없었다.
@@ -9,7 +10,8 @@ extends SceneTree
 ## 이 테스트도 실제로 NapTrigger를 밟아 꿈에 들어간 뒤 그 안에서 퍼즐을
 ## 푸는 진짜 경로로 다시 작성했다(예전엔 chapter1_real에 머문 채
 ## advance_cycle()로 순환만 흉내 냈음 — 이제 퍼즐 자체가 꿈 안에 있어서
-## 그 방식이 통하지 않음).
+## 그 방식이 통하지 않음). v0.17(타이틀 카드)/v0.18(종료 화면 -> 현실
+## 연결)이 추가되면서 경로가 더 길어져서 이 테스트도 그만큼 확장했다.
 ##
 ## 실행: godot4 --headless --script res://tests/test_full_playthrough.gd --path <project>
 
@@ -54,6 +56,13 @@ func _initialize() -> void:
 		_finish()
 		return
 
+	# 진짜 첫 방문이므로 "1장" 타이틀 카드가 자동으로 떠 있어야 한다
+	# (chapter1_dream_entry.gd, 2026-09-09) — _move_to()의 진행-없음
+	# 감지 가드가 알아서 기다려주므로 여기서는 확인만 한다.
+	var title_card: Node = root.get_node_or_null("ChapterTitleCard")
+	_assert(title_card != null and title_card.is_active(),
+		"진짜 첫 꿈 방문이라 '1장' 타이틀 카드가 자동으로 뜸")
+
 	# 3) 꿈 안에서 퍼즐 4단계를 한 방문 안에 전부 진행 — 판자 확인(잠김)
 	# -> 사방치기에서 열쇠 -> 장독에서 나무패 -> 판자에서 일기 개봉.
 	var floorboard: Node2D = current_scene.get_node("Floorboard")
@@ -80,6 +89,14 @@ func _initialize() -> void:
 	await _wait_scene_change("Chapter1End", 3.0)
 	_assert(current_scene != null and current_scene.name == "Chapter1End",
 		"프롤로그부터 시작한 전체 플레이가 챕터 종료 화면까지 정상 도달, 실제: %s" %
+			[current_scene.name if current_scene else "null"])
+
+	# 4) 종료 화면에서 Enter -> "일상"(현실)으로 이어짐(v0.18) — 챕터 1의
+	# 전체 경로가 진짜로 한 바퀴 다 도는지까지 확인한다.
+	await _send_action("ui_accept")
+	await _wait_scene_change("Chapter1Real", 3.0)
+	_assert(current_scene != null and current_scene.name == "Chapter1Real",
+		"챕터 종료 화면에서 Enter를 누르면 현실(일상)로 돌아옴, 실제: %s" %
 			[current_scene.name if current_scene else "null"])
 
 	_finish()
