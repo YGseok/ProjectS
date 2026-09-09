@@ -17,6 +17,7 @@ DialogueSystem="*res://scenes/common/DialogueSystem.tscn"
 Chapter1Progress="*res://scripts/chapter1_progress.gd"
 ItemPopup="*res://scenes/common/ItemPopup.tscn"
 DebugWarp="*res://scenes/common/DebugWarp.tscn"
+ChapterTitleCard="*res://scenes/common/ChapterTitleCard.tscn"
 
 [display]
 

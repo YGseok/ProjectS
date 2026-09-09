@@ -11,6 +11,12 @@ var _dialogue: Node
 var _all_passed := true
 
 func _initialize() -> void:
+	# 첫 꿈 방문 때 자동으로 뜨는 "1장 시작" 타이틀 카드(chapter_title_card.gd,
+	# 2026-09-09)가 이동을 막아 이 테스트의 꿈 씬 부분을 방해하지 않도록
+	# 미리 "이미 봤다"로 처리해둔다 — 타이틀 카드 자체는
+	# tests/test_chapter_title_card.gd가 따로 검증한다.
+	root.get_node("Chapter1Progress").chapter_started = true
+
 	change_scene_to_file("res://scenes/chapter1_real.tscn")
 	await process_frame
 	await process_frame

@@ -39,11 +39,13 @@ func _open_diary() -> void:
 			mark.flash()
 
 ## DESIGN.md §8.1 "트리거(챕터 종료 = 탈출)": 일기 페이지를 다 읽고 나면
-## 그 자체로 각성(챕터 종료)이 일어나야 한다 — 대화가 끝나는 순간 자동으로
-## 전환한다. 2026-09-09부터 이 꿈에는 더 이상 별도의 "깨어나기" 트리거가
-## 없다 — 일기를 여는 것이 유일한 탈출 방법이라 여기가 유일한 씬 전환
-## 경로다.
+## 그 자체로 각성(챕터 종료)이 일어나야 한다 — 대화가 끝나는 순간 "1장
+## 종료" 타이틀 카드를 띄운 뒤 자동으로 전환한다(사람 피드백, 2026-09-09
+## "첫 꿈 탈출하면, 1챕터 완료 타이틀이 뜬다"). 2026-09-09부터 이 꿈에는
+## 더 이상 별도의 "깨어나기" 트리거가 없다 — 일기를 여는 것이 유일한
+## 탈출 방법이라 여기가 유일한 씬 전환 경로다.
 func _on_diary_dialogue_ended() -> void:
+	await ChapterTitleCard.show_title("1장 종료")
 	var fade := get_tree().get_first_node_in_group("fade_overlay")
 	if fade:
 		fade.fade_to_scene("res://scenes/chapter1_end.tscn")

@@ -20,6 +20,7 @@
 [ext_resource type="Texture2D" path="res://assets/props/main_tileset_props/gonggi_stone.png" id="19_gonggi_tex"]
 [ext_resource type="Texture2D" path="res://assets/props/main_tileset_props/jar.png" id="20_jar_tex"]
 [ext_resource type="PackedScene" path="res://scenes/common/ObjectiveHint.tscn" id="21_objective_hint"]
+[ext_resource type="Script" path="res://scripts/chapter1_dream_entry.gd" id="22_dream_entry"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_action_prompt"]
 font_size = 16
@@ -37,6 +38,7 @@ font_color = Color(1, 1, 1, 0.55)
 shader = ExtResource("10_reveal_shader")
 
 [node name="Chapter1Dream" type="Node2D"]
+script = ExtResource("22_dream_entry")
 
 [node name="Background" type="TileMapLayer" parent="."]
 tile_set = ExtResource("4_tileset")

@@ -28,7 +28,7 @@ func _process(delta: float) -> void:
 			_moving = false
 		return
 
-	if DialogueSystem.is_active() or ItemPopup.is_active():
+	if DialogueSystem.is_active() or ItemPopup.is_active() or ChapterTitleCard.is_active():
 		return
 
 	var dir := Vector2.ZERO

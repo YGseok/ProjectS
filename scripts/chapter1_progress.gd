@@ -11,3 +11,8 @@ extends Node
 var has_key := false
 var has_stamp := false
 var diary_opened := false
+
+## "1장 시작" 타이틀 카드(scripts/chapter_title_card.gd)를 이미 보여줬는지
+## — 처음 꿈에 들어갈 때만 뜨고, 재방문(예: 개발자 치트로 되돌아오는
+## 경우)에는 다시 뜨지 않게 한다.
+var chapter_started := false

@@ -20,13 +20,17 @@ extends CanvasLayer
 ## "1장 시작" 체크포인트는 이제 chapter1_real이 아니라 chapter1_dream으로
 ## 바로 이동한다 — 퍼즐 오브젝트가 전부 꿈 쪽으로 옮겨갔기 때문.
 
+## chapter_started를 true로 두는 체크포인트는 "1장 시작" 타이틀 카드를
+## 다시 띄우지 않는다 — 개발 중 반복 테스트할 때마다 2.5초씩 카드를
+## 기다리지 않아도 되게 하기 위함(프롤로그만 예외 — 진짜 처음부터
+## 시작하는 상태를 재현해야 하므로 false).
 const CHECKPOINTS: Array[Dictionary] = [
 	{"label": "프롤로그", "scene": "res://scenes/chapter1_intro.tscn",
-		"has_key": false, "has_stamp": false, "diary_opened": false},
+		"has_key": false, "has_stamp": false, "diary_opened": false, "chapter_started": false},
 	{"label": "1장 진행 중(꿈, 아이템 없음)", "scene": "res://scenes/chapter1_dream.tscn",
-		"has_key": false, "has_stamp": false, "diary_opened": false},
+		"has_key": false, "has_stamp": false, "diary_opened": false, "chapter_started": true},
 	{"label": "1장 종료", "scene": "res://scenes/chapter1_end.tscn",
-		"has_key": true, "has_stamp": true, "diary_opened": true},
+		"has_key": true, "has_stamp": true, "diary_opened": true, "chapter_started": true},
 ]
 
 @onready var _panel: Panel = $Panel
@@ -66,6 +70,7 @@ func _warp_to(checkpoint: Dictionary) -> void:
 	Chapter1Progress.has_key = checkpoint["has_key"]
 	Chapter1Progress.has_stamp = checkpoint["has_stamp"]
 	Chapter1Progress.diary_opened = checkpoint["diary_opened"]
+	Chapter1Progress.chapter_started = checkpoint["chapter_started"]
 	_menu_open = false
 	_panel.visible = false
 	get_tree().change_scene_to_file(checkpoint["scene"])

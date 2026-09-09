@@ -146,14 +146,11 @@
 
 > INBOX.md에 새 지시가 있으면 이 큐보다 항상 먼저 처리한다.
 
-0. **[진행 중] 챕터 1 시작/종료 타이틀 카드**(INBOX.md 2026-09-09 —
-   "첫 꿈 들어간 후 1챕터 타이틀이 뜨고... 첫 꿈 탈출하면, 1챕터 완료
-   타이틀이 뜬다"). v0.16에서 퍼즐을 꿈 안으로 옮기는 구조 변경까지는
-   끝났지만, 타이틀 카드 자체는 아직 안 만듦 — 다음 이터레이션에서 이어갈
-   것. 이후 "탈출 후 일상 파트"(INBOX.md 같은 항목, "탈출한 후 바깥을
-   돌아다니며 NPC와 대화하거나 단서를 얻을 수 있는 일상 플레이")도 남아
-   있는데, 이건 새 대사/단서 콘텐츠가 필요해서 순수 구조 작업보다 범위가
-   넓다 — 일단 chapter1_end를 그대로 두거나 최소한으로만 chapter1_real
+0. **챕터 1 시작/종료 타이틀 카드는 v0.17로 완료**(INBOX.md 2026-09-09).
+   **아직 남은 것**: "탈출 후 일상 파트"(INBOX.md 같은 항목, "탈출한 후
+   바깥을 돌아다니며 NPC와 대화하거나 단서를 얻을 수 있는 일상 플레이")
+   — 이건 새 대사/단서 콘텐츠가 필요해서 순수 구조 작업보다 범위가 넓다
+   — 일단 chapter1_end를 그대로 두거나 최소한으로만 chapter1_real
    재진입 정도로 연결하고, 실제 단서 콘텐츠는 사람 확인 후 채울 것.
 1. `floorboard.gd`(마루 판자)/`hopscotch_key.gd`(사방치기)는 여전히
    `ColorRect` 그레이박스다. **`assets/tiles/main/`의 A4/A5/Inside_C/
@@ -223,6 +220,34 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- **v0.17 — 챕터 시작/종료 타이틀 카드 추가(INBOX.md 2026-09-09)**: 새
+  오토로드 `ChapterTitleCard`(`scripts/chapter_title_card.gd` +
+  `scenes/common/ChapterTitleCard.tscn`) — `show_title(text)`를 호출하면
+  화면 전체를 덮는 반투명 검은 배경 위에 큰 글씨로 텍스트를 띄우고,
+  `ui_accept`로 바로 스킵하거나 2.5초 뒤 자동으로 사라진다. 호출부는
+  `await`로 카드가 사라질 때까지 기다렸다가 다음 동작을 이어갈 수 있음.
+  **시작**: 새 스크립트 `scripts/chapter1_dream_entry.gd`를
+  `chapter1_dream.tscn` 루트에 붙여서, `Chapter1Progress.chapter_started`
+  가 false일 때만(=진짜 첫 방문) `"1장\n\"여름, 옛집\""`을 띄우고 플래그를
+  true로 바꾼다(재방문 시 중복 방지). **종료**: `floorboard.gd`의
+  `_on_diary_dialogue_ended()`에 `await ChapterTitleCard.show_title("1장
+  종료")`를 씬 전환 직전에 추가. **이동 차단**: `player.gd`가
+  `ChapterTitleCard.is_active()`도 확인해서(대화창/팝업과 같은 패턴)
+  타이틀이 떠 있는 동안 이동을 막는다. `debug_warp.gd`의 체크포인트에도
+  `chapter_started` 필드를 추가 — 프롤로그만 false(진짜 처음부터),
+  나머지는 true로 둬서 개발 중 반복 테스트할 때마다 카드를 기다리지
+  않아도 되게 함. 신규 회귀 테스트 `tests/test_chapter_title_card.gd`
+  (첫 방문에 자동으로 뜸, 이동 차단, Enter로 스킵, 재방문 시 중복 안
+  뜸 — 9개 어서션). **부작용 대응**: `chapter1_dream.tscn`을 직접 로드해
+  퍼즐/콜리전/장식물 상호작용을 검증하는 기존 테스트들
+  (`test_chapter1_puzzle.gd`/`test_dynamic_collision.gd`/
+  `test_scenery_flavor.gd`)은 타이틀 카드가 이동을 막아 방해하므로,
+  씬을 로드하기 전에 `Chapter1Progress.chapter_started = true`를 미리
+  설정해서 우회(이 테스트들의 목적은 타이틀 카드 자체가 아니므로).
+  `test_full_playthrough.gd`(실제 낮잠으로 처음 진입하는 경로)는 별도
+  처리 없이도 통과 — `_move_to()`의 진행-없음 감지 가드가 타이틀이
+  자동으로 사라질 때까지의 시간을 자연스럽게 흡수함. 전체 21종 + QA
+  7개 씬 재통과, 실제 창 캡처로 타이틀 카드 렌더링 확인.
 - **v0.16 — 챕터 1 퍼즐을 실제로 꿈 안으로 이전(구조 변경 코드 구현,
   INBOX.md 2026-09-09)**: v0.15에서 DESIGN.md에 기록한 결정을 실제
   코드/씬으로 구현. **오브젝트 이동**: `Floorboard`/`GonggiStones`/
