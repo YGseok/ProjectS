@@ -1,13 +1,12 @@
 extends InteractableBase
-## 장독대 항아리 — 3단계부터 등장(DESIGN.md §8.1). 표식 새겨진 나무패를
-## 발견한다(1회성). 순수 퍼즐 단서로만 쓰고 별도 공포 디테일은 없음.
-## 획득 시 아이템 팝업을 띄운다(사람 피드백, 2026-09-08 — "아이템 획득
-## 피드백이 부족함").
+## 장독대 항아리(DESIGN.md §8.1) — 꿈 안에서 처음부터 상시 등장
+## (2026-09-09부터: 퍼즐이 순환마다 하나씩이 아니라 꿈 방문 한 번 안에서
+## 전부 진행되므로 더 이상 "N단계부터 등장" 게이팅이 없음). 표식 새겨진
+## 나무패를 발견한다(1회성). 순수 퍼즐 단서로만 쓰고 별도 공포 디테일은
+## 없음. 획득 시 아이템 팝업을 띄운다(사람 피드백, 2026-09-08 — "아이템
+## 획득 피드백이 부족함").
 
 const STAMP_ICON := preload("res://assets/props/ui_icons/stamp_icon.png")
-
-func _is_visible_now() -> bool:
-	return Chapter1Progress.stage >= 3
 
 func _on_interact() -> void:
 	if Chapter1Progress.has_stamp:

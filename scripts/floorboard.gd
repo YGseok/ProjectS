@@ -1,8 +1,10 @@
 extends InteractableBase
 ## 마루 밑 판자 — 챕터 1 메인 퍼즐 "닫힌 일기장"의 최종 오브젝트
-## (DESIGN.md §8.1). 상시 보임(1단계부터). 소지품(열쇠/나무패)과 진행
-## 단계에 따라 다른 대사를 보여주다가, 4단계 + 열쇠/나무패를 모두 가진
-## 상태에서만 실제로 열리며 일기 시퀀스가 재생된다.
+## (DESIGN.md §8.1). 꿈 안에서 상시 보임. 소지품(열쇠/나무패)에 따라
+## 다른 대사를 보여주다가, 열쇠+나무패를 모두 가진 상태에서 조사하면
+## 곧바로 열리며 일기 시퀀스가 재생된다(2026-09-09부터: 예전엔 순환
+## 4단계까지 기다려야 했지만, 이제 꿈 방문 한 번 안에서 다 모으면 바로
+## 열 수 있음 — 더 기다릴 "순환"이 없음).
 
 @export var wall_mark_path: NodePath
 
@@ -12,10 +14,7 @@ func _on_interact() -> void:
 		DialogueSystem.start_dialogue(["떼어낸 페이지를 다시 읽어본다.", "\"미워.\"", "...그 외엔 아무것도 알아볼 수 없다."])
 		return
 	if p.has_key and p.has_stamp:
-		if p.stage >= p.MAX_STAGE:
-			_open_diary()
-		else:
-			DialogueSystem.start_dialogue(["열쇠와 나무패를 함께 넣어본다.", "...아직 뭔가 맞지 않는 느낌이다."])
+		_open_diary()
 		return
 	if p.has_key:
 		DialogueSystem.start_dialogue(["주머니 속 열쇠를 자물쇠에 넣어본다.", "...맞지 않는다.", "뭔가 하나가 더 필요할 것 같다."])
@@ -39,9 +38,11 @@ func _open_diary() -> void:
 		if mark:
 			mark.flash()
 
-## DESIGN.md §8.1 "트리거(챕터 종료)": 일기 페이지를 다 읽고 나면 그
-## 자체로 각성(챕터 종료)이 일어나야 한다 — 별도로 WakeTrigger까지 걸어가
-## Enter를 또 누를 필요 없이, 대화가 끝나는 순간 자동으로 전환한다.
+## DESIGN.md §8.1 "트리거(챕터 종료 = 탈출)": 일기 페이지를 다 읽고 나면
+## 그 자체로 각성(챕터 종료)이 일어나야 한다 — 대화가 끝나는 순간 자동으로
+## 전환한다. 2026-09-09부터 이 꿈에는 더 이상 별도의 "깨어나기" 트리거가
+## 없다 — 일기를 여는 것이 유일한 탈출 방법이라 여기가 유일한 씬 전환
+## 경로다.
 func _on_diary_dialogue_ended() -> void:
 	var fade := get_tree().get_first_node_in_group("fade_overlay")
 	if fade:

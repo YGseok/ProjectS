@@ -22,15 +22,9 @@ func _initialize() -> void:
 	_assert(_player != null, "player 그룹 노드를 찾음")
 	_assert(_nap_trigger != null, "NapTrigger 노드를 찾음")
 	_assert(_progress != null, "Chapter1Progress 오토로드 노드를 /root 에서 찾음")
-	# 순환 진행은 각성(WakeTrigger) 쪽 책임이다 — 낮잠 쪽에서 실수로
-	# advances_chapter1_cycle을 켜두면 단계가 두 배로 빨리 올라가 버린다.
-	_assert(_nap_trigger != null and not _nap_trigger.advances_chapter1_cycle,
-		"NapTrigger는 advances_chapter1_cycle이 꺼져 있음(진행은 각성 쪽 담당)")
 	if _player == null or _nap_trigger == null or _progress == null:
 		_finish()
 		return
-
-	var stage_before: int = _progress.stage
 
 	var prompt_label: Label = _nap_trigger.get_node("PromptLabel")
 
@@ -77,8 +71,6 @@ func _initialize() -> void:
 	await _wait_scene_change("Chapter1Dream", 3.0)
 	_assert(current_scene.name == "Chapter1Dream",
 		"사정거리 안에서는 정상적으로 낮잠 전환됨(대조군), 실제: %s" % [current_scene.name])
-	_assert(_progress.stage == stage_before,
-		"낮잠 자체는 진행 단계를 안 바꿈, 실제: %d (이전: %d)" % [_progress.stage, stage_before])
 
 	_finish()
 

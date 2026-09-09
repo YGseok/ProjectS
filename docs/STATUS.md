@@ -87,36 +87,34 @@
   시뮬레이션해서 **사람 없이 자동으로 검증 가능**. 위 대화 시스템 버그도
   이 방식으로 잡아냈다. 사용법/함정은 `qa/README.md`의 "상호작용 자동
   테스트" 절 참고. 예시: `tests/test_dialogue_interaction.gd`.
-- `res://scenes/chapter1_real.tscn` / `chapter1_dream.tscn` — 배경은 이제
+- `res://scenes/chapter1_real.tscn` / `chapter1_dream.tscn` — 배경은
   실제 타일 아트 적용됨(아래 "배경 아트 통합" 참고, 더 이상 그레이박스
-  아님). 낮잠→꿈 전환은 왕복 가능하고, `chapter1_dream.tscn`의
-  `WakeTrigger`는 Enter로 각성할 때마다 `Chapter1Progress.advance_cycle()`
-  을 호출해 메인 퍼즐 1~3단계를 순환시키는 역할을 한다(이 부분은 의도한
-  최종 동작 — "임시"가 아님). "일기 개봉(4단계+열쇠+나무패 완료)이
-  각성을 유발해야 한다"는 조건은 **WakeTrigger를 게이팅하는 방식 대신**
-  `floorboard.gd`가 일기 대사 종료(`DialogueSystem.dialogue_ended`) 시점에
-  직접 `chapter1_end.tscn`으로 전환하는 별도 경로로 이미 구현
-  완료됐다(2026-09-07, 아래 완료 기록 "챕터 1 메인 퍼즐 확정" 참고) —
-  WakeTrigger는 여전히 1~3단계 순환 전용.
-- **챕터 1 메인 퍼즐 "닫힌 일기장" 구현**(INBOX.md 결정 반영, 2026-09-07):
-  DESIGN.md §8.1을 4단계 수집 퍼즐로 교체하고 실제 오브젝트까지 구현.
-  `scripts/chapter1_progress.gd`(오토로드 `Chapter1Progress`)가 `stage`
-  (1~4)·`has_key`·`has_stamp`·`diary_opened`를 씬 전환 너머로 유지하고,
-  `WakeTrigger`(꿈→현실)가 각성마다 `advance_cycle()`을 호출해 1단계씩
-  올린다. `scripts/interactable_base.gd`(공통 베이스, 범위 내 Enter →
-  `_on_interact()`) 위에 `floorboard.gd`(마루 밑 판자, 상시 보임 —
-  1단계에서 잠김 대사만, 열쇠만 있으면 "안 맞음", 4단계+열쇠+나무패
-  모두 갖추면 개봉되며 `wall_mark_flash.gd`로 벽 낙서를 짧게 flash),
-  `gonggi_stones.gd`(순수 플레이버, 상태 없음), `hopscotch_key.gd`(2단계
-  부터 등장, 조사 시 `has_key=true`), `jar_stamp.gd`(3단계부터 등장,
-  조사 시 `has_stamp=true`) 4개 오브젝트를 `chapter1_real.tscn`에 배치.
-  **새 실내 씬은 만들지 않음** — "마루 밑"은 기존 툇마루(포치) 공간을,
-  "장독대"는 기존 마당(야외)을 그대로 활용해 구현. **아트는 전부
-  `ColorRect` 그레이박스**(작은 색 사각형)로만 표현 — 기능 구현 우선,
-  실제 스프라이트는 나중 검수 단계에서 교체 예정(캐릭터 아트와 같은
-  정책, 2026-09-07 사람 확인 참고). `tests/test_chapter1_puzzle.gd`로
-  4단계 전체 진행(등장 조건, 아이템 획득, 조기 개봉 방지, 재개봉 시
-  상태 유지)을 자동 검증 완료.
+  아님). **2026-09-09부터 구조가 바뀜**: 낮잠(`NapTrigger`, 현실→꿈)은
+  여전히 있지만 이제 편도다 — 꿈 안에는 "그냥 깨어나기" 트리거가 없고,
+  퍼즐(마루 밑 판자·공기돌·사방치기·장독)을 꿈 안에서 풀어 일기를 여는
+  것만이 유일한 탈출법이다(`floorboard.gd`가 일기 대사 종료 시점에
+  직접 `chapter1_end.tscn`으로 전환). 아래 "챕터 1 메인 퍼즐" 항목의
+  설명은 v0.16으로 갱신된 최신 구조 기준.
+- **챕터 1 메인 퍼즐 "닫힌 일기장" 구현**(INBOX.md 결정 반영, 2026-09-07
+  확정; 구조 2026-09-09 갱신 — v0.16 참고): DESIGN.md §8.1을 4단계 수집
+  퍼즐로 교체하고 실제 오브젝트까지 구현, 전부 `chapter1_dream.tscn`
+  (꿈)에 있다. `scripts/chapter1_progress.gd`(오토로드
+  `Chapter1Progress`)가 `has_key`·`has_stamp`·`diary_opened`를 씬 전환
+  너머로 유지한다(예전엔 순환 횟수를 세는 `stage`도 있었으나 v0.16에서
+  삭제 — 이제 꿈 방문 한 번 안에서 자유 순서로 다 모은다).
+  `scripts/interactable_base.gd`(공통 베이스, 범위 내 Enter →
+  `_on_interact()`) 위에 `floorboard.gd`(마루 밑 판자, 꿈 안에서 상시
+  보임 — 잠김 대사만 하다가 열쇠+나무패를 모두 갖추면 즉시 개봉되며
+  `wall_mark_flash.gd`로 벽 낙서를 짧게 flash), `gonggi_stones.gd`(순수
+  플레이버, 상태 없음), `hopscotch_key.gd`(조사 시 `has_key=true`),
+  `jar_stamp.gd`(조사 시 `has_stamp=true`) 4개 오브젝트를 배치 — 전부
+  단계 게이팅 없이 꿈 방문 즉시부터 보임. **새 실내 씬은 만들지 않음**
+  — "마루 밑"은 기존 툇마루(포치) 공간을, "장독대"는 기존 마당(야외)을
+  그대로 활용해 구현. **아트는 전부 `ColorRect`/단색 스프라이트
+  그레이박스**로만 표현 — 기능 구현 우선, 실제 스프라이트는 나중 검수
+  단계에서 교체 예정(캐릭터 아트와 같은 정책, 2026-09-07 사람 확인
+  참고). `tests/test_chapter1_puzzle.gd`로 전체 진행(자유 순서 아이템
+  획득, 조기 개봉 방지, 재개봉 시 상태 유지)을 자동 검증 완료.
 - **이동 콜리전 + 오클루전 리빌 구현 완료**(사람 피드백, 2026-09-07):
   `scripts/collision_map.gd`(구역별 `Rect2` 목록, 32px 그리드 정렬 필수)로
   벽/나무 밑둥을 실제로 막음. 나무/덤불은 `YSortObjects`(Node2D,
@@ -148,6 +146,15 @@
 
 > INBOX.md에 새 지시가 있으면 이 큐보다 항상 먼저 처리한다.
 
+0. **[진행 중] 챕터 1 시작/종료 타이틀 카드**(INBOX.md 2026-09-09 —
+   "첫 꿈 들어간 후 1챕터 타이틀이 뜨고... 첫 꿈 탈출하면, 1챕터 완료
+   타이틀이 뜬다"). v0.16에서 퍼즐을 꿈 안으로 옮기는 구조 변경까지는
+   끝났지만, 타이틀 카드 자체는 아직 안 만듦 — 다음 이터레이션에서 이어갈
+   것. 이후 "탈출 후 일상 파트"(INBOX.md 같은 항목, "탈출한 후 바깥을
+   돌아다니며 NPC와 대화하거나 단서를 얻을 수 있는 일상 플레이")도 남아
+   있는데, 이건 새 대사/단서 콘텐츠가 필요해서 순수 구조 작업보다 범위가
+   넓다 — 일단 chapter1_end를 그대로 두거나 최소한으로만 chapter1_real
+   재진입 정도로 연결하고, 실제 단서 콘텐츠는 사람 확인 후 채울 것.
 1. `floorboard.gd`(마루 판자)/`hopscotch_key.gd`(사방치기)는 여전히
    `ColorRect` 그레이박스다. **`assets/tiles/main/`의 A4/A5/Inside_C/
    Inside_C_2/Inside_D/Inside_E를 전부 눈으로 확인 완료(2026-09-08)** —
@@ -216,6 +223,46 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- **v0.16 — 챕터 1 퍼즐을 실제로 꿈 안으로 이전(구조 변경 코드 구현,
+  INBOX.md 2026-09-09)**: v0.15에서 DESIGN.md에 기록한 결정을 실제
+  코드/씬으로 구현. **오브젝트 이동**: `Floorboard`/`GonggiStones`/
+  `HopscotchKey`/`JarStamp`/`WallMarkFlash`를 `chapter1_real.tscn`에서
+  `chapter1_dream.tscn`으로 통째로 옮김(같은 좌표, 같은 컴포넌트 —
+  대사/에셋 전부 그대로 재사용, 새로 지어낸 내용 없음). `ObjectiveHint`
+  인스턴스도 함께 옮김(퍼즐이 있는 곳에 힌트가 있어야 함). `InventoryUI`
+  는 이제 꿈에만 남기고 현실에서는 제거(현실에서는 항상 아이템이
+  없어서 켤 일이 없어짐). **단계 게이팅 제거**: `Chapter1Progress`에서
+  `stage`/`MAX_STAGE`/`advance_cycle()`을 완전히 삭제 — 이제 `has_key`/
+  `has_stamp`/`diary_opened` 조합만으로 퍼즐을 판단한다.
+  `hopscotch_key.gd`/`jar_stamp.gd`의 `_is_visible_now()`(각각 stage>=2/
+  stage>=3) 오버라이드를 삭제해서 씬 로드 즉시부터 둘 다 보이게 함.
+  `floorboard.gd`는 `has_key and has_stamp`만 확인하면 곧바로 일기를
+  연다(예전엔 추가로 `stage>=MAX_STAGE`도 필요했음). `objective_hint.gd`
+  는 이제 열쇠/나무패를 어느 순서로 먼저 얻어도(예전엔 사방치기가
+  장독보다 먼저 등장해서 "장독 먼저" 케이스가 아예 불가능했지만, 지금은
+  둘 다 처음부터 보여서 가능해짐) 맞는 힌트가 나오도록 케이스 추가.
+  **WakeTrigger 완전 제거**: "꿈을 오가는게 아니라 꿈 안에서 탈출" 요구를
+  문자 그대로 구현 — 꿈에는 이제 "그냥 깨어나기" 트리거가 아예 없고,
+  `floorboard.gd`가 일기를 여는 순간 자동으로 `chapter1_end.tscn`으로
+  전환하는 것이 유일한 탈출 경로다. `nap_trigger.gd`(NapTrigger/
+  WakeTrigger가 공유하던 스크립트)에서 `advances_chapter1_cycle` 필드도
+  같이 삭제(더 이상 아무도 안 씀). `debug_warp.gd`의 체크포인트도
+  `stage` 필드 삭제 + "1장 시작" 체크포인트가 이제 chapter1_dream으로
+  바로 이동하도록 갱신. **테스트 정리**: 이제 존재하지 않는 메커니즘을
+  검증하던 `test_wake_trigger_range.gd`/`test_nap_wake_roundtrip.gd`
+  삭제(왕복 자체가 없어졌으므로). `test_chapter1_puzzle.gd`/
+  `test_full_playthrough.gd`/`test_dynamic_collision.gd`/
+  `test_debug_warp.gd`/`test_objective_hint_unit.gd`/
+  `test_background_tint_reset.gd`/`test_nap_trigger_range.gd`를 새 구조에
+  맞게 재작성(특히 `test_full_playthrough.gd`는 이제 진짜로 NapTrigger를
+  밟아 꿈에 들어간 뒤 그 안에서 퍼즐을 푸는 실제 경로로 검증 — 예전엔
+  `advance_cycle()` 직접 호출로 순환을 흉내만 냈음). **QA로 발견한
+  레이아웃 버그**: `chapter1_dream.tscn`의 `MoodLabel`("연출 메모")이
+  새로 옮겨온 `ObjectiveHint` 라벨과 화면 하단 왼쪽에서 완전히 겹쳐
+  보이는 문제를 실제 창 캡처로 발견 — `MoodLabel`을 화면 하단 오른쪽
+  정렬로 이동해서 해결. 전체 20종(22개에서 2개 삭제) + QA 7개 씬 재통과,
+  두 씬 모두 실제 창 캡처로 시각 확인 완료. **아직 안 한 것**: "1장
+  시작"/"1장 종료" 타이틀 카드 표시, 탈출 후 "일상" 파트 — 다음 버전.
 - **v0.15 — 챕터 1 퍼즐 구조 변경 결정을 DESIGN.md에 기록(코드 변경
   없음)**: INBOX.md 2026-09-09 지시("퍼즐 방식을 바꾼다. 꿈을 오가는게
   아니라, 꿈 안에서 무언가를 해야 탈출하는 구조로 바꾼다" + "챕터의

@@ -8,7 +8,10 @@ extends SceneTree
 var _all_passed := true
 
 func _initialize() -> void:
-	change_scene_to_file("res://scenes/chapter1_real.tscn")
+	# ObjectiveHint는 2026-09-09 퍼즐 구조 변경(꿈 방문 한 번 안에서 전부
+	# 진행)으로 chapter1_real.tscn에서 chapter1_dream.tscn으로 옮겨졌다 —
+	# 퍼즐 자체가 꿈 안으로 이동했으므로 힌트도 그쪽에 있어야 의미가 있다.
+	change_scene_to_file("res://scenes/chapter1_dream.tscn")
 	await process_frame
 	await process_frame
 

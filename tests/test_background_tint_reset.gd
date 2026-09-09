@@ -1,6 +1,7 @@
 extends SceneTree
-## 자동 회귀 테스트 — 낮잠→꿈→각성 왕복 후에도 chapter1_real의 지붕 색
-## 오버레이(RoofTint)가 항상 같은 값을 유지하는지 검증한다.
+## 자동 회귀 테스트 — 낮잠으로 꿈에 들어갔다가 현실로 다시 돌아와도
+## chapter1_real의 지붕 색 오버레이(RoofTint)가 항상 같은 값을 유지하는지
+## 검증한다.
 ##
 ## 배경: 예전에는 지붕/벽 색 구분을 TileData.modulate로 구현했는데, 이는
 ## chapter1_real/chapter1_dream이 공유하는 main_tileset.tres 리소스 자체를
@@ -9,7 +10,13 @@ extends SceneTree
 ## (2026-09-07, 사람이 실제 플레이하다 발견). 지금은 씬마다 독립된
 ## ColorRect 오버레이 노드로 바뀌어서 애초에 공유 자원이 없다 — 이
 ## 테스트는 그 사실(매번 새로 로드되는 씬은 항상 같은 값을 가짐)을
-## 왕복 후에도 재확인해서 회귀를 잡는다.
+## 다시 로드한 뒤에도 재확인해서 회귀를 잡는다.
+##
+## 2026-09-09부터 꿈 안에는 "깨어나기" 트리거가 없다(일기를 여는 것만이
+## 유일한 탈출법 — 퍼즐 구조 변경 참고) — 그래서 "각성"을 실제로
+## 재현하는 대신, 이 테스트가 원래 검증하려던 핵심("각 씬은 매번 로드될
+## 때마다 항상 같은 고유 틴트를 가지며, 다른 씬의 값에 오염되지 않는다")
+## 은 chapter1_real을 직접 다시 로드해서 그대로 확인한다.
 ##
 ## 실행: godot4 --headless --script res://tests/test_background_tint_reset.gd --path <project>
 
@@ -32,13 +39,15 @@ func _initialize() -> void:
 	_assert(dream_roof_tint.color != expected_color,
 		"꿈 씬의 RoofTint는 현실과 다른(더 어두운/붉은) 값, 실제: %s" % [dream_roof_tint.color])
 
-	# 각성 -> 현실
-	await _send_action("ui_accept")
-	await _wait_scene_change("Chapter1Real", 3.0)
+	# 현실로 재로드(더 이상 꿈 안에 "깨어나기" 트리거가 없어서, 직접
+	# 다시 불러오는 것으로 "같은 씬은 항상 같은 값" 회귀를 재확인한다).
+	change_scene_to_file("res://scenes/chapter1_real.tscn")
+	await process_frame
+	await process_frame
 
 	var roof_tint_after: ColorRect = current_scene.get_node("RoofTint")
 	_assert(roof_tint_after.color == expected_color,
-		"각성 후 RoofTint가 원래 값으로 돌아옴 (전 %s vs 후 %s)" % [expected_color, roof_tint_after.color])
+		"현실을 다시 불러와도 RoofTint가 원래 값 그대로임 (전 %s vs 후 %s)" % [expected_color, roof_tint_after.color])
 
 	_finish()
 

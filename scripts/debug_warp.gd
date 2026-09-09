@@ -15,14 +15,18 @@ extends CanvasLayer
 ## 나중에 챕터 2/3...이 추가되면 CHECKPOINTS에 항목만 더 넣으면 된다.
 ## `OS.is_debug_build()`가 false인 배포 빌드에서는 아예 반응하지 않는다
 ## (플레이어에게 노출되면 안 되는 개발자 전용 기능이라서).
+##
+## 2026-09-09 퍼즐 구조 변경(꿈 방문 한 번 안에서 전부 진행) 이후,
+## "1장 시작" 체크포인트는 이제 chapter1_real이 아니라 chapter1_dream으로
+## 바로 이동한다 — 퍼즐 오브젝트가 전부 꿈 쪽으로 옮겨갔기 때문.
 
 const CHECKPOINTS: Array[Dictionary] = [
 	{"label": "프롤로그", "scene": "res://scenes/chapter1_intro.tscn",
-		"stage": 1, "has_key": false, "has_stamp": false, "diary_opened": false},
-	{"label": "1장 시작(현실, 1단계)", "scene": "res://scenes/chapter1_real.tscn",
-		"stage": 1, "has_key": false, "has_stamp": false, "diary_opened": false},
+		"has_key": false, "has_stamp": false, "diary_opened": false},
+	{"label": "1장 진행 중(꿈, 아이템 없음)", "scene": "res://scenes/chapter1_dream.tscn",
+		"has_key": false, "has_stamp": false, "diary_opened": false},
 	{"label": "1장 종료", "scene": "res://scenes/chapter1_end.tscn",
-		"stage": 4, "has_key": true, "has_stamp": true, "diary_opened": true},
+		"has_key": true, "has_stamp": true, "diary_opened": true},
 ]
 
 @onready var _panel: Panel = $Panel
@@ -59,7 +63,6 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 func _warp_to(checkpoint: Dictionary) -> void:
-	Chapter1Progress.stage = checkpoint["stage"]
 	Chapter1Progress.has_key = checkpoint["has_key"]
 	Chapter1Progress.has_stamp = checkpoint["has_stamp"]
 	Chapter1Progress.diary_opened = checkpoint["diary_opened"]

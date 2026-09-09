@@ -1,20 +1,21 @@
 extends SceneTree
 ## 자동 상호작용 테스트 — 챕터 1 메인 퍼즐 "닫힌 일기장"(DESIGN.md §8.1,
-## 2026-09-07 확정)의 4단계 순환 진행을 검증한다.
+## 2026-09-07 확정; 구조 2026-09-09 갱신)의 진행을 검증한다.
 ##
 ## 실행: godot4 --headless --script res://tests/test_chapter1_puzzle.gd --path <project>
 ##
-## Chapter1Progress는 오토로드라 change_scene_to_file()로 씬을 다시 불러도
-## 값이 유지된다 — 여기서는 실제 낮잠/각성 씬 전환 대신
-## Chapter1Progress.advance_cycle()을 직접 호출해 순환을 시뮬레이션한다
-## (씬 전환 자체는 test_nap_wake_roundtrip.gd가 이미 검증함).
+## 2026-09-09부터 퍼즐이 "순환(낮잠↔각성)마다 하나씩"이 아니라 "꿈 방문
+## 한 번 안에서 전부"로 바뀌면서, 오브젝트들도 chapter1_real에서
+## chapter1_dream으로 옮겨갔고 더 이상 단계별로 등장/사라지지 않는다 —
+## 그래서 이 테스트도 chapter1_dream.tscn을 직접 로드하고, advance_cycle()
+## 시뮬레이션 없이 열쇠/나무패를 자유 순서로 모으는 흐름을 검증한다.
 
 var _player: Node2D
 var _progress: Node
 var _all_passed := true
 
 func _initialize() -> void:
-	change_scene_to_file("res://scenes/chapter1_real.tscn")
+	change_scene_to_file("res://scenes/chapter1_dream.tscn")
 	await process_frame
 	await process_frame
 
@@ -26,8 +27,6 @@ func _initialize() -> void:
 		_finish()
 		return
 
-	_assert(_progress.stage == 1, "초기 진행 단계는 1, 실제: %d" % _progress.stage)
-
 	var floorboard: Node2D = current_scene.get_node("Floorboard")
 	var hopscotch: Node2D = current_scene.get_node("HopscotchKey")
 	var jar: Node2D = current_scene.get_node("JarStamp")
@@ -35,16 +34,15 @@ func _initialize() -> void:
 	var stamp_slot: Control = current_scene.get_node("InventoryUI/StampSlot")
 	var hint_label: Label = current_scene.get_node("ObjectiveHint/Label")
 
-	# 새로 추가된 오브젝트들의 _process()가 한 번 이상 돌 시간을 준다
-	# (씬 로드 직후 2프레임만으로는 부족할 때가 있었음 — visible 갱신은
-	# _process에서 일어나므로).
+	# 오브젝트들의 _process()가 한 번 이상 돌 시간을 준다(씬 로드 직후
+	# 2프레임만으로는 부족할 때가 있었음 — visible 갱신은 _process에서 일어남).
 	for i in range(10):
 		await process_frame
-	_assert(not hopscotch.visible, "1단계에서는 사방치기(열쇠) 안 보임")
-	_assert(not jar.visible, "1단계에서는 장독(나무패) 안 보임")
+	_assert(hopscotch.visible, "사방치기(열쇠)는 꿈 방문 즉시부터 보임(더 이상 단계 게이팅 없음)")
+	_assert(jar.visible, "장독(나무패)도 꿈 방문 즉시부터 보임(더 이상 단계 게이팅 없음)")
 	_assert(not key_slot.visible and not stamp_slot.visible,
 		"아이템 획득 전에는 인벤토리 UI 슬롯이 둘 다 숨겨져 있음")
-	_assert(hint_label.text != "", "1단계 목표 힌트가 비어있지 않음, 실제: '%s'" % hint_label.text)
+	_assert(hint_label.text != "", "초기 목표 힌트가 비어있지 않음, 실제: '%s'" % hint_label.text)
 
 	# 판자로 이동해서 조사 — 아직 잠겨있다는 대사만 뜨고 상태 변화 없음.
 	await _move_to(floorboard.position)
@@ -64,23 +62,16 @@ func _initialize() -> void:
 	await _interact()
 	_assert(hint_label.visible, "대화가 닫히면 목표 힌트가 다시 보임")
 	_assert(not _progress.has_key and not _progress.has_stamp,
-		"1단계에서 판자 조사해도 열쇠/나무패 상태 변화 없음")
+		"아직 아무것도 못 모은 상태에서 판자 조사해도 열쇠/나무패 상태 변화 없음")
 
-	# 순환 1회(각성 시뮬레이션) -> 2단계, 사방치기 등장.
-	_progress.advance_cycle()
-	await process_frame
-	_assert(_progress.stage == 2, "순환 1회 후 2단계, 실제: %d" % _progress.stage)
-	_assert(hopscotch.visible, "2단계부터 사방치기 보임")
-	_assert(not jar.visible, "2단계에서는 아직 장독 안 보임")
-
-	var hint_stage1 := hint_label.text
+	var hint_before_key := hint_label.text
 	await _move_to(hopscotch.position)
 	await _interact_expect_item("열쇠")
-	_assert(_progress.has_key, "2단계 사방치기 조사 후 열쇠 획득")
+	_assert(_progress.has_key, "사방치기 조사 후 열쇠 획득")
 	await process_frame
 	_assert(key_slot.visible and not stamp_slot.visible,
 		"열쇠 획득 후 인벤토리에 열쇠 슬롯만 보임")
-	_assert(hint_label.text != hint_stage1,
+	_assert(hint_label.text != hint_before_key,
 		"열쇠 획득 후 목표 힌트가 바뀜, 실제: '%s'" % hint_label.text)
 
 	# 이미 파낸 뒤 다시 조사해도 크래시 없이 "이미 비어있다" 분기만 타고
@@ -92,15 +83,9 @@ func _initialize() -> void:
 	await _interact()
 	_assert(not _progress.diary_opened, "열쇠만 있고 나무패 없으면 아직 안 열림")
 
-	# 순환 2회 -> 3단계, 장독 등장.
-	_progress.advance_cycle()
-	await process_frame
-	_assert(_progress.stage == 3, "순환 2회 후 3단계, 실제: %d" % _progress.stage)
-	_assert(jar.visible, "3단계부터 장독 보임")
-
 	await _move_to(jar.position)
 	await _interact_expect_item("나무패")
-	_assert(_progress.has_stamp, "3단계 장독 조사 후 나무패 획득")
+	_assert(_progress.has_stamp, "장독 조사 후 나무패 획득")
 	await process_frame
 	_assert(key_slot.visible and stamp_slot.visible,
 		"나무패까지 획득하면 인벤토리에 두 슬롯 다 보임")
@@ -110,22 +95,6 @@ func _initialize() -> void:
 	await _interact()
 	_assert(_progress.has_stamp, "장독을 다시 조사해도 나무패 상태는 그대로 유지")
 
-	await _move_to(floorboard.position)
-	await _interact()
-	_assert(not _progress.diary_opened,
-		"열쇠+나무패 모두 있어도 4단계 전에는 아직 안 열림 (실제: stage=%d)" % _progress.stage)
-
-	# 순환 3회 -> 4단계, 이제 열림.
-	_progress.advance_cycle()
-	await process_frame
-	_assert(_progress.stage == 4, "순환 3회 후 4단계, 실제: %d" % _progress.stage)
-
-	# MAX_STAGE(4)를 넘어서까지 순환을 더 시도해도 5, 6...으로 안 올라가고
-	# 4에서 멈추는지 확인 (chapter1_progress.gd의 상한 체크).
-	_progress.advance_cycle()
-	_progress.advance_cycle()
-	_assert(_progress.stage == 4, "MAX_STAGE를 넘겨 호출해도 4에서 멈춤, 실제: %d" % _progress.stage)
-
 	var wall_mark: Node2D = current_scene.get_node("WallMarkFlash")
 	_assert(not wall_mark.visible, "일기 개봉 전에는 벽 낙서가 숨겨져 있음")
 
@@ -134,9 +103,10 @@ func _initialize() -> void:
 	# wall_mark_flash.gd의 flash()를 동기적으로 호출해 visible=true를
 	# 세팅한 직후(진짜 사라지는 건 flash_seconds 뒤라 타이밍에 안전하게
 	# 검증 가능한 시점) 상태를 확인한 다음, 나머지 대화는 _interact()로
-	# 마저 닫는다.
+	# 마저 닫는다. 2026-09-09부터는 열쇠+나무패만 있으면(더 이상 순환
+	# 단계를 기다릴 필요 없이) 곧바로 열린다.
 	await _send_action("ui_accept")
-	_assert(wall_mark.visible, "일기 개봉 시퀀스 시작과 동시에 벽 낙서가 flash()됨")
+	_assert(wall_mark.visible, "열쇠+나무패를 모두 갖춘 뒤 판자를 조사하면 곧바로 일기 개봉 시퀀스가 시작되며 벽 낙서가 flash()됨")
 
 	# flash_seconds(기본 0.2초)가 지나면 다시 숨어야 한다 — "딱 한 번만
 	# 스치듯" 요구사항의 나머지 절반(사라지는 쪽)은 지금까지 타이밍
@@ -146,24 +116,24 @@ func _initialize() -> void:
 	_assert(not wall_mark.visible, "flash_seconds가 지나면 벽 낙서가 다시 숨겨짐")
 
 	await _interact()
-	_assert(_progress.diary_opened, "4단계 + 열쇠 + 나무패 모두 갖춘 뒤 판자 조사하면 일기 개봉됨")
+	_assert(_progress.diary_opened, "열쇠 + 나무패 모두 갖춘 뒤 판자 조사하면 일기 개봉됨")
 	await process_frame
 	_assert(not key_slot.visible and not stamp_slot.visible,
 		"일기 개봉(아이템 소진) 후 인벤토리 슬롯이 둘 다 사라짐")
 	_assert(hint_label.text == "", "일기 개봉 후 목표 힌트가 비워짐(더 할 일 없음)")
 
-	# 일기 개봉(대화 종료) 자체가 각성(챕터 종료)을 유발해야 한다
-	# (DESIGN.md §8.1 "트리거" 항목) — WakeTrigger를 따로 안 걸어가도
-	# 자동으로 Chapter1End로 전환되는지 확인.
+	# 일기 개봉(대화 종료) 자체가 각성(챕터 종료 = 탈출)을 유발해야 한다
+	# (DESIGN.md §8.1 "트리거" 항목) — 2026-09-09부터 이 꿈에는 별도의
+	# "깨어나기" 트리거가 아예 없으므로, 일기 개봉이 유일한 탈출 경로다.
 	await _wait_scene_change("Chapter1End", 3.0)
 	_assert(current_scene != null and current_scene.name == "Chapter1End",
 		"일기 개봉 후 자동으로 챕터 종료 화면(Chapter1End)으로 전환됨, 실제: %s" %
 			[current_scene.name if current_scene else "null"])
 
-	# diary_opened == true 상태에서 챕터 1을 다시 열어 판자를 재조사해도
+	# diary_opened == true 상태에서 꿈을 다시 열어 판자를 재조사해도
 	# (Chapter1Progress는 오토로드라 값이 그대로 유지됨) 재오픈 로직이
 	# 다시 실행되거나 크래시하지 않고 "다시 읽기" 대사만 뜨는지 확인.
-	change_scene_to_file("res://scenes/chapter1_real.tscn")
+	change_scene_to_file("res://scenes/chapter1_dream.tscn")
 	await process_frame
 	for i in range(10):
 		await process_frame
@@ -186,8 +156,8 @@ func _wait_scene_change(expected_name: String, timeout_sec: float) -> void:
 		elapsed += step
 
 
-## target까지 이동한다. target 자체가 이제 오브젝트 콜리전으로 막혀 있을
-## 수 있으므로(2026-09-09, NPC/대화 오브젝트 충돌 추가), 정확히 그 칸에
+## target까지 이동한다. target 자체가 오브젝트 콜리전으로 막혀 있을 수
+## 있으므로(2026-09-09, NPC/대화 오브젝트 충돌 추가), 정확히 그 칸에
 ## 못 들어가면(진행 없음) 인접 칸에서 멈춘다 — interact_radius가 그 거리를
 ## 커버하도록 이미 늘어나 있음. x축이 막혀 있으면 y축으로 우회를 시도해서
 ## (그리고 그 반대도) 다른 오브젝트 하나 때문에 목표 근처에 못 가는 경우를

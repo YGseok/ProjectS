@@ -37,9 +37,9 @@ func _initialize() -> void:
 	await _press_key(KEY_F9)
 	_assert(warp.is_menu_open(), "대화창이 열려 있어도 F9로 치트 메뉴가 열림")
 
-	# 진행 상태를 일부러 어질러 놓은 뒤, "1장 시작" 체크포인트(인덱스 1 ->
-	# 키 '2')로 이동하면 stage=1/아이템 없음으로 정확히 초기화되는지 확인.
-	progress.stage = 3
+	# 진행 상태를 일부러 어질러 놓은 뒤, "1장 진행 중(꿈)" 체크포인트
+	# (인덱스 1 -> 키 '2')로 이동하면 아이템 없음으로 정확히 초기화되는지
+	# 확인한다.
 	progress.has_key = true
 	progress.has_stamp = true
 	progress.diary_opened = true
@@ -48,14 +48,13 @@ func _initialize() -> void:
 	await process_frame
 	await process_frame
 	_assert(not warp.is_menu_open(), "체크포인트 선택 후 메뉴가 자동으로 닫힘")
-	await _wait_scene_change("Chapter1Real", 3.0)
-	_assert(current_scene != null and current_scene.name == "Chapter1Real",
-		"'1장 시작' 선택 시 chapter1_real로 이동함, 실제: %s" %
+	await _wait_scene_change("Chapter1Dream", 3.0)
+	_assert(current_scene != null and current_scene.name == "Chapter1Dream",
+		"'1장 진행 중' 선택 시 chapter1_dream으로 이동함, 실제: %s" %
 			[current_scene.name if current_scene else "null"])
-	_assert(progress.stage == 1 and not progress.has_key and not progress.has_stamp
-			and not progress.diary_opened,
-		"'1장 시작' 이동 시 진행 상태가 시작 지점 값으로 초기화됨(stage=%d, key=%s, stamp=%s, diary=%s)" %
-			[progress.stage, progress.has_key, progress.has_stamp, progress.diary_opened])
+	_assert(not progress.has_key and not progress.has_stamp and not progress.diary_opened,
+		"'1장 진행 중' 이동 시 진행 상태가 시작 지점 값으로 초기화됨(key=%s, stamp=%s, diary=%s)" %
+			[progress.has_key, progress.has_stamp, progress.diary_opened])
 
 	# "1장 종료" 체크포인트(인덱스 2 -> 키 '3')로 이동하면 완료 상태로 감.
 	await _press_key(KEY_F9)
@@ -65,10 +64,9 @@ func _initialize() -> void:
 	_assert(current_scene != null and current_scene.name == "Chapter1End",
 		"'1장 종료' 선택 시 chapter1_end로 이동함, 실제: %s" %
 			[current_scene.name if current_scene else "null"])
-	_assert(progress.stage == 4 and progress.has_key and progress.has_stamp
-			and progress.diary_opened,
-		"'1장 종료' 이동 시 진행 상태가 완료 값으로 설정됨(stage=%d, key=%s, stamp=%s, diary=%s)" %
-			[progress.stage, progress.has_key, progress.has_stamp, progress.diary_opened])
+	_assert(progress.has_key and progress.has_stamp and progress.diary_opened,
+		"'1장 종료' 이동 시 진행 상태가 완료 값으로 설정됨(key=%s, stamp=%s, diary=%s)" %
+			[progress.has_key, progress.has_stamp, progress.diary_opened])
 
 	_finish()
 
