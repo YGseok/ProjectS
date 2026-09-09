@@ -10,5 +10,13 @@ class_name SceneryFlavor
 
 @export var lines: Array[String] = ["..."]
 
+func _ready() -> void:
+	# 트렁크는 이미 전용 사각형으로 막혀 있다(chapter1_real.tscn의
+	# CollisionMap 참고) — interactable_base.gd의 범용 "가장 가까운 칸"
+	# 충돌을 여기서도 켜면 스프라이트 기준점이 타일 중심과 어긋나 있어서
+	# 트렁크와 안 맞는 엉뚱한 칸이 막히는 부작용이 생긴다(2026-09-09).
+	blocks_movement = false
+	super._ready()
+
 func _on_interact() -> void:
 	DialogueSystem.start_dialogue(lines)

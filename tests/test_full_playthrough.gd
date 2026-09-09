@@ -86,17 +86,30 @@ func _interact_close() -> void:
 		guard += 1
 
 
+## target 자체가 오브젝트 콜리전으로 막혀 있을 수 있으므로(2026-09-09,
+## NPC/대화 오브젝트 충돌 추가) 진행이 안 되면 인접 칸에서 멈춘다 —
+## test_chapter1_puzzle.gd의 같은 헬퍼와 동일한 로직(x축이 막히면 y축으로
+## 우회 시도).
 func _move_to(target: Vector2) -> void:
-	while not _player.position.is_equal_approx(target):
+	var guard := 0
+	while not _player.position.is_equal_approx(target) and guard < 100:
+		guard += 1
 		var diff := target - _player.position
-		var action := "ui_right"
+		var x_action := ""
+		var y_action := ""
 		if absf(diff.x) > 0.01:
-			action = "ui_right" if diff.x > 0 else "ui_left"
-		elif absf(diff.y) > 0.01:
-			action = "ui_down" if diff.y > 0 else "ui_up"
-		else:
+			x_action = "ui_right" if diff.x > 0 else "ui_left"
+		if absf(diff.y) > 0.01:
+			y_action = "ui_down" if diff.y > 0 else "ui_up"
+		if x_action == "" and y_action == "":
 			break
-		await _move_one_tile(action)
+		var before := _player.position
+		if x_action != "":
+			await _move_one_tile(x_action)
+		if _player.position.is_equal_approx(before) and y_action != "":
+			await _move_one_tile(y_action)
+		if _player.position.is_equal_approx(before):
+			break
 
 
 func _move_one_tile(action: String) -> void:

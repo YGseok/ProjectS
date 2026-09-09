@@ -216,6 +216,41 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- **v0.12 — NPC/대화 오브젝트 벽 콜리전 추가(INBOX.md 2026-09-09)**:
+  `interactable_base.gd`(하위: floorboard/gonggi_stones/hopscotch_key/
+  jar_stamp/scenery_flavor)와 `npc.gd` 모두 `_ready()`에서
+  `"blocks_movement"` 그룹에 들어가고, `collision_map.gd`가 정적
+  `blocked_rects`(벽/나무 밑둥) 검사에 더해 이 그룹의 노드도 동적으로
+  검사한다 — `visible`인(= 지금 단계에 등장한) 노드만, 그 노드의
+  `global_position`에서 16px 이내를 막는다. 전부 정확히 타일 중심에
+  있는 오브젝트라 "자기 타일만" 막힌다. **핵심 설계 포인트**: 정적
+  목록이 아니라 그룹+visible 동적 검사로 만든 이유는, 사방치기/장독처럼
+  단계에 따라 나타나는 오브젝트가 안 보이는 동안엔 자동으로 안 막히고
+  등장하는 순간부터 막히게 하기 위함(수동 동기화 불필요, 새 오브젝트
+  추가 시에도 별도 rect 등록 필요 없음). **나무/덤불(scenery_flavor.gd)
+  은 예외** — 이미 트렁크 모양에 맞춘 전용 rect로 막혀 있고 스프라이트
+  기준점이 타일 중심과 어긋나 있어서, 범용 방식을 그대로 적용하면
+  트렁크와 안 맞는 엉뚱한 칸이 막히는 부작용이 있었다(직접 계산으로
+  발견 — TreeSmall 기준 (96,672)이 새로 막힘) — `blocks_movement`라는
+  새 `@export bool`(기본 true)을 추가해 `scenery_flavor.gd`에서만 false로
+  끔. `interactable_base.gd`의 `interact_radius` 기본값도 28→34로
+  올림 — 오브젝트 자신의 타일이 막혀서 더는 그 위에 설 수 없고 인접
+  타일(정확히 32px)에서만 상호작용해야 하는데 28로는 그 거리에 못
+  미쳐서 상호작용이 아예 불가능해지기 때문(NPC는 원래부터 자체 로직
+  으로 48px 사용 중이라 영향 없음). **부작용 및 대응**: (1) 판자/공기돌이
+  이제 툇마루(y=160)를 가로막아서, `test_movement_bounds.gd`의 "왼쪽
+  경계까지 콜리전 없이 이동" 가정이 깨짐 — 콜리전 없는 y=192행으로
+  우회하도록 수정. (2) `test_scenery_flavor.gd`의 "오른쪽 3, 아래 9"
+  경로가 이제 NPC 타일(704,160)을 가로질러야 해서 막힘 — "아래 10,
+  오른쪽 3, 위 1"로 우회 경로 변경. (3) `test_chapter1_puzzle.gd`/
+  `test_full_playthrough.gd`가 오브젝트 위치로 정확히 이동하던
+  `_move_to()` 헬퍼는 이제 목표 타일에 못 들어가므로 무한 루프 위험이
+  있었음 — 진행이 안 되면(막힘) x축→y축 우회를 한 번 시도하고, 그래도
+  안 되면 인접 칸에서 멈추도록 재작성. 신규 회귀 테스트
+  `tests/test_dynamic_collision.gd` 추가(NPC/Floorboard/GonggiStones가
+  실제로 막히는지 + HopscotchKey가 1단계엔 안 막다가 2단계부터 막는지,
+  12개 어서션). `tests/run_all.sh`가 이제 21개 파일을 실행함. 전체
+  21종 + QA 7개 씬 재통과.
 - **v0.11 — 타자기 효과(v0.03) 회귀 테스트 추가**: `dialogue_system.gd`/
   `intro_sequence.gd`의 `Label.visible_ratio` 타자기 효과가 v0.03에서
   `tools/verify_typewriter.gd` 일회성 스크립트로만 검증되고 삭제된 뒤,

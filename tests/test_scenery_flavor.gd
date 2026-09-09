@@ -23,11 +23,16 @@ func _initialize() -> void:
 		_finish()
 		return
 
-	# TreeGreen 옆(704,448)까지 이동해서 조사 — 오른쪽 3, 아래 9.
+	# TreeGreen 옆(704,448)까지 이동해서 조사. (608,160)에서 곧장
+	# "오른쪽 3, 아래 9"로 가면 (704,160)을 지나야 하는데, 그 자리는
+	# 2026-09-09에 추가된 ShadowNPC 콜리전으로 막혀 있다 — 아래로 먼저
+	# 충분히 내려간 뒤(10칸, y=480행) 오른쪽으로 이동해서(y=480행은
+	# 트렁크 콜리전과 안 겹침) NPC/나무 밑동을 모두 피해 도착한다.
+	for i in range(10):
+		await _move_one_tile("ui_down")
 	for i in range(3):
 		await _move_one_tile("ui_right")
-	for i in range(9):
-		await _move_one_tile("ui_down")
+	await _move_one_tile("ui_up")
 	_assert(_player.position.is_equal_approx(Vector2(704, 448)),
 		"TreeGreen 옆까지 정상 이동, 실제: %s" % [_player.position])
 

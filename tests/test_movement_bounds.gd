@@ -7,6 +7,11 @@ extends SceneTree
 ## "오브젝트 콜리전"을 섞지 않기 위해 콜리전이 없는 왼쪽 방향을 쓴다.
 ## 콜리전 자체는 test_collision_map.gd에서 따로 검증한다.
 ##
+## y=160행(툇마루)은 2026-09-09부터 GonggiStones(416,160)/Floorboard
+## (480,160)/ShadowNPC(704,160)에 콜리전이 생겨서 더 이상 "콜리전 없는
+## 가로줄"이 아니다 — 아래로 한 칸(y=192) 내려간 뒤 그 줄에서 왼쪽 이동을
+## 검증한다(그 줄은 여전히 아무 오브젝트도 없음).
+##
 ## 실행: godot4 --headless --script res://tests/test_movement_bounds.gd --path <project>
 
 var _player: Node2D
@@ -37,20 +42,22 @@ func _initialize() -> void:
 			"카메라 limit이 play_area(0,0,1280,720)와 일치, 실제: (%d,%d,%d,%d)" %
 				[camera.limit_left, camera.limit_top, camera.limit_right, camera.limit_bottom])
 
-	# 시작 위치 (608,160) 에서 왼쪽으로 19칸(608/32) 이동하면 x=0 (경계)에 도달
+	# 콜리전 없는 줄(y=192)로 한 칸 내려간 뒤, 왼쪽으로 19칸(608/32)
+	# 이동하면 x=0 (경계)에 도달.
+	await _move_one_tile("ui_down")
 	for i in range(19):
 		await _move_one_tile("ui_left")
-	_assert(_player.position.is_equal_approx(Vector2(0, 160)),
-		"왼쪽으로 19칸 이동 후 (0,160), 실제: %s" % [_player.position])
+	_assert(_player.position.is_equal_approx(Vector2(0, 192)),
+		"왼쪽으로 19칸 이동 후 (0,192), 실제: %s" % [_player.position])
 
 	# 경계에서 한 번 더 왼쪽으로 누르면 화면 밖(x=-32)으로 못 나가고 그대로여야 함
 	await _move_one_tile("ui_left")
-	_assert(_player.position.is_equal_approx(Vector2(0, 160)),
-		"경계에서 추가로 왼쪽으로 눌러도 그대로 (0,160), 실제: %s" % [_player.position])
+	_assert(_player.position.is_equal_approx(Vector2(0, 192)),
+		"경계에서 추가로 왼쪽으로 눌러도 그대로 (0,192), 실제: %s" % [_player.position])
 
 	# 오른쪽으로 다시 이동은 정상 작동해야 함 (경계 로직이 이동 자체를 막은 게 아님을 확인)
 	await _move_one_tile("ui_right")
-	_assert(_player.position.is_equal_approx(Vector2(32, 160)),
+	_assert(_player.position.is_equal_approx(Vector2(32, 192)),
 		"경계 이후 오른쪽으로 이동은 정상, 실제: %s" % [_player.position])
 
 	_finish()

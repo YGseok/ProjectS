@@ -186,24 +186,32 @@ func _wait_scene_change(expected_name: String, timeout_sec: float) -> void:
 		elapsed += step
 
 
+## target까지 이동한다. target 자체가 이제 오브젝트 콜리전으로 막혀 있을
+## 수 있으므로(2026-09-09, NPC/대화 오브젝트 충돌 추가), 정확히 그 칸에
+## 못 들어가면(진행 없음) 인접 칸에서 멈춘다 — interact_radius가 그 거리를
+## 커버하도록 이미 늘어나 있음. x축이 막혀 있으면 y축으로 우회를 시도해서
+## (그리고 그 반대도) 다른 오브젝트 하나 때문에 목표 근처에 못 가는 경우를
+## 피한다.
 func _move_to(target: Vector2) -> void:
-	while not _player.position.is_equal_approx(target):
-		var dir := Vector2.ZERO
+	var guard := 0
+	while not _player.position.is_equal_approx(target) and guard < 100:
+		guard += 1
 		var diff := target - _player.position
+		var x_action := ""
+		var y_action := ""
 		if absf(diff.x) > 0.01:
-			dir = Vector2.RIGHT if diff.x > 0 else Vector2.LEFT
-		elif absf(diff.y) > 0.01:
-			dir = Vector2.DOWN if diff.y > 0 else Vector2.UP
-		else:
+			x_action = "ui_right" if diff.x > 0 else "ui_left"
+		if absf(diff.y) > 0.01:
+			y_action = "ui_down" if diff.y > 0 else "ui_up"
+		if x_action == "" and y_action == "":
 			break
-		var action := "ui_right"
-		if dir == Vector2.LEFT:
-			action = "ui_left"
-		elif dir == Vector2.DOWN:
-			action = "ui_down"
-		elif dir == Vector2.UP:
-			action = "ui_up"
-		await _move_one_tile(action)
+		var before := _player.position
+		if x_action != "":
+			await _move_one_tile(x_action)
+		if _player.position.is_equal_approx(before) and y_action != "":
+			await _move_one_tile(y_action)
+		if _player.position.is_equal_approx(before):
+			break
 
 
 func _move_one_tile(action: String) -> void:
