@@ -31,6 +31,6 @@ offset_left = 20.0
 offset_top = 684.0
 offset_right = 500.0
 offset_bottom = 708.0
-text = "Enter: 다음 / Esc: 건너뛰기 (자동 재생 중)"
+text = "Enter: 다음 / Esc: 건너뛰기"
 
 [node name="FadeOverlay" parent="." instance=ExtResource("2_fade")]

@@ -1,7 +1,8 @@
 extends SceneTree
-## 자동 상호작용 테스트 — 챕터 1 프롤로그(intro_sequence.gd)의 자동 재생,
-## Enter로 한 줄 스킵, Esc로 전체 스킵, 그리고 끝까지 재생 시
-## chapter1_real로 정상 전환되는지 검증한다.
+## 자동 상호작용 테스트 — 챕터 1 프롤로그(intro_sequence.gd)가 입력 없이는
+## 절대 진행되지 않고(2026-09-09 "자동 재생되지 않도록" 피드백으로 자동
+## 진행 제거) Enter로만 한 줄씩 넘어가는지, Esc로 전체 스킵, 그리고 끝까지
+## 다 넘겼을 때 chapter1_real로 정상 전환되는지 검증한다.
 ##
 ## 실행: godot4 --headless --script res://tests/test_intro_sequence.gd --path <project>
 
@@ -38,10 +39,11 @@ func _initialize() -> void:
 	_assert(is_equal_approx(label.visible_ratio, 1.0),
 		"충분히 기다리면 전체 글자가 다 보임(ratio==1.0), 실제: %f" % label.visible_ratio)
 
-	# 자동 재생: 아무 입력 없이 AUTO_ADVANCE_SECONDS(3초)만 지나도 다음 줄로.
-	await create_timer(3.2).timeout
-	_assert(label.text != second_line,
-		"입력 없이도 3초 뒤 자동으로 다음 줄로 넘어감, 실제: '%s'" % label.text)
+	# 자동 재생 없음(2026-09-09 회귀 확인): 입력 없이 오래 기다려도
+	# 절대 다음 줄로 안 넘어가야 한다 — 예전엔 3초면 자동으로 넘어갔었음.
+	await create_timer(3.5).timeout
+	_assert(label.text == second_line,
+		"입력 없이 오래 기다려도 자동으로 넘어가지 않음(수동 진행), 실제: '%s'" % label.text)
 
 	# Esc로 전체 스킵 -> 남은 줄과 상관없이 바로 chapter1_real로 전환.
 	await _send_action("ui_cancel")

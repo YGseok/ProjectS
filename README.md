@@ -26,7 +26,7 @@ loop/
   STOP                # 이 파일이 생기면 루프가 멈춘다 (기본적으로 없음)
   logs/               # 이터레이션별 실행 로그
 scenes/
-  chapter1_intro.tscn # 챕터 1 프롤로그 (자동 재생 + 스킵 가능한 인트로)
+  chapter1_intro.tscn # 챕터 1 프롤로그 (Enter로 진행, Esc로 스킵 가능한 인트로)
   chapter1_real.tscn  # 챕터 1 현실 파트
   chapter1_dream.tscn # 챕터 1 꿈 파트
   chapter1_end.tscn   # 챕터 1 종료 화면 (챕터 2 없어서 최소 임시 상태)

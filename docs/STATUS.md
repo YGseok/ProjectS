@@ -216,6 +216,17 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- **v0.13 — 프롤로그 자동 재생 제거(INBOX.md 2026-09-09)**:
+  `intro_sequence.gd`가 원래(2026-09-08 지시) `AUTO_ADVANCE_SECONDS`
+  (3초) 뒤 자동으로 다음 줄로 넘어갔는데, 이번 사람 피드백("오프닝
+  다이얼로그가 자동 재생되지 않도록 한다")으로 그 타이머 분기를 완전히
+  제거 — 이제 `ui_accept`(Enter)로만 진행된다. `ui_cancel`(Esc) 전체
+  스킵과 타자기 효과(v0.03)는 그대로 유지. `chapter1_intro.tscn`의
+  `SkipHint` 라벨 텍스트도 "(자동 재생 중)" 문구를 지움, `README.md`의
+  문서 구조 설명도 같이 수정. `tests/test_intro_sequence.gd`의 기존
+  "3초 뒤 자동으로 넘어감" 어서션을 정반대(입력 없이 오래 기다려도 안
+  넘어감)로 뒤집어 새 요구사항을 회귀 테스트로 고정. 전체 21종 + QA
+  7개 씬 재통과.
 - **v0.12 — NPC/대화 오브젝트 벽 콜리전 추가(INBOX.md 2026-09-09)**:
   `interactable_base.gd`(하위: floorboard/gonggi_stones/hopscotch_key/
   jar_stamp/scenery_flavor)와 `npc.gd` 모두 `_ready()`에서
