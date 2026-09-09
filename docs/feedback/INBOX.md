@@ -49,6 +49,11 @@
   `assets/sprites/characters/bonus_pack/` 캐릭터들도 이 디자인(흰 원피스,
   10살 한국인 여아)과 맞지 않아 아직 확정된 스프라이트 없음. 맞는 에셋을
   더 구하거나 별도 제작 필요 — 계속 대기.
+  **(2026-09-09 사람 확인)** 실제 캐릭터 스프라이트가 정해지면
+  `scenes/test/pipeline_test.tscn`/`scripts/test/pipeline_test_character.gd`
+  에서 이미 검증해둔 8방향 스프라이트 교체 방식을 그대로 챕터 1 플레이어
+  (`scripts/player.gd`, 지금은 파란 `ColorRect`)에 적용하기로 함 — 그
+  전까지는 파이프라인 테스트 씬을 새로 손대지 않고 레퍼런스로만 유지.
 
 ## 처리된 항목
 
