@@ -146,6 +146,16 @@
 
 > INBOX.md에 새 지시가 있으면 이 큐보다 항상 먼저 처리한다.
 
+-1. **[진행 중] 챕터 2/3 + 일상 NPC 3개**(INBOX.md 2026-09-14, DESIGN.md
+   §11 참고). v0.25에서 계획만 기록함 — 다음 순서로 이어갈 것: (a)
+   `ChapterProgress` 오토로드 + `chapter_key_item.gd`/
+   `chapter_escape_trigger.gd` 범용 스크립트, (b) `chapter2_dream.tscn`,
+   (c) `chapter3_dream.tscn`(호수, 파란 ColorRect 그레이박스) +
+   `NapTrigger`가 진행 상태에 맞는 꿈으로 분기하도록 `nap_trigger.gd`에
+   `target_scene_by_chapter` 같은 동적 분기 추가, (d) `chapter1_real.tscn`
+   에 NPC 3개 추가, (e) 프롤로그→...→3장 종료(임시 엔딩)까지 전체
+   페이즈 전환을 검증하는 통합 테스트. 전부 placeholder 콘텐츠 —
+   진짜 스토리 내용은 사람 확인 후.
 0. **챕터 1 시작/종료 타이틀 카드는 v0.17로 완료**(INBOX.md 2026-09-09).
    **아직 남은 것**: "탈출 후 일상 파트"(INBOX.md 같은 항목, "탈출한 후
    바깥을 돌아다니며 NPC와 대화하거나 단서를 얻을 수 있는 일상 플레이")
@@ -216,6 +226,23 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- **v0.25 — 챕터 2/3 + 일상 NPC 계획을 DESIGN.md §11에 기록(코드 변경
+  없음)**: INBOX.md 2026-09-14 지시("2개의 챕터의 퍼즐 내용은 챕터
+  1과 유사하게, 키 아이템 3개 + 탈출 트리거로 임의 구성", "호수 맵을
+  구성하고 마지막 챕터에 배치", "일상 파트에 NPC 3개 + 페이즈 전환
+  테스트 우선")를 반영해 구조를 정리. **핵심 결정**: (1) 현실(일상)은
+  챕터마다 새로 안 만들고 `chapter1_real.tscn` 하나를 공유 허브로 계속
+  씀 — `NapTrigger`가 진행 상태에 맞는 꿈으로 동적 분기. (2) 챕터별로는
+  꿈 씬만 새로 만듦(`chapter2_dream.tscn`/`chapter3_dream.tscn`).
+  (3) 아이템 3개+탈출 로직은 챕터 1 전용 스크립트를 건드리지 않고 범용
+  스크립트(`chapter_key_item.gd`/`chapter_escape_trigger.gd`) + 범용
+  진행 저장소(`ChapterProgress` 오토로드, 챕터 번호를 key로 하는
+  Dictionary)로 새로 만듦 — `Chapter1Progress`는 이미 테스트가 많이
+  물려 있어 그대로 유지. (4) 호수 맵은 물 타일 에셋이 없어서(A5.png
+  직접 확인) 파란 반투명 ColorRect로 그레이박스 처리. (5) 3장이
+  마지막 챕터 — 탈출하면 일상이 아니라 임시 엔딩 화면으로. 자세한
+  내용은 DESIGN.md §11 참고. 실제 구현은 다음 버전부터 — 이 버전
+  시점에는 게임 동작 변화 없음(전체 27종 테스트 무변경 통과 상태).
 - **v0.24 — 챕터 1 꿈에도 기와집 내부 반영(DESIGN.md §4 "같은 물리
   공간" 원칙, v0.23 후속)**: `chapter1_dream_background.gd`에 v0.23과
   동일한 안방/건넌방 내부 타일 채우기를 추가하고,
