@@ -17,9 +17,11 @@ func _initialize() -> void:
 
 	var warp: Node = root.get_node_or_null("DebugWarp")
 	var progress: Node = root.get_node_or_null("Chapter1Progress")
+	var chapter_progress: Node = root.get_node_or_null("ChapterProgress")
 	_assert(warp != null, "DebugWarp 오토로드를 찾음")
 	_assert(progress != null, "Chapter1Progress 오토로드를 찾음")
-	if warp == null or progress == null:
+	_assert(chapter_progress != null, "ChapterProgress 오토로드를 찾음")
+	if warp == null or progress == null or chapter_progress == null:
 		_finish()
 		return
 
@@ -67,6 +69,37 @@ func _initialize() -> void:
 	_assert(progress.has_key and progress.has_stamp and progress.diary_opened,
 		"'1장 종료' 이동 시 진행 상태가 완료 값으로 설정됨(key=%s, stamp=%s, diary=%s)" %
 			[progress.has_key, progress.has_stamp, progress.diary_opened])
+	_assert(chapter_progress.current_chapter == 2,
+		"'1장 종료' 이동 시 ChapterProgress.current_chapter가 2로 설정됨, 실제: %d" %
+			chapter_progress.current_chapter)
+
+	# 챕터 2/3 체크포인트(v0.26으로 추가, 인덱스 3~6 -> 키 '4'~'7')도
+	# ChapterProgress를 정확히 덮어쓰는지 확인한다.
+	await _press_key(KEY_F9)
+	await _press_key(KEY_5)
+	await _wait_scene_change("Chapter2End", 3.0)
+	_assert(current_scene != null and current_scene.name == "Chapter2End",
+		"'2장 종료' 선택 시 chapter2_end로 이동함, 실제: %s" %
+			[current_scene.name if current_scene else "null"])
+	_assert(chapter_progress.all_items_collected(2) and chapter_progress.is_escaped(2),
+		"'2장 종료' 이동 시 챕터 2가 완료 상태(아이템 3개+탈출)로 설정됨")
+	_assert(chapter_progress.current_chapter == 3,
+		"'2장 종료' 이동 시 ChapterProgress.current_chapter가 3으로 설정됨, 실제: %d" %
+			chapter_progress.current_chapter)
+
+	await _press_key(KEY_F9)
+	await _press_key(KEY_6)
+	await _wait_scene_change("Chapter3Dream", 3.0)
+	_assert(current_scene != null and current_scene.name == "Chapter3Dream",
+		"'3장(호수) 진행 중' 선택 시 chapter3_dream으로 이동함, 실제: %s" %
+			[current_scene.name if current_scene else "null"])
+	_assert(chapter_progress.items_collected_count(3) == 0 and not chapter_progress.is_escaped(3),
+		"'3장(호수) 진행 중' 이동 시 챕터 3 진행 상태가 아이템 없음으로 초기화됨")
+
+	# 이전 워프(챕터 2 완료 상태)가 새 워프에 섞여 들어가지 않는지도
+	# 함께 확인 — reset_all()이 실제로 매번 깨끗이 지우는지가 핵심.
+	_assert(not chapter_progress.is_escaped(2),
+		"챕터 3으로 워프해도 이전 워프의 챕터 2 완료 상태가 남아있지 않음(reset_all 확인)")
 
 	_finish()
 

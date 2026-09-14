@@ -219,6 +219,21 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- **v0.28 — 개발자용 챕터 이동 치트에 챕터 2/3 체크포인트 추가**
+  (INBOX.md 2026-09-09, v0.14에서 "챕터 2/3이 생기면 체크포인트만
+  추가하면 되는 구조로 만들어둠"이라 예고했던 것을 실행). `DebugWarp`
+  (`scripts/debug_warp.gd`)의 `CHECKPOINTS`에 "2장 진행 중"/"2장 종료"/
+  "3장(호수) 진행 중"/"3장(마지막) 종료" 4개를 추가해 총 7개가 됨(F9로
+  메뉴, 숫자키 4~7). 챕터 2/3은 `Chapter1Progress`가 아니라 범용
+  `ChapterProgress`로 관리하므로, `chapter_progress.gd`에 개발자 도구
+  전용 `force_state(chapter, items_found, escaped, started)`/
+  `reset_all()`을 추가 — 워프할 때마다 먼저 `reset_all()`로 모든 챕터
+  상태를 지우고 그 체크포인트가 필요로 하는 챕터만 채워서, 이전 워프의
+  상태가 섞여 들어가지 않게 함. `tests/test_debug_warp.gd`에 새
+  체크포인트 검증(7개 assert 추가, 이전 워프 상태가 안 남아있는지도
+  확인) — 기존 assert(인덱스 1/2 체크포인트)는 그대로 통과해 하위
+  호환 확인됨. `tests/run_all.sh`(29개 파일, 전부 통과) 검증 완료.
+
 - **v0.27 — 일상 파트 NPC 3개 추가**(INBOX.md 2026-09-14, DESIGN.md
   §11.4). `chapter1_real.tscn`에 `scenes/common/ShadowNPC.tscn`(기존
   `scripts/npc.gd` 재사용 컴포넌트)을 3개 더 인스턴스화: `NpcA`

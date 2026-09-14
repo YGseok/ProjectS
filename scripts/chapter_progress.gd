@@ -49,3 +49,18 @@ func is_started(chapter: int) -> bool:
 
 func set_started(chapter: int) -> void:
 	_get_chapter(chapter)["started"] = true
+
+## 개발자용 챕터 이동 치트(debug_warp.gd) 전용 — 임의의 진행 상태로
+## 강제로 덮어쓴다(items_found개를 앞에서부터 모은 것으로 표시).
+func force_state(chapter: int, items_found: int, escaped: bool, started: bool) -> void:
+	var items: Array[bool] = [false, false, false]
+	for i in range(mini(items_found, items.size())):
+		items[i] = true
+	_chapters[chapter] = {"items": items, "escaped": escaped, "started": started}
+
+## 개발자용 챕터 이동 치트 전용 — 모든 챕터 진행 상태를 지우고 1장부터
+## 다시 시작하는 상태로 되돌린다. 각 체크포인트로 이동하기 직전에 항상
+## 호출해서, 이전 워프에서 남은 상태가 섞여 들어가지 않게 한다.
+func reset_all() -> void:
+	_chapters = {}
+	current_chapter = 1

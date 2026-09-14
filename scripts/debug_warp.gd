@@ -11,26 +11,52 @@ extends CanvasLayer
 ## 체크포인트로 즉시 이동하면서 Chapter1Progress를 그 지점에 맞는 값으로
 ## 덮어쓴다(그 이후 단계에서만 얻었을 아이템은 없어짐).
 ##
-## 지금은 챕터 1까지만 구현돼 있어서 체크포인트도 그만큼만 등록했다 —
-## 나중에 챕터 2/3...이 추가되면 CHECKPOINTS에 항목만 더 넣으면 된다.
-## `OS.is_debug_build()`가 false인 배포 빌드에서는 아예 반응하지 않는다
-## (플레이어에게 노출되면 안 되는 개발자 전용 기능이라서).
+## 챕터 2/3이 추가되면서(v0.26) CHECKPOINTS에 그 체크포인트들도 추가함 —
+## 예고한 대로 항목만 더 넣는 구조 그대로 확장했다. `OS.is_debug_build()`
+## 가 false인 배포 빌드에서는 아예 반응하지 않는다(플레이어에게 노출되면
+## 안 되는 개발자 전용 기능이라서).
 ##
 ## 2026-09-09 퍼즐 구조 변경(꿈 방문 한 번 안에서 전부 진행) 이후,
 ## "1장 시작" 체크포인트는 이제 chapter1_real이 아니라 chapter1_dream으로
 ## 바로 이동한다 — 퍼즐 오브젝트가 전부 꿈 쪽으로 옮겨갔기 때문.
+##
+## 챕터 1은 `Chapter1Progress`(has_key/has_stamp/diary_opened)로, 챕터
+## 2/3은 범용 `ChapterProgress`(chapter_progress.gd)로 각각 관리한다 —
+## 워프할 때마다 `ChapterProgress.reset_all()`로 먼저 깨끗이 지운 뒤
+## 그 체크포인트가 필요로 하는 챕터만 `force_state()`로 채운다(이전
+## 워프에서 남은 상태가 섞여 들어가지 않게).
 
-## chapter_started를 true로 두는 체크포인트는 "1장 시작" 타이틀 카드를
-## 다시 띄우지 않는다 — 개발 중 반복 테스트할 때마다 2.5초씩 카드를
-## 기다리지 않아도 되게 하기 위함(프롤로그만 예외 — 진짜 처음부터
-## 시작하는 상태를 재현해야 하므로 false).
+## chapter_started/chapter_progress_started를 true로 두는 체크포인트는
+## 그 챕터의 "N장 시작" 타이틀 카드를 다시 띄우지 않는다 — 개발 중
+## 반복 테스트할 때마다 2.5초씩 카드를 기다리지 않아도 되게 하기 위함
+## (프롤로그만 예외 — 진짜 처음부터 시작하는 상태를 재현해야 하므로
+## false).
 const CHECKPOINTS: Array[Dictionary] = [
 	{"label": "프롤로그", "scene": "res://scenes/chapter1_intro.tscn",
-		"has_key": false, "has_stamp": false, "diary_opened": false, "chapter_started": false},
+		"has_key": false, "has_stamp": false, "diary_opened": false, "chapter_started": false,
+		"current_chapter": 1},
 	{"label": "1장 진행 중(꿈, 아이템 없음)", "scene": "res://scenes/chapter1_dream.tscn",
-		"has_key": false, "has_stamp": false, "diary_opened": false, "chapter_started": true},
+		"has_key": false, "has_stamp": false, "diary_opened": false, "chapter_started": true,
+		"current_chapter": 1},
 	{"label": "1장 종료", "scene": "res://scenes/chapter1_end.tscn",
-		"has_key": true, "has_stamp": true, "diary_opened": true, "chapter_started": true},
+		"has_key": true, "has_stamp": true, "diary_opened": true, "chapter_started": true,
+		"current_chapter": 2},
+	{"label": "2장 진행 중(꿈, 아이템 없음)", "scene": "res://scenes/chapter2_dream.tscn",
+		"has_key": true, "has_stamp": true, "diary_opened": true, "chapter_started": true,
+		"current_chapter": 2,
+		"chapter_states": {2: {"items": 0, "escaped": false, "started": true}}},
+	{"label": "2장 종료", "scene": "res://scenes/chapter2_end.tscn",
+		"has_key": true, "has_stamp": true, "diary_opened": true, "chapter_started": true,
+		"current_chapter": 3,
+		"chapter_states": {2: {"items": 3, "escaped": true, "started": true}}},
+	{"label": "3장(호수) 진행 중(꿈, 아이템 없음)", "scene": "res://scenes/chapter3_dream.tscn",
+		"has_key": true, "has_stamp": true, "diary_opened": true, "chapter_started": true,
+		"current_chapter": 3,
+		"chapter_states": {3: {"items": 0, "escaped": false, "started": true}}},
+	{"label": "3장(마지막) 종료", "scene": "res://scenes/chapter3_end.tscn",
+		"has_key": true, "has_stamp": true, "diary_opened": true, "chapter_started": true,
+		"current_chapter": 3,
+		"chapter_states": {3: {"items": 3, "escaped": true, "started": true}}},
 ]
 
 @onready var _panel: Panel = $Panel
@@ -71,6 +97,14 @@ func _warp_to(checkpoint: Dictionary) -> void:
 	Chapter1Progress.has_stamp = checkpoint["has_stamp"]
 	Chapter1Progress.diary_opened = checkpoint["diary_opened"]
 	Chapter1Progress.chapter_started = checkpoint["chapter_started"]
+
+	ChapterProgress.reset_all()
+	ChapterProgress.current_chapter = checkpoint.get("current_chapter", 1)
+	var chapter_states: Dictionary = checkpoint.get("chapter_states", {})
+	for chapter_number in chapter_states:
+		var state: Dictionary = chapter_states[chapter_number]
+		ChapterProgress.force_state(chapter_number, state["items"], state["escaped"], state["started"])
+
 	_menu_open = false
 	_panel.visible = false
 	get_tree().change_scene_to_file(checkpoint["scene"])
