@@ -220,6 +220,20 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- **v0.22 — 분위기용 발판 배치(INBOX.md 2026-09-14, 레벨 디자인 위임)**:
+  2026-09-08에 만들어두고 배치는 보류했던 `scripts/pressure_plate.gd`
+  (범용 발판 컴포넌트)를 처음으로 실제 씬에 연결. 새 하위 클래스
+  `scripts/pressure_plate_flavor.gd`(`pressed` 시그널을 받아
+  `DialogueSystem.start_dialogue()`로 대사 한 줄을 딱 한 번만 띄움,
+  `one_shot`을 강제 true로) 신설 후 `chapter1_dream.tscn`의 원두막
+  마루(`CreakyBoardPlate`, 좌표 896,480 — 지붕 콜리전 밖의 열린 바닥)에
+  배치, 대사는 "마루 밑에서 삐걱- 소리가 났다. 아무도 없는데."(DESIGN.md
+  §5 "비정상적인 고요함" 항목에 신규 채택 기록, 새 진상/사건 없이 순수
+  청각적 위화감만). 상호작용 키 없이 밟는 즉시 자동 발동. 신규 회귀
+  테스트 `tests/test_pressure_plate_placement.gd`(도달 가능성, 자동
+  발동, one_shot 재발동 방지 — 8개 어서션; 원두막 지붕 콜리전을 피해
+  우회하는 이동 경로 필요했음). 전체 25종 + QA 7개 씬 재통과, 실제 창
+  캡처로 배치 확인.
 - **v0.21 — 미니맵 추가(INBOX.md 2026-09-14)**: 새 오토로드 `Minimap`
   (`scripts/minimap.gd` + `scenes/common/Minimap.tscn`) — 화면 우상단
   (160×90 패널)에 자유 이동 맵 범위 대비 플레이어의 상대 위치를 노란
