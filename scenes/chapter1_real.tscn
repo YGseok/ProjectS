@@ -14,6 +14,7 @@
 [ext_resource type="Script" path="res://scripts/occlusion_reveal_manager.gd" id="12_reveal_manager"]
 [ext_resource type="Script" path="res://scripts/scenery_flavor.gd" id="22_scenery"]
 [ext_resource type="Script" path="res://scripts/chapter1_real_entry.gd" id="23_real_entry"]
+[ext_resource type="Script" path="res://scripts/clue_object.gd" id="24_clue"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 18
@@ -87,6 +88,36 @@ script = ExtResource("22_scenery")
 lines = Array[String](["빨간 열매가 조롱조롱 달린 덤불. 먹을 수 있는 건지는 모르겠다."])
 
 [node name="PromptLabel" type="Label" parent="BushBerryExamine"]
+offset_left = -60.0
+offset_top = -40.0
+offset_right = 60.0
+offset_bottom = -16.0
+horizontal_alignment = 1
+label_settings = SubResource("LabelSettings_action_prompt")
+text = "Enter: 살펴보기"
+
+[node name="ClueChapter1" type="Node2D" parent="."]
+position = Vector2(320, 608)
+script = ExtResource("24_clue")
+required_chapter = 1
+lines = Array[String](["밭 한쪽에 낯익은 글씨가 적힌 종잇조각이 떨어져 있다.", "(placeholder 단서 — 1장 이후)"])
+
+[node name="PromptLabel" type="Label" parent="ClueChapter1"]
+offset_left = -60.0
+offset_top = -40.0
+offset_right = 60.0
+offset_bottom = -16.0
+horizontal_alignment = 1
+label_settings = SubResource("LabelSettings_action_prompt")
+text = "Enter: 살펴보기"
+
+[node name="ClueChapter2" type="Node2D" parent="."]
+position = Vector2(480, 608)
+script = ExtResource("24_clue")
+required_chapter = 2
+lines = Array[String](["평소와 다르게, 마루 밑에서 희미한 냄새가 난다.", "(placeholder 단서 — 2장 이후)"])
+
+[node name="PromptLabel" type="Label" parent="ClueChapter2"]
 offset_left = -60.0
 offset_top = -40.0
 offset_right = 60.0
