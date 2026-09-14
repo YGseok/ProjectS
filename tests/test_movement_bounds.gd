@@ -28,18 +28,16 @@ func _initialize() -> void:
 		_finish()
 		return
 
-	# 카메라 limit_*가 play_area(현재는 화면 전체, 0,0,1280,720)와 정확히
-	# 같아야 한다 — 뷰포트 크기와 limit 크기가 같으면 카메라가 움직일
-	# 여지가 없어서(항상 중앙에 고정) 지금은 시각적으로 아무 변화가
-	# 없지만, 나중에 맵이 화면보다 커지면(사람 피드백, 2026-09-08 —
-	# "맵이 과하게 넓으면 스크롤링") 이 limit이 실제 맵 경계 역할을 하게
-	# 된다. 값이 실수로 어긋나면 이 테스트가 잡아낸다.
+	# 카메라 limit_*가 play_area와 정확히 같아야 한다. 2026-09-14 맵 확장
+	# (기와집 내부 방 2개, DESIGN.md §8.3)으로 맵이 처음으로 화면
+	# (1280x720)보다 커졌다 — 위쪽으로 320px 늘어나서 limit_top이 -320.
+	# 값이 실수로 어긋나면 이 테스트가 잡아낸다.
 	var camera: Camera2D = _player.get_node("Camera2D")
 	_assert(camera != null, "플레이어에 Camera2D가 있음")
 	if camera:
-		_assert(camera.limit_left == 0 and camera.limit_top == 0 and
+		_assert(camera.limit_left == 0 and camera.limit_top == -320 and
 				camera.limit_right == 1280 and camera.limit_bottom == 720,
-			"카메라 limit이 play_area(0,0,1280,720)와 일치, 실제: (%d,%d,%d,%d)" %
+			"카메라 limit이 play_area(0,-320,1280,1040)와 일치, 실제: (%d,%d,%d,%d)" %
 				[camera.limit_left, camera.limit_top, camera.limit_right, camera.limit_bottom])
 
 	# 콜리전 없는 줄(y=192)로 한 칸 내려간 뒤, 왼쪽으로 19칸(608/32)

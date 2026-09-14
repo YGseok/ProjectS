@@ -19,8 +19,11 @@ const WOOD_MED := Vector2i(1, 5)
 const WALL := Vector2i(2, 10)
 
 func _ready() -> void:
-	# 마당(잔디) 전체
-	_fill_rect(0, 40, 0, 23, 1, GRASS)
+	# 마당(잔디) 전체 — 2026-09-14 맵 확장으로 기와집 내부(행 -10~-1)
+	# 위쪽도 카메라가 스크롤해서 보이므로, 그 범위까지 잔디 바탕을
+	# 먼저 깔아둔다(안 그러면 방 바깥쪽이 빈 채로 보임). 방/벽은 아래에서
+	# 그 위에 덧그린다.
+	_fill_rect(0, 40, -10, 23, 1, GRASS)
 
 	# 기와집 벽 (x160-1120, y0-128 -> col5-34, row0-3)
 	_fill_rect(5, 35, 0, 4, 0, WALL)
@@ -37,6 +40,24 @@ func _ready() -> void:
 
 	# 원두막 바닥 (x864-1088, y384-576 -> col27-33, row12-17)
 	_fill_rect(27, 34, 12, 18, 1, WOOD_MED)
+
+	# --- 기와집 내부 (2026-09-14 맵 확장, DESIGN.md §8.3) ---
+	# 안방 출입문 (x448-511, y0-128 -> col14-15, row0-3) — 외벽을 뚫어서
+	# 마당에서 안방으로 들어갈 수 있게 한다.
+	_fill_rect(14, 16, 0, 4, 1, WOOD_LIGHT)
+
+	# 내부 바닥(안방+건넌방, col9-30, row-9~-1 -> x288-991, y-288~-1)
+	_fill_rect(9, 30, -9, 0, 1, WOOD_LIGHT)
+
+	# 북쪽/서쪽/동쪽 외벽
+	_fill_rect(9, 31, -10, -9, 0, WALL)
+	_fill_rect(9, 10, -10, 0, 0, WALL)
+	_fill_rect(30, 31, -10, 0, 0, WALL)
+
+	# 안방-건넌방 사이 벽(col19, x608-639) — 중간 2칸(row-5,-4)만 뚫어서
+	# 건넌방으로 넘어가는 문으로 남긴다.
+	_fill_rect(19, 20, -9, -5, 0, WALL)
+	_fill_rect(19, 20, -3, 0, 0, WALL)
 
 
 func _fill_rect(c0: int, c1: int, r0: int, r1: int, source_id: int, atlas: Vector2i) -> void:
