@@ -91,9 +91,17 @@ offset_bottom = 576.0
 mouse_filter = 2
 color = Color(0.3, 0.28, 0.3, 0.3)
 
+[node name="InteriorTint" type="ColorRect" parent="."]
+offset_left = 288.0
+offset_top = -320.0
+offset_right = 992.0
+offset_bottom = 0.0
+mouse_filter = 2
+color = Color(0.2, 0.22, 0.28, 0.35)
+
 [node name="CollisionMap" type="Node2D" parent="."]
 script = ExtResource("9_collision_map")
-blocked_rects = Array[Rect2]([Rect2(160, 0, 960, 128), Rect2(832, 352, 288, 64), Rect2(672, 448, 32, 32), Rect2(96, 640, 32, 32), Rect2(1120, 640, 32, 32)])
+blocked_rects = Array[Rect2]([Rect2(160, 0, 160, 128), Rect2(384, 0, 736, 128), Rect2(832, 352, 288, 64), Rect2(672, 448, 32, 32), Rect2(96, 640, 32, 32), Rect2(1120, 640, 32, 32), Rect2(288, -320, 704, 32), Rect2(288, -320, 32, 320), Rect2(960, -320, 32, 320), Rect2(608, -288, 32, 128), Rect2(608, -96, 32, 96)])
 
 [node name="OcclusionRevealManager" type="Node" parent="."]
 script = ExtResource("11_reveal_manager")
@@ -317,9 +325,26 @@ offset_bottom = 416.0
 text = "원두막"
 label_settings = SubResource("LabelSettings_zone")
 
+[node name="MainRoomLabel" type="Label" parent="."]
+offset_left = 340.0
+offset_top = -300.0
+offset_right = 560.0
+offset_bottom = -276.0
+text = "안방"
+label_settings = SubResource("LabelSettings_zone")
+
+[node name="GuestRoomLabel" type="Label" parent="."]
+offset_left = 680.0
+offset_top = -300.0
+offset_right = 900.0
+offset_bottom = -276.0
+text = "건넌방"
+label_settings = SubResource("LabelSettings_zone")
+
 [node name="Player" type="Node2D" parent="YSortObjects"]
 position = Vector2(608, 160)
 script = ExtResource("1_player")
+play_area = Rect2(0, -320, 1280, 1040)
 
 [node name="Sprite" type="ColorRect" parent="YSortObjects/Player"]
 offset_left = -14.0
@@ -338,7 +363,7 @@ color = Color(0.05, 0.05, 0.05, 0.8)
 
 [node name="Camera2D" type="Camera2D" parent="YSortObjects/Player"]
 limit_left = 0
-limit_top = 0
+limit_top = -320
 limit_right = 1280
 limit_bottom = 720
 

@@ -2,6 +2,11 @@ extends Node2D
 ## 챕터 1 현실 파트 진입 처리 — 미니맵을 켠다(사람 피드백, 2026-09-14:
 ## "미니맵도 일단 추가해보자. 우상단에 항상 떠있도록 한다"). 자유 이동이
 ## 가능한 씬이라 진입하는 즉시 표시한다.
+##
+## 맵 범위는 player.gd의 play_area/Camera2D.limit_*와 반드시 맞춰야 한다
+## — 2026-09-14 맵 확장(기와집 내부, DESIGN.md §8.3)으로 위쪽 320px가
+## 늘어났는데 여기를 안 맞추면 집 안에서 미니맵 점이 맨 위에 붙은 채로
+## 안 움직이는 것처럼 보인다.
 
 func _ready() -> void:
-	Minimap.show_map(Rect2(Vector2.ZERO, Vector2(1280, 720)))
+	Minimap.show_map(Rect2(Vector2(0, -320), Vector2(1280, 1040)))
