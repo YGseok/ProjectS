@@ -146,16 +146,13 @@
 
 > INBOX.md에 새 지시가 있으면 이 큐보다 항상 먼저 처리한다.
 
--1. **[진행 중] 챕터 2/3 + 일상 NPC 3개**(INBOX.md 2026-09-14, DESIGN.md
-   §11 참고). v0.25에서 계획만 기록함 — 다음 순서로 이어갈 것: (a)
-   `ChapterProgress` 오토로드 + `chapter_key_item.gd`/
-   `chapter_escape_trigger.gd` 범용 스크립트, (b) `chapter2_dream.tscn`,
-   (c) `chapter3_dream.tscn`(호수, 파란 ColorRect 그레이박스) +
-   `NapTrigger`가 진행 상태에 맞는 꿈으로 분기하도록 `nap_trigger.gd`에
-   `target_scene_by_chapter` 같은 동적 분기 추가, (d) `chapter1_real.tscn`
-   에 NPC 3개 추가, (e) 프롤로그→...→3장 종료(임시 엔딩)까지 전체
-   페이즈 전환을 검증하는 통합 테스트. 전부 placeholder 콘텐츠 —
-   진짜 스토리 내용은 사람 확인 후.
+-1. **[진행 중] 일상 파트 NPC 3개**(INBOX.md 2026-09-14, DESIGN.md §11.4
+   참고). 챕터 2/3 뼈대(키 아이템 3개 + 탈출 트리거, 호수 맵, 동적 낮잠
+   분기, 프롤로그→3장 종료 통합 테스트)는 v0.26으로 완료됨(아래 완료
+   기록 참고) — 남은 건 `chapter1_real.tscn`에 NPC 3개 추가, 임의
+   대사로 상호작용 가능하게 만드는 것뿐. `npc.gd` 재사용, 대사는 전부
+   placeholder(사람 피드백: "우선은 일상 파트를 만들고... 디테일한
+   내용은 추후 다듬는다").
 0. **챕터 1 시작/종료 타이틀 카드는 v0.17로 완료**(INBOX.md 2026-09-09).
    **아직 남은 것**: "탈출 후 일상 파트"(INBOX.md 같은 항목, "탈출한 후
    바깥을 돌아다니며 NPC와 대화하거나 단서를 얻을 수 있는 일상 플레이")
@@ -225,6 +222,49 @@
 > 참고) — 그 외 나머지 열린 공간은 여전히 자유 이동.
 
 ## 3. 완료 기록 (최신이 위)
+
+- **v0.26 — 챕터 2/3 뼈대 구현 + 프롤로그→3장 종료 통합 테스트**
+  (INBOX.md 2026-09-14, DESIGN.md §11 계획 실행). **신규**: 범용
+  `ChapterProgress` 오토로드(챕터별 `{items:[bool,bool,bool], escaped,
+  started}` 딕셔너리, `Chapter1Progress`는 기존 테스트 의존성 때문에
+  건드리지 않고 그대로 둠) + 재사용 가능한 `chapter_key_item.gd`(조각
+  3개 수집)/`chapter_escape_trigger.gd`(3개 다 모이면 탈출 → 타이틀
+  카드 → 다음 씬)/`chapter_dream_entry.gd`(꿈 씬 최초 진입 시 타이틀 +
+  미니맵)/`chapter_end.gd`(챕터 2 이후 공용 종료 화면). **씬**:
+  `chapter2_dream.tscn`(챕터 1 꿈의 기와집 구조 재사용, 조각 3개 +
+  탈출 트리거)/`chapter2_end.tscn`, `chapter3_dream.tscn`(호수 맵 —
+  `assets/tiles/main/`에 물 타일이 없어 파란 반투명 `ColorRect` +
+  콜리전으로 그레이박싱, DESIGN.md §11.3에 기록)/`chapter3_end.tscn`
+  (마지막 챕터라 일상 복귀 없이 정적 임시 엔딩 화면). **동적 라우팅**:
+  `nap_trigger.gd`에 `target_scene_by_chapter: Array[String]` 추가(빈
+  배열이면 기존 `target_scene` 그대로 써서 하위 호환) — `chapter1_real`
+  하나를 계속 공유 허브로 쓰면서 `ChapterProgress.current_chapter`에
+  따라 낮잠이 다른 챕터 꿈으로 분기. `floorboard.gd`(챕터 1 탈출)가
+  `ChapterProgress.current_chapter = 2`로 올려서 체인을 시작시킴.
+  **버그 발견 및 수정 (실제 버그, 챕터 1에도 있었음)**: 통합 테스트
+  작성 중 챕터 2 종료 화면이 뜨자마자 곧바로 챕터 1 현실로 스킵되는
+  현상을 발견 — 원인은 두 가지가 겹쳐 있었다. (1) `chapter_end.gd`/
+  `chapter1_end.gd`가 씬이 뜬 바로 그 프레임의 `ui_accept` 입력을
+  거르지 않아서, 직전 화면에서 타이틀 카드를 스킵한 입력이 이 씬의
+  "계속하기"로도 재해석될 수 있는 취약점이 있었다(`ChapterTitleCard`/
+  `DialogueSystem`/`ItemPopup`에서 이미 고친 것과 같은 "닫는 입력이
+  같은 프레임에 다른 걸 재트리거" 버그 클래스) — `_ready_frame` 가드를
+  추가해 방어(챕터 1의 `chapter1_end.gd`도 같이 고쳐서 잠재적 버그를
+  선제 제거). (2) **실제 표면화된 원인은 따로 있었다**: 디버그 로그로
+  추적한 결과 `chapter2_dream.tscn`의 `EscapeTrigger.next_scene`이
+  복사-붙여넣기 실수로 `chapter1_real.tscn`을 가리키고 있어서
+  `chapter2_end.tscn`을 아예 거치지 않고 있었다 — 단순 오타 버그, 수정
+  완료. **신규 테스트**: `tests/test_full_story_progression.gd` —
+  프롤로그→챕터1(꿈)→챕터1 종료→일상→챕터2(꿈)→챕터2 종료→일상→
+  챕터3(호수 꿈)→챕터3 종료(최종 화면)까지 전체 페이즈 체인이 안
+  끊기는지 18개 assert로 검증(전부 통과). `tests/run_all.sh`(28개 파일,
+  전부 통과) + `qa/run_all.sh`에 `chapter2_dream`/`chapter2_end`/
+  `chapter3_dream`/`chapter3_end` 4개 씬 추가(총 11개, 전부 통과, 스크린샷
+  육안 확인 완료 — 타이틀 카드 오버레이 포함해 챕터 1과 동일한 톤).
+  아이템 이름/대사는 전부 placeholder("조각 A/B/C" 등) — 이번 작업은
+  "내용"이 아니라 "챕터 전환 구조가 끝까지 이어지는가"를 검증하는
+  것이라 사람이 명시적으로 위임함(INBOX.md 2026-09-14). **남은 것**:
+  일상 파트 NPC 3개(DESIGN.md §11.4) — 아직 미착수, 다음 이터레이션.
 
 - **v0.25 — 챕터 2/3 + 일상 NPC 계획을 DESIGN.md §11에 기록(코드 변경
   없음)**: INBOX.md 2026-09-14 지시("2개의 챕터의 퍼즐 내용은 챕터

@@ -19,6 +19,7 @@ ItemPopup="*res://scenes/common/ItemPopup.tscn"
 DebugWarp="*res://scenes/common/DebugWarp.tscn"
 ChapterTitleCard="*res://scenes/common/ChapterTitleCard.tscn"
 Minimap="*res://scenes/common/Minimap.tscn"
+ChapterProgress="*res://scripts/chapter_progress.gd"
 
 [display]
 

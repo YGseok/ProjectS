@@ -1,0 +1,157 @@
+[gd_scene load_steps=9 format=3 uid="uid://chapter3_dream_scene"]
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
+[ext_resource type="PackedScene" path="res://scenes/common/FadeOverlay.tscn" id="2_fade"]
+[ext_resource type="TileSet" path="res://assets/tiles/main/main_tileset.tres" id="3_tileset"]
+[ext_resource type="Script" path="res://scripts/chapter3_dream_background.gd" id="4_background"]
+[ext_resource type="Script" path="res://scripts/collision_map.gd" id="5_collision_map"]
+[ext_resource type="Script" path="res://scripts/chapter_dream_entry.gd" id="6_dream_entry"]
+[ext_resource type="Script" path="res://scripts/chapter_key_item.gd" id="7_key_item"]
+[ext_resource type="Script" path="res://scripts/chapter_escape_trigger.gd" id="8_escape"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_action_prompt"]
+font_size = 16
+font_color = Color(0.95, 0.85, 0.35, 0.9)
+
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+font_size = 18
+font_color = Color(0.95, 0.95, 0.9, 0.85)
+
+[sub_resource type="LabelSettings" id="LabelSettings_zone"]
+font_size = 16
+font_color = Color(1, 1, 1, 0.6)
+
+[node name="Chapter3Dream" type="Node2D"]
+script = ExtResource("6_dream_entry")
+chapter_number = 3
+title_text = "3장"
+map_bounds = Rect2(0, 0, 1280, 720)
+
+[node name="Background" type="TileMapLayer" parent="."]
+tile_set = ExtResource("3_tileset")
+script = ExtResource("4_background")
+
+[node name="LakeWater" type="ColorRect" parent="."]
+offset_left = 256.0
+offset_top = 224.0
+offset_right = 1024.0
+offset_bottom = 544.0
+mouse_filter = 2
+color = Color(0.12, 0.22, 0.35, 0.85)
+
+[node name="LakeLabel" type="Label" parent="."]
+offset_left = 600.0
+offset_top = 368.0
+offset_right = 760.0
+offset_bottom = 392.0
+text = "호수"
+label_settings = SubResource("LabelSettings_zone")
+
+[node name="CollisionMap" type="Node2D" parent="."]
+script = ExtResource("5_collision_map")
+blocked_rects = Array[Rect2]([Rect2(256, 224, 768, 320)])
+
+[node name="KeyItemA" type="Node2D" parent="."]
+position = Vector2(128, 128)
+script = ExtResource("7_key_item")
+chapter_number = 3
+item_index = 0
+item_name = "조각 A"
+found_lines = Array[String](["호숫가 풀숲에서 조각 하나를 발견했다."])
+
+[node name="PromptLabel" type="Label" parent="KeyItemA"]
+offset_left = -60.0
+offset_top = -44.0
+offset_right = 60.0
+offset_bottom = -20.0
+horizontal_alignment = 1
+label_settings = SubResource("LabelSettings_action_prompt")
+text = "Enter: 살펴보기"
+
+[node name="KeyItemB" type="Node2D" parent="."]
+position = Vector2(1152, 128)
+script = ExtResource("7_key_item")
+chapter_number = 3
+item_index = 1
+item_name = "조각 B"
+found_lines = Array[String](["반대편 호숫가에서 또 다른 조각을 찾았다."])
+
+[node name="PromptLabel" type="Label" parent="KeyItemB"]
+offset_left = -60.0
+offset_top = -44.0
+offset_right = 60.0
+offset_bottom = -20.0
+horizontal_alignment = 1
+label_settings = SubResource("LabelSettings_action_prompt")
+text = "Enter: 살펴보기"
+
+[node name="KeyItemC" type="Node2D" parent="."]
+position = Vector2(640, 656)
+script = ExtResource("7_key_item")
+chapter_number = 3
+item_index = 2
+item_name = "조각 C"
+found_lines = Array[String](["호수 남쪽 기슭에서 마지막 조각을 찾았다."])
+
+[node name="PromptLabel" type="Label" parent="KeyItemC"]
+offset_left = -60.0
+offset_top = -44.0
+offset_right = 60.0
+offset_bottom = -20.0
+horizontal_alignment = 1
+label_settings = SubResource("LabelSettings_action_prompt")
+text = "Enter: 살펴보기"
+
+[node name="EscapeTrigger" type="Node2D" parent="."]
+position = Vector2(640, 96)
+script = ExtResource("8_escape")
+chapter_number = 3
+locked_line = "조각이 아직 다 모이지 않았다."
+escape_lines = Array[String](["조각 세 개를 맞추자, 호수 안개가 걷힌다."])
+title_text = "3장 종료"
+next_scene = "res://scenes/chapter3_end.tscn"
+advances_story = false
+
+[node name="PromptLabel" type="Label" parent="EscapeTrigger"]
+offset_left = -60.0
+offset_top = -44.0
+offset_right = 60.0
+offset_bottom = -20.0
+horizontal_alignment = 1
+label_settings = SubResource("LabelSettings_action_prompt")
+text = "Enter: 살펴보기"
+
+[node name="TitleLabel" type="Label" parent="."]
+offset_left = 20.0
+offset_top = 4.0
+offset_right = 1000.0
+offset_bottom = 28.0
+text = "chapter3_dream.tscn — 챕터 3 꿈, 호수 (placeholder)"
+label_settings = SubResource("LabelSettings_title")
+
+[node name="Player" type="Node2D" parent="."]
+position = Vector2(128, 608)
+script = ExtResource("1_player")
+
+[node name="Sprite" type="ColorRect" parent="Player"]
+offset_left = -14.0
+offset_top = -14.0
+offset_right = 14.0
+offset_bottom = 14.0
+color = Color(0.25, 0.55, 0.85, 1)
+
+[node name="FacingIndicator" type="ColorRect" parent="Player"]
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 4.0
+offset_bottom = 4.0
+position = Vector2(0, 16)
+color = Color(0.05, 0.05, 0.05, 0.8)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+limit_left = 0
+limit_top = 0
+limit_right = 1280
+limit_bottom = 720
+
+[node name="FadeOverlay" parent="." instance=ExtResource("2_fade")]

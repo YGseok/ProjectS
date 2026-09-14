@@ -11,16 +11,27 @@ extends Node2D
 ## "챕터 전환이나 나레이션 같이, 플레이 불가능한 시점에서는 표시되지
 ## 않는다") — 오토로드라 이전 씬에서 켜져 있었을 수 있어서 명시적으로
 ## 꺼야 한다.
+##
+## **버그 수정(2026-09-14, 챕터 2/3 통합 테스트로 발견)**: 이 씬은
+## 직전 "1장 종료" 타이틀 카드를 스킵하려고 누른 Enter 직후에 로드되는데,
+## 그 입력이 이 씬이 뜬 바로 그 프레임에도 "새로 눌림"으로 보여서 화면이
+## 뜨자마자 곧바로 다음 씬으로 스킵돼버리는 문제가 있었다(같은 버그를
+## `chapter_end.gd`에서도 발견해 같이 고침) — `_ready_frame`으로 이 씬이
+## 뜬 바로 그 프레임의 입력은 무시한다.
 
 const NEXT_SCENE := "res://scenes/chapter1_real.tscn"
 
 var _continued := false
+var _ready_frame := -1
 
 func _ready() -> void:
 	Minimap.hide_map()
+	_ready_frame = Engine.get_process_frames()
 
 func _process(_delta: float) -> void:
 	if _continued:
+		return
+	if Engine.get_process_frames() == _ready_frame:
 		return
 	if Input.is_action_just_pressed("ui_accept"):
 		_continue()

@@ -23,6 +23,10 @@ func _on_interact() -> void:
 
 func _open_diary() -> void:
 	Chapter1Progress.diary_opened = true
+	# 2026-09-14부터 챕터 2/3이 생기면서, 탈출 시 다음 챕터로 진행 상태를
+	# 넘겨야 chapter1_real.tscn의 NapTrigger가 다시 낮잠 잘 때 챕터 1
+	# 대신 챕터 2 꿈으로 이어진다(DESIGN.md §11, nap_trigger.gd 참고).
+	ChapterProgress.current_chapter = 2
 	DialogueSystem.dialogue_ended.connect(_on_diary_dialogue_ended, CONNECT_ONE_SHOT)
 	DialogueSystem.start_dialogue([
 		"열쇠와 나무패를 함께 넣자, 딸깍 소리와 함께 자물쇠가 풀린다.",

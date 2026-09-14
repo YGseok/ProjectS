@@ -18,8 +18,18 @@ extends Node2D
 ## `interactable_base.gd`/`item_popup.gd`에서 이미 두 번, 챕터 타이틀
 ## 카드에서 세 번째로 겪어서(2026-09-08, 2026-09-14) 여기도 방어적으로
 ## 막아둔다.
+##
+## **(2026-09-14 갱신, DESIGN.md §11)** 챕터 2/3부터는 현실(일상)을
+## 챕터마다 새로 안 만들고 `chapter1_real.tscn`을 계속 공유 허브로 쓴다
+## — 그래서 이 낮잠 트리거 하나가 지금 진행 중인 챕터에 맞는 꿈으로
+## 동적으로 분기해야 한다. `target_scene_by_chapter`가 비어 있으면
+## (기본값) 예전처럼 `target_scene`을 그대로 쓰는 완전히 호환되는
+## 동작이고, 값이 있으면 `ChapterProgress.current_chapter`(1-based)에
+## 맞는 인덱스를 그 배열에서 찾아 쓴다 — 범위를 벗어나면 안전하게
+## `target_scene`으로 대체한다.
 
 @export var target_scene: String = ""
+@export var target_scene_by_chapter: Array[String] = []
 @export var interact_radius: float = 24.0
 @export var prompt_text: String = "Enter"
 
@@ -31,10 +41,19 @@ func _ready() -> void:
 	_prompt_label.text = prompt_text
 	_prompt_label.visible = false
 
+func _current_target_scene() -> String:
+	if target_scene_by_chapter.is_empty():
+		return target_scene
+	var index := ChapterProgress.current_chapter - 1
+	if index >= 0 and index < target_scene_by_chapter.size():
+		return target_scene_by_chapter[index]
+	return target_scene
+
 func _process(_delta: float) -> void:
 	if _player == null:
 		_player = get_tree().get_first_node_in_group("player")
-	if _player == null or target_scene.is_empty():
+	var effective_target := _current_target_scene()
+	if _player == null or effective_target.is_empty():
 		return
 
 	var in_range := global_position.distance_to(_player.global_position) <= interact_radius
@@ -46,6 +65,6 @@ func _process(_delta: float) -> void:
 	if in_range and not blocked and Input.is_action_just_pressed("ui_accept"):
 		var fade := get_tree().get_first_node_in_group("fade_overlay")
 		if fade:
-			fade.fade_to_scene(target_scene)
+			fade.fade_to_scene(effective_target)
 		else:
-			get_tree().change_scene_to_file(target_scene)
+			get_tree().change_scene_to_file(effective_target)

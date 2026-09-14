@@ -215,6 +215,7 @@ label_settings = SubResource("LabelSettings_zone")
 [node name="NapTrigger" parent="." instance=ExtResource("3_trigger")]
 position = Vector2(608, 160)
 target_scene = "res://scenes/chapter1_dream.tscn"
+target_scene_by_chapter = Array[String](["res://scenes/chapter1_dream.tscn", "res://scenes/chapter2_dream.tscn", "res://scenes/chapter3_dream.tscn"])
 prompt_text = "Enter: 낮잠"
 
 [node name="FadeOverlay" parent="." instance=ExtResource("2_fade")]
