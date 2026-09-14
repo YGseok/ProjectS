@@ -15,6 +15,11 @@ extends Node2D
 ## 으로 글자가 순차적으로 나타난다(2026-09-08 추가). 순수 시각 효과라
 ## 진행 로직과는 무관 — 타이핑 도중에 ui_accept를 눌러도 그냥 다음
 ## 줄로 넘어갈 뿐, 별도의 "타이핑 완료" 단계는 없다.
+##
+## 자유 이동이 없는 순수 나레이션 파트라 미니맵을 끈다(사람 피드백,
+## 2026-09-14 "챕터 전환이나 나레이션 같이, 플레이 불가능한 시점에서는
+## 표시되지 않는다") — 오토로드라 이전 씬에서 켜져 있었을 수 있어서
+## 명시적으로 꺼야 한다.
 
 const CHARS_PER_SECOND := 40.0
 const NEXT_SCENE := "res://scenes/chapter1_real.tscn"
@@ -35,6 +40,7 @@ var _reveal_progress := 0.0
 var _finished := false
 
 func _ready() -> void:
+	Minimap.hide_map()
 	_show_line(0)
 
 func _process(delta: float) -> void:

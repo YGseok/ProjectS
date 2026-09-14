@@ -13,6 +13,7 @@
 [ext_resource type="Shader" path="res://shaders/occlusion_reveal.gdshader" id="11_reveal_shader"]
 [ext_resource type="Script" path="res://scripts/occlusion_reveal_manager.gd" id="12_reveal_manager"]
 [ext_resource type="Script" path="res://scripts/scenery_flavor.gd" id="22_scenery"]
+[ext_resource type="Script" path="res://scripts/chapter1_real_entry.gd" id="23_real_entry"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 18
@@ -30,6 +31,7 @@ font_size = 16
 font_color = Color(0.95, 0.85, 0.35, 0.9)
 
 [node name="Chapter1Real" type="Node2D"]
+script = ExtResource("23_real_entry")
 
 [node name="Background" type="TileMapLayer" parent="."]
 tile_set = ExtResource("5_tileset")

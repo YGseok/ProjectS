@@ -18,6 +18,7 @@ Chapter1Progress="*res://scripts/chapter1_progress.gd"
 ItemPopup="*res://scenes/common/ItemPopup.tscn"
 DebugWarp="*res://scenes/common/DebugWarp.tscn"
 ChapterTitleCard="*res://scenes/common/ChapterTitleCard.tscn"
+Minimap="*res://scenes/common/Minimap.tscn"
 
 [display]
 

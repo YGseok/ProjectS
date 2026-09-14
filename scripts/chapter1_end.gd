@@ -7,9 +7,17 @@ extends Node2D
 ## 후... 일상 플레이" 항목 참고 — 새 콘텐츠가 필요해서 이번엔 순수 구조
 ## 연결만 함).
 
+## 자유 이동이 없는 정적 화면이라 미니맵을 끈다(사람 피드백, 2026-09-14
+## "챕터 전환이나 나레이션 같이, 플레이 불가능한 시점에서는 표시되지
+## 않는다") — 오토로드라 이전 씬에서 켜져 있었을 수 있어서 명시적으로
+## 꺼야 한다.
+
 const NEXT_SCENE := "res://scenes/chapter1_real.tscn"
 
 var _continued := false
+
+func _ready() -> void:
+	Minimap.hide_map()
 
 func _process(_delta: float) -> void:
 	if _continued:
