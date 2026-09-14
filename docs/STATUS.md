@@ -220,6 +220,32 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- **v0.20 — 일기 개봉 → 챕터 종료 타이틀 카드 재트리거 버그 수정
+  (INBOX.md 2026-09-14 버그 리포트)**: 사람이 실제 플레이하다 발견 —
+  "일기장을 열 때, 대화 인풋이 되어, 챕터 화면을 넘기는데, 챕터 종료와
+  '떼어낸 페이지를 다시 읽어본다' 대화창이 겹침." **원인**: 일기 개봉
+  대화가 끝나면 `floorboard.gd`가 `ChapterTitleCard.show_title("1장
+  종료")`를 띄우는데, 그 타이틀을 넘기려고 누른 `ui_accept`가 같은
+  프레임에 여전히 인접해 있는 Floorboard의 `_process()`에도 "새로
+  눌림"으로 보여서 `diary_opened==true` 분기("떼어낸 페이지를 다시
+  읽어본다")를 재트리거했다. `ChapterTitleCard`는 `DialogueSystem`/
+  `ItemPopup`과 달리 `is_active()`만 있고 `just_ended_this_frame()`이
+  없어서, `interactable_base.gd`/`npc.gd`/`nap_trigger.gd`의 기존
+  "다른 UI가 열려 있거나 막 닫힌 프레임엔 반응 안 함" 가드 목록에
+  애초에 빠져 있었다 — `DialogueSystem`/`ItemPopup`에서 이미 두 번 겪은
+  것과 정확히 같은 "닫는 입력이 같은 프레임에 다른 걸 재트리거" 버그
+  클래스가 세 번째로 재발한 것. 재발생한 대화창은 `DialogueSystem`이
+  오토로드라 씬이 `chapter1_end`로 바뀐 뒤에도 안 닫힌 채 남아서 챕터
+  종료 화면과 겹쳐 보였다(실제 증상). **수정**: `chapter_title_card.gd`
+  에 `_ended_frame`/`just_ended_this_frame()`을 추가(기존 `_ended_frame`
+  패턴과 동일)하고, `interactable_base.gd`/`npc.gd`/`nap_trigger.gd`
+  세 곳의 가드 조건에 `ChapterTitleCard.is_active() or
+  ChapterTitleCard.just_ended_this_frame()`을 추가. 신규 회귀 테스트
+  `tests/test_diary_title_card_no_retrigger.gd` — 실제 버그 시나리오를
+  그대로 재현(일기 개봉 → "1장 종료" 타이틀이 뜬 그 프레임에 곧바로
+  ui_accept 한 번 더 전송 → 대화가 다시 안 열리는지, 최종적으로
+  대화창 없이 챕터 종료 화면에 도착하는지) 7개 어서션. 전체 23종 + QA
+  7개 씬 재통과.
 - **v0.19 — 챕터 1 전체 경로 통합 검증 강화(코드 변경 없음)**:
   `tests/test_full_playthrough.gd`를 v0.15~v0.18에서 바뀐 전체 구조에
   맞춰 확장 — 프롤로그 스킵 → 낮잠 → 꿈 진입("1장" 타이틀 카드가 실제로

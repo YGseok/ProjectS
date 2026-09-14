@@ -11,11 +11,13 @@ extends Node2D
 ## 즉 `floorboard.gd`가 유일한 탈출 경로), 그래서 `advances_chapter1_cycle`
 ## 필드도 함께 삭제함(더 이상 아무도 안 씀).
 ##
-## 대화창/아이템 팝업이 열려 있거나 막 닫힌 프레임에는 반응하지 않는다 —
-## 지금 오브젝트 배치상 실제로 겹치는 자리는 없지만(NapTrigger가 정확히
-## 플레이어 스폰 위치라 특히 조심), 같은 종류의 "닫는 입력이 같은 프레임에
-## 다른 걸 재트리거" 버그를 `interactable_base.gd`/`item_popup.gd`에서
-## 이미 두 번 겪어서(2026-09-08) 여기도 방어적으로 막아둔다.
+## 대화창/아이템 팝업/챕터 타이틀 카드가 열려 있거나 막 닫힌 프레임에는
+## 반응하지 않는다 — 지금 오브젝트 배치상 실제로 겹치는 자리는 없지만
+## (NapTrigger가 정확히 플레이어 스폰 위치라 특히 조심), 같은 종류의
+## "닫는 입력이 같은 프레임에 다른 걸 재트리거" 버그를
+## `interactable_base.gd`/`item_popup.gd`에서 이미 두 번, 챕터 타이틀
+## 카드에서 세 번째로 겪어서(2026-09-08, 2026-09-14) 여기도 방어적으로
+## 막아둔다.
 
 @export var target_scene: String = ""
 @export var interact_radius: float = 24.0
@@ -39,7 +41,8 @@ func _process(_delta: float) -> void:
 	_prompt_label.visible = in_range
 
 	var blocked := DialogueSystem.is_active() or DialogueSystem.just_ended_this_frame() \
-		or ItemPopup.is_active() or ItemPopup.just_closed_this_frame()
+		or ItemPopup.is_active() or ItemPopup.just_closed_this_frame() \
+		or ChapterTitleCard.is_active() or ChapterTitleCard.just_ended_this_frame()
 	if in_range and not blocked and Input.is_action_just_pressed("ui_accept"):
 		var fade := get_tree().get_first_node_in_group("fade_overlay")
 		if fade:
