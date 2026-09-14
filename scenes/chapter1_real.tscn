@@ -212,6 +212,42 @@ offset_bottom = 120.0
 text = "그림자 NPC (대화 테스트용, 가까이서 Enter)"
 label_settings = SubResource("LabelSettings_zone")
 
+[node name="NpcA" parent="YSortObjects" instance=ExtResource("4_shadow_npc")]
+position = Vector2(384, -160)
+dialogue_lines = Array[String](["오늘도 덥네.", "..."])
+
+[node name="NpcALabel" type="Label" parent="."]
+offset_left = 340.0
+offset_top = -196.0
+offset_right = 580.0
+offset_bottom = -172.0
+text = "일상 NPC A (placeholder, 가까이서 Enter)"
+label_settings = SubResource("LabelSettings_zone")
+
+[node name="NpcB" parent="YSortObjects" instance=ExtResource("4_shadow_npc")]
+position = Vector2(800, -160)
+dialogue_lines = Array[String](["또 왔구나.", "밥은 먹었니?"])
+
+[node name="NpcBLabel" type="Label" parent="."]
+offset_left = 756.0
+offset_top = -196.0
+offset_right = 996.0
+offset_bottom = -172.0
+text = "일상 NPC B (placeholder, 가까이서 Enter)"
+label_settings = SubResource("LabelSettings_zone")
+
+[node name="NpcC" parent="YSortObjects" instance=ExtResource("4_shadow_npc")]
+position = Vector2(960, 544)
+dialogue_lines = Array[String](["...", "여긴 조용해서 좋아."])
+
+[node name="NpcCLabel" type="Label" parent="."]
+offset_left = 916.0
+offset_top = 508.0
+offset_right = 1156.0
+offset_bottom = 532.0
+text = "일상 NPC C (placeholder, 가까이서 Enter)"
+label_settings = SubResource("LabelSettings_zone")
+
 [node name="NapTrigger" parent="." instance=ExtResource("3_trigger")]
 position = Vector2(608, 160)
 target_scene = "res://scenes/chapter1_dream.tscn"
