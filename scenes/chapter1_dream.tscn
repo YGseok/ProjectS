@@ -22,6 +22,8 @@
 [ext_resource type="PackedScene" path="res://scenes/common/ObjectiveHint.tscn" id="21_objective_hint"]
 [ext_resource type="Script" path="res://scripts/chapter1_dream_entry.gd" id="22_dream_entry"]
 [ext_resource type="Script" path="res://scripts/pressure_plate_flavor.gd" id="23_plate"]
+[ext_resource type="Texture2D" path="res://assets/props/main_tileset_props/floorboard_loose.png" id="24_floorboard_tex"]
+[ext_resource type="Script" path="res://scripts/hopscotch_visual.gd" id="25_hopscotch_visual"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_action_prompt"]
 font_size = 16
@@ -154,13 +156,8 @@ position = Vector2(480, 160)
 script = ExtResource("14_floorboard")
 wall_mark_path = NodePath("../WallMarkFlash")
 
-[node name="Visual" type="ColorRect" parent="Floorboard"]
-offset_left = -12.0
-offset_top = -6.0
-offset_right = 12.0
-offset_bottom = 6.0
-mouse_filter = 2
-color = Color(0.32, 0.22, 0.13, 0.9)
+[node name="Visual" type="Sprite2D" parent="Floorboard"]
+texture = ExtResource("24_floorboard_tex")
 
 [node name="PromptLabel" type="Label" parent="Floorboard"]
 offset_left = -60.0
@@ -191,13 +188,8 @@ text = "Enter: 살펴보기"
 position = Vector2(448, 480)
 script = ExtResource("16_hopscotch")
 
-[node name="Visual" type="ColorRect" parent="HopscotchKey"]
-offset_left = -14.0
-offset_top = -14.0
-offset_right = 14.0
-offset_bottom = 14.0
-mouse_filter = 2
-color = Color(0.6, 0.55, 0.4, 0.5)
+[node name="Visual" type="Node2D" parent="HopscotchKey"]
+script = ExtResource("25_hopscotch_visual")
 
 [node name="PromptLabel" type="Label" parent="HopscotchKey"]
 offset_left = -60.0
