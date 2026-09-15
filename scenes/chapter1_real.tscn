@@ -211,20 +211,7 @@ position = Vector2(608, 160)
 script = ExtResource("1_player")
 play_area = Rect2(0, -320, 1280, 1040)
 
-[node name="Sprite" type="ColorRect" parent="YSortObjects/Player"]
-offset_left = -14.0
-offset_top = -14.0
-offset_right = 14.0
-offset_bottom = 14.0
-color = Color(0.25, 0.55, 0.85, 1)
-
-[node name="FacingIndicator" type="ColorRect" parent="YSortObjects/Player"]
-offset_left = -4.0
-offset_top = -4.0
-offset_right = 4.0
-offset_bottom = 4.0
-position = Vector2(0, 16)
-color = Color(0.05, 0.05, 0.05, 0.8)
+[node name="Sprite" type="Sprite2D" parent="YSortObjects/Player"]
 
 [node name="Camera2D" type="Camera2D" parent="YSortObjects/Player"]
 limit_left = 0

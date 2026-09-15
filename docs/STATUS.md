@@ -224,6 +224,31 @@
 
 ## 3. 완료 기록 (최신이 위)
 
+- **v0.30 — 플레이어 캐릭터를 파란 ColorRect에서 실제 스프라이트로
+  교체(placeholder 아트)**(사람 확인, 2026-09-15: "기능부터 만들고
+  내용은 나중에" 방침을 캐릭터 스프라이트에도 적용 — 2026-09-07엔 같은
+  방침으로 진행하기로 했다가 2026-09-09에 "실제 스프라이트 정해질 때까지
+  보류"로 되돌아갔던 항목, 이번에 다시 진행하기로 확인받음).
+  `bonus_pack/Cute_Yui.png`(3열×4행 걷기 프레임 시트)에서 방향별
+  가운데(정지) 프레임만 잘라 `assets/sprites/characters/
+  player_placeholder/player_{down,side,up}.png`로 새로 만듦 — 오른쪽은
+  왼쪽 프레임을 `flip_h`로 반전해서 재사용(시트 자체의 왼쪽/오른쪽 행이
+  진짜 반전쌍인지 불확실해서 직접 반전을 써서 좌우 대칭을 보장).
+  `scripts/player.gd`가 `pipeline_test_character.gd`에서 이미 검증한
+  방식대로 `facing`에 따라 `Sprite2D.texture`/`flip_h`를 갱신하도록
+  확장 — 기존 디버그용 `FacingIndicator`(작은 점) 노드는 실제 스프라이트
+  가 방향을 보여주므로 제거. `chapter1_real.tscn`/`chapter1_dream.tscn`/
+  `chapter2_dream.tscn`/`chapter3_dream.tscn` 4개 씬(Player가 있는 곳
+  전부)의 `Sprite` 노드를 `ColorRect`에서 `Sprite2D`로 교체.
+  `tests/run_all.sh`(30개 파일, 전부 통과 — 어떤 테스트도 `Sprite`/
+  `FacingIndicator` 노드 구조에 의존하지 않아 하위 호환 문제 없음) +
+  `qa/run_all.sh`(11개, 전부 통과) + 창을 띄운 일회성 검증(4방향 전환/
+  좌우 반전이 실제로 잘 보이는지 확인 후 검증 스크립트 삭제, 프로젝트
+  관례대로)으로 검증. **캐릭터 디자인은 최종 확정본(흰 원피스, 10살
+  전후 한국인 여아)과 다름** — `assets/sprites/characters/
+  player_placeholder/README.md`에 명시했고, 나중에 진짜 디자인이
+  정해지면 그 폴더 파일 3개만 교체하면 코드 변경 없이 바뀐다.
+
 - **v0.29 — 탈출 후 일상 파트 "단서" 오브젝트 추가(구조 먼저, 내용은
   placeholder)**(INBOX.md 2026-09-09 항목, 2026-09-15 사람 확인:
   "기능부터 만들고 내용은 나중에 붙인다" — 실제 단서 내용은 스토리
