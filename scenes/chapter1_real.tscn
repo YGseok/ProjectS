@@ -15,6 +15,7 @@
 [ext_resource type="Script" path="res://scripts/scenery_flavor.gd" id="22_scenery"]
 [ext_resource type="Script" path="res://scripts/chapter1_real_entry.gd" id="23_real_entry"]
 [ext_resource type="Script" path="res://scripts/clue_object.gd" id="24_clue"]
+[ext_resource type="PackedScene" path="res://scenes/common/DailyLifeHint.tscn" id="25_daily_hint"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 18
@@ -273,3 +274,5 @@ target_scene_by_chapter = Array[String](["res://scenes/chapter1_dream.tscn", "re
 prompt_text = "Enter: 낮잠"
 
 [node name="FadeOverlay" parent="." instance=ExtResource("2_fade")]
+
+[node name="DailyLifeHint" parent="." instance=ExtResource("25_daily_hint")]

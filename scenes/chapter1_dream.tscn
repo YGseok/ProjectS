@@ -185,7 +185,7 @@ label_settings = SubResource("LabelSettings_action_prompt")
 text = "Enter: 살펴보기"
 
 [node name="HopscotchKey" type="Node2D" parent="."]
-position = Vector2(448, 480)
+position = Vector2(768, 320)
 script = ExtResource("16_hopscotch")
 
 [node name="Visual" type="Node2D" parent="HopscotchKey"]

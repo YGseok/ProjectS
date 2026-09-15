@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://scripts/chapter_dream_entry.gd" id="9_dream_entry"]
 [ext_resource type="Script" path="res://scripts/chapter_key_item.gd" id="10_key_item"]
 [ext_resource type="Script" path="res://scripts/chapter_escape_trigger.gd" id="11_escape"]
+[ext_resource type="Script" path="res://scripts/ground_marker.gd" id="12_marker"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_action_prompt"]
 font_size = 16
@@ -100,6 +101,9 @@ item_index = 0
 item_name = "조각 A"
 found_lines = Array[String](["흙 속에서 낯선 조각 하나를 발견했다."])
 
+[node name="Marker" type="Node2D" parent="KeyItemA"]
+script = ExtResource("12_marker")
+
 [node name="PromptLabel" type="Label" parent="KeyItemA"]
 offset_left = -60.0
 offset_top = -44.0
@@ -116,6 +120,9 @@ chapter_number = 2
 item_index = 1
 item_name = "조각 B"
 found_lines = Array[String](["장독 안에서 또 다른 조각을 찾았다."])
+
+[node name="Marker" type="Node2D" parent="KeyItemB"]
+script = ExtResource("12_marker")
 
 [node name="PromptLabel" type="Label" parent="KeyItemB"]
 offset_left = -60.0
@@ -134,6 +141,9 @@ item_index = 2
 item_name = "조각 C"
 found_lines = Array[String](["원두막 마루 틈에서 마지막 조각을 찾았다."])
 
+[node name="Marker" type="Node2D" parent="KeyItemC"]
+script = ExtResource("12_marker")
+
 [node name="PromptLabel" type="Label" parent="KeyItemC"]
 offset_left = -60.0
 offset_top = -44.0
@@ -151,6 +161,11 @@ locked_line = "조각이 아직 다 모이지 않았다."
 escape_lines = Array[String](["조각 세 개를 맞추자, 문이 스르르 열린다."])
 title_text = "2장 종료"
 next_scene = "res://scenes/chapter2_end.tscn"
+
+[node name="Marker" type="Node2D" parent="EscapeTrigger"]
+script = ExtResource("12_marker")
+color = Color(0.4, 0.85, 0.75, 0.9)
+radius = 11.0
 
 [node name="PromptLabel" type="Label" parent="EscapeTrigger"]
 offset_left = -60.0

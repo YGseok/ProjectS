@@ -85,14 +85,26 @@ func _check_puzzle_object_collision_in_dream() -> void:
 	_assert(_player.position.is_equal_approx(Vector2(448, 160)),
 		"(꿈) GonggiStones(416,160) 자리로는 이동 못 하고 그대로임, 실제: %s" % [_player.position])
 
-	# --- HopscotchKey(448,480) 콜리전: 2026-09-09부터는 단계 게이팅 없이
+	# --- HopscotchKey(768,320) 콜리전: 2026-09-09부터는 단계 게이팅 없이
 	# 씬 로드 직후부터 바로 보이고 바로 막혀야 한다(예전엔 2단계부터).
+	# 위치는 2026-09-15 사람 피드백("밭에 있는 게 맥락상 어색함")으로
+	# 448,480(밭 한가운데)에서 768,320(빈 마당, TreeGreen 접근 경로
+	# x=704와도 안 겹치는 칸)으로 옮겨졌다. GonggiStones(416,160)/
+	# Floorboard(480,160)와 같은 행(y=160)을 계속 오른쪽으로 가면
+	# Floorboard 자리에 곧장 막히므로, 한 칸 아래(y=192, 둘 다 안 걸리는
+	# 행)로 내려간 뒤 오른쪽으로 다가가서 마지막 한 칸 위에서 막히는지
+	# 확인한다.
 	var hopscotch: Node2D = current_scene.get_node("HopscotchKey")
 	_assert(hopscotch.visible, "(꿈) HopscotchKey는 씬 로드 즉시부터 보임(더 이상 단계 게이팅 없음)")
+	await _move_one_tile("ui_down")
 	for i in range(10):
+		await _move_one_tile("ui_right")
+	_assert(_player.position.is_equal_approx(Vector2(768, 192)),
+		"(꿈) HopscotchKey 위쪽 행(768,192)까지 이동, 실제: %s" % [_player.position])
+	for i in range(4):
 		await _move_one_tile("ui_down")
-	_assert(_player.position.is_equal_approx(Vector2(448, 448)),
-		"(꿈) HopscotchKey 옆(448,448)까지만 이동, 자리(448,480)는 처음부터 막혀 있음, 실제: %s" %
+	_assert(_player.position.is_equal_approx(Vector2(768, 288)),
+		"(꿈) HopscotchKey 위(768,288)까지만 이동, 자리(768,320)는 처음부터 막혀 있음, 실제: %s" %
 			[_player.position])
 
 

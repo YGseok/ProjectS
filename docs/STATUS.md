@@ -196,6 +196,39 @@ placeholder로 채워짐 — 각 항목의 "진짜 최종본"(단서 내용, 캐
 
 ## 3. 완료 기록 (최신이 위)
 
+- **v0.32 — 플레이 피드백 4건 처리(미니맵 구분/일상 힌트/사방치기 위치/
+  챕터2·3 오브젝트 가시성)**(INBOX.md 2026-09-15, 직접 플레이 후 남긴
+  4개 항목).
+  1. **미니맵에 배경색/벽/NPC 구분 추가**: 패널 바탕을 어두운 회색에서
+     대략적인 "걸어다닐 수 있는 땅" 녹색 톤으로 바꾸고, 새 자식 노드
+     `Panel/Terrain`(`scripts/minimap_terrain.gd`)이 `CollisionMap.
+     blocked_rects`(벽/지붕/나무 밑둥 등)를 어두운 사각형으로, "minimap_
+     npc" 그룹 노드(NPC)를 청록색 점으로 그린다. `npc.gd`가 이 그룹에
+     새로 가입. `minimap.gd`가 매 프레임 월드 좌표를 미니맵 로컬 좌표로
+     변환해서 넘겨줌. 새 테스트 `test_minimap_terrain.gd`(9개 assert).
+  2. **일상 파트(챕터마다 공유하는 허브 `chapter1_real.tscn`)에 목표
+     힌트 추가**: 기존 챕터 1 꿈 전용 `scripts/objective_hint.gd`의
+     공통 로직(페이드 전환, 대화 중 숨김)을 `scripts/
+     objective_hint_base.gd`로 뽑아내고, 새 `scripts/daily_life_hint.gd`
+     (일상 파트는 낮잠이 유일한 진행 수단이라 항상 같은 문구)가 이를
+     상속. 새 씬 `scenes/common/DailyLifeHint.tscn`을 `chapter1_real.
+     tscn`에 배치.
+  3. **사방치기(`HopscotchKey`) 위치를 밭(피마자밭, 448,480)에서 빈
+     마당(768,320)으로 이동** — "밭에 흙바닥 아이가 낙서한 사방치기가
+     있는 게 맥락상 어색하다"는 피드백. GonggiStones/Floorboard/
+     TreeGreen 접근 경로 등 기존 이동 경로와 안 겹치는 칸을 확인하고
+     골랐다. `test_dynamic_collision.gd`의 접근 경로/좌표도 새 위치에
+     맞게 갱신.
+  4. **챕터 2/3의 조각/탈출구 오브젝트에 시각 마커 추가**: "오브젝트가
+     투명이라 어디서 뭘 먹어야 할지 모르겠다"는 피드백에 대응 — 새
+     범용 컴포넌트 `scripts/ground_marker.gd`(`_draw()`로 반짝이는
+     8각 별 모양을 그림, 사방치기와 같은 이유로 기하학적 도형이라
+     절차적 생성 채택)를 `chapter2_dream.tscn`/`chapter3_dream.tscn`의
+     `KeyItemA/B/C`(금색)와 `EscapeTrigger`(청록색)에 자식으로 배치.
+  `tests/run_all.sh`(31개 파일, 전부 통과) + `qa/run_all.sh`(11개, 전부
+  통과) + 스크린샷 육안 확인(미니맵 벽/NPC 점 구분, 일상 힌트 문구,
+  옮겨진 사방치기, 챕터2/3 반짝이는 마커 전부 확인됨) 완료.
+
 - **v0.31 — 마루 밑 판자/사방치기를 `ColorRect` 그레이박스에서 실제
   그림으로 교체(같은 "기능부터, 내용은 나중" 방침)**(사람 확인,
   2026-09-15: v0.30 캐릭터 스프라이트에 이어 "같은 방침"으로 이 항목도

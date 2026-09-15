@@ -7,6 +7,9 @@ extends Node2D
 ## 피드백, 2026-09-09) — NPC 타일 위로 플레이어가 겹쳐 걸어 들어갈 수
 ## 없다. 상호작용 자체는 원래도 인접 타일(TILE_SIZE 거리)에서 하도록
 ## 되어 있어서 이 변경으로 인한 영향은 없다.
+##
+## "minimap_npc" 그룹에도 속해서 미니맵에 위치가 점으로 표시된다(사람
+## 피드백, 2026-09-15 "미니맵에... NPC가 확실히 구분되어야 한다").
 
 const TILE_SIZE := 32.0
 const FACE_DOT_THRESHOLD := 0.9
@@ -17,6 +20,7 @@ var _player: Node2D
 
 func _ready() -> void:
 	add_to_group("blocks_movement")
+	add_to_group("minimap_npc")
 
 func _process(_delta: float) -> void:
 	if _player == null:
