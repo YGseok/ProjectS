@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cehy6wnhaivse"
-path="res://.godot/imported/player_draft_v5_preview.png-1f1b16d805061562f7eefa43da8734b8.ctex"
+uid="uid://b4imulvjuwik3"
+path="res://.godot/imported/pc001_down_full.png-4f2eaf4398ded0f07e55b7c8d12f2273.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/player_draft_v5_preview.png"
-dest_files=["res://.godot/imported/player_draft_v5_preview.png-1f1b16d805061562f7eefa43da8734b8.ctex"]
+source_file="res://assets/sprites/characters/concept_art/pc001_down_full.png"
+dest_files=["res://.godot/imported/pc001_down_full.png-4f2eaf4398ded0f07e55b7c8d12f2273.ctex"]
 
 [params]
 
