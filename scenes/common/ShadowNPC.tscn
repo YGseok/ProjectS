@@ -1,14 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://shadow_npc_scene"]
+[gd_scene load_steps=3 format=3 uid="uid://shadow_npc_scene"]
 
 [ext_resource type="Script" path="res://scripts/npc.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters/npc/grandpa_cane.png" id="2_tex"]
 
 [node name="ShadowNPC" type="Node2D"]
 script = ExtResource("1_script")
 dialogue_lines = Array[String](["[...]"])
 
-[node name="Sprite" type="ColorRect" parent="."]
-offset_left = -14.0
-offset_top = -14.0
-offset_right = 14.0
-offset_bottom = 14.0
-color = Color(0.03, 0.03, 0.03, 1)
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_tex")
+offset = Vector2(0, -19)

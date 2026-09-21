@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
 [ext_resource type="PackedScene" path="res://scenes/common/FadeOverlay.tscn" id="2_fade"]
-[ext_resource type="TileSet" path="res://assets/tiles/main/main_tileset.tres" id="4_tileset"]
+[ext_resource type="TileSet" path="res://assets/tiles/village/village_tileset.tres" id="4_tileset"]
 [ext_resource type="Script" path="res://scripts/chapter1_dream_background.gd" id="5_background"]
 [ext_resource type="Texture2D" path="res://assets/props/nature/tree_green.png" id="6_tree_green"]
 [ext_resource type="Texture2D" path="res://assets/props/nature/tree_small.png" id="7_tree_small"]
@@ -23,7 +23,7 @@
 [ext_resource type="Script" path="res://scripts/chapter1_dream_entry.gd" id="22_dream_entry"]
 [ext_resource type="Script" path="res://scripts/pressure_plate_flavor.gd" id="23_plate"]
 [ext_resource type="Texture2D" path="res://assets/props/main_tileset_props/floorboard_loose.png" id="24_floorboard_tex"]
-[ext_resource type="Script" path="res://scripts/hopscotch_visual.gd" id="25_hopscotch_visual"]
+[ext_resource type="Texture2D" path="res://assets/props/main_tileset_props/hopscotch.png" id="25_hopscotch_visual"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_action_prompt"]
 font_size = 16
@@ -188,8 +188,8 @@ text = "Enter: 살펴보기"
 position = Vector2(768, 320)
 script = ExtResource("16_hopscotch")
 
-[node name="Visual" type="Node2D" parent="HopscotchKey"]
-script = ExtResource("25_hopscotch_visual")
+[node name="Visual" type="Sprite2D" parent="HopscotchKey"]
+texture = ExtResource("25_hopscotch_visual")
 
 [node name="PromptLabel" type="Label" parent="HopscotchKey"]
 offset_left = -60.0

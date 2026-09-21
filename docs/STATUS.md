@@ -196,6 +196,8 @@ placeholder로 채워짐 — 각 항목의 "진짜 최종본"(단서 내용, 캐
 
 ## 3. 완료 기록 (최신이 위)
 
+- **v0.34 — 전체 리소스를 사용자 제작 시트로 교체(2026-09-21)**: `assets/README.md`에 원본→파생물 대응 정리. 주인공 4방향(`pc001.jpg`)으로 `player.gd`가 left/right 별도 텍스처 사용(flip_h 제거), NPC 4명(`npc001~002.jpg`), 새 타일셋 `assets/tiles/village/village_tileset.tres`(잔디·밭·물·벽·지붕·마루·원두막바닥·방바닥, 소스 1개, 배경 스크립트 좌표/`_fill_rect` 시그니처 갱신, 지붕/방바닥/호수가 각각 전용 타일 사용, `LakeWater` ColorRect 제거), 나무·덤불·장독·공기돌·사방치기·조각(깨진 동전)·열쇠/나무패 아이콘 교체. 삭제: `assets/tiles/main`·`interior_test`, `props/bonus_pack`·`interior_test`, `sprites/characters/{bonus_pack,concept_art,elf_girl_test,player_placeholder}`, THIRD_PARTY_LICENSES, `pipeline_test`/`main_tileset_test` 씬·스크립트·테스트, 옛 tools, `hopscotch_visual.gd`. 테스트 30개 통과(pipeline 테스트 1개 삭제), QA 9개 통과. **한계**: 물 타일은 시트에 순수 물이 없어 해안 타일의 물 부분만 늘려 씀, 지붕 타일은 돌담 재사용.
+
 - **v0.33 — 플레이어 캐릭터 확정 디자인 첫 적용(정면만)**(사람 확인,
   2026-09-17: 절차적 생성 초안 7종을 삭제하고 실제 컨셉아트
   `concept_pc001.webp`를 새로 제공 — DESIGN.md 목표(흰 원피스, 10살

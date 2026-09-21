@@ -11,32 +11,35 @@ extends TileMapLayer
 ## 때 현실 배경이 안 돌아오는 버그가 있었다(2026-09-07, 사람이 플레이하다
 ## 발견).
 
-const GRASS := Vector2i(0, 8)
-const DIRT := Vector2i(1, 8)
-const WOOD_LIGHT := Vector2i(0, 5)
-const WOOD_MED := Vector2i(1, 5)
-const WALL := Vector2i(2, 10)
+const GRASS := Vector2i(0, 0)
+const DIRT := Vector2i(1, 0)
+const WOOD_LIGHT := Vector2i(5, 0)
+const WOOD_MED := Vector2i(6, 0)
+const WALL := Vector2i(3, 0)
+const ROOF := Vector2i(4, 0)
+const WATER := Vector2i(2, 0)
+const FLOOR_INTERIOR := Vector2i(7, 0)
 
 func _ready() -> void:
 	# 마당(잔디) 전체 — 2026-09-14 맵 확장으로 기와집 내부(행 -10~-1)
 	# 위쪽도 카메라가 스크롤해서 보이므로, 그 범위까지 잔디 바탕을
 	# 먼저 깔아둔다(chapter1_real_background.gd와 동일한 이유).
-	_fill_rect(0, 40, -10, 23, 1, GRASS)
+	_fill_rect(0, 40, -10, 23, GRASS)
 
 	# 기와집 벽
-	_fill_rect(5, 35, 0, 4, 0, WALL)
+	_fill_rect(5, 35, 0, 4, WALL)
 
 	# 툇마루
-	_fill_rect(5, 35, 4, 6, 1, WOOD_LIGHT)
+	_fill_rect(5, 35, 4, 6, WOOD_LIGHT)
 
 	# 밭 (피마자밭)
-	_fill_rect(6, 18, 9, 19, 1, DIRT)
+	_fill_rect(6, 18, 9, 19, DIRT)
 
 	# 원두막 지붕
-	_fill_rect(26, 35, 11, 13, 0, WALL)
+	_fill_rect(26, 35, 11, 13, ROOF)
 
 	# 원두막 바닥
-	_fill_rect(27, 34, 12, 18, 1, WOOD_MED)
+	_fill_rect(27, 34, 12, 18, WOOD_MED)
 
 	# --- 기와집 내부 (2026-09-14 맵 확장, DESIGN.md §8.3 —
 	# 안방/건넌방 내부 구조는 chapter1_real_background.gd와 완전히 동일한
@@ -44,16 +47,16 @@ func _ready() -> void:
 	# 원칙). **문 위치만 예외**: 현실의 문 자리(col14-15, x448-511)는
 	# 여기 꿈 씬에서는 Floorboard(480,160)/GonggiStones(416,160)와 겹쳐서
 	# 그대로 못 씀 — col10-11(x320-383, 안방 서쪽 구석)로 옮김.
-	_fill_rect(10, 12, 0, 4, 1, WOOD_LIGHT)
-	_fill_rect(9, 30, -9, 0, 1, WOOD_LIGHT)
-	_fill_rect(9, 31, -10, -9, 0, WALL)
-	_fill_rect(9, 10, -10, 0, 0, WALL)
-	_fill_rect(30, 31, -10, 0, 0, WALL)
-	_fill_rect(19, 20, -9, -5, 0, WALL)
-	_fill_rect(19, 20, -3, 0, 0, WALL)
+	_fill_rect(10, 12, 0, 4, WOOD_LIGHT)
+	_fill_rect(9, 30, -9, 0, FLOOR_INTERIOR)
+	_fill_rect(9, 31, -10, -9, WALL)
+	_fill_rect(9, 10, -10, 0, WALL)
+	_fill_rect(30, 31, -10, 0, WALL)
+	_fill_rect(19, 20, -9, -5, WALL)
+	_fill_rect(19, 20, -3, 0, WALL)
 
 
-func _fill_rect(c0: int, c1: int, r0: int, r1: int, source_id: int, atlas: Vector2i) -> void:
+func _fill_rect(c0: int, c1: int, r0: int, r1: int, atlas: Vector2i) -> void:
 	for c in range(c0, c1):
 		for r in range(r0, r1):
-			set_cell(Vector2i(c, r), source_id, atlas)
+			set_cell(Vector2i(c, r), 0, atlas)

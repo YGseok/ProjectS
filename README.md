@@ -38,12 +38,11 @@ scripts/              # 게임 코드 (플레이어, NPC, 대화 시스템, 배�
                       #   인벤토리/팝업/힌트 UI, 발판 컴포넌트 등)
 shaders/              # 커스텀 셰이더 (나무 오클루전 반투명 리빌 등)
 assets/
-  tiles/main/         # 메인 배경 타일셋 (라이선스: THIRD_PARTY_LICENSES 참고)
+  tiles/village/      # 배경 타일 아틀라스(village_tiles.png) + village_tileset.tres
   props/nature/       # 마당 장식용 자연 오브젝트
   props/main_tileset_props/  # 챕터 1 퍼즐 소품(장독/공기돌 등) 크롭본
   props/ui_icons/     # 아이템 팝업/인벤토리용 자리표시 아이콘
   sprites/            # 캐릭터 스프라이트 (확정된 주인공 아트는 아직 없음)
-  THIRD_PARTY_LICENSES/  # 외부 에셋 라이선스 원문
 tools/
   *.gd + README.md    # 에셋 준비/점검용 헤드리스 일회성 스크립트 모음
 Setting/              # 여러 PC 간 Claude 메모리/설정 동기화 (CLAUDE.md 참고)

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
 [ext_resource type="PackedScene" path="res://scenes/common/FadeOverlay.tscn" id="2_fade"]
-[ext_resource type="TileSet" path="res://assets/tiles/main/main_tileset.tres" id="3_tileset"]
+[ext_resource type="TileSet" path="res://assets/tiles/village/village_tileset.tres" id="3_tileset"]
 [ext_resource type="Script" path="res://scripts/chapter1_dream_background.gd" id="4_background"]
 [ext_resource type="Script" path="res://scripts/collision_map.gd" id="5_collision_map"]
 [ext_resource type="Texture2D" path="res://assets/props/nature/tree_green.png" id="6_tree_green"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://scripts/chapter_key_item.gd" id="10_key_item"]
 [ext_resource type="Script" path="res://scripts/chapter_escape_trigger.gd" id="11_escape"]
 [ext_resource type="Script" path="res://scripts/ground_marker.gd" id="12_marker"]
+[ext_resource type="Texture2D" path="res://assets/props/main_tileset_props/fragment_item.png" id="99_frag"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_action_prompt"]
 font_size = 16
@@ -101,8 +102,9 @@ item_index = 0
 item_name = "조각 A"
 found_lines = Array[String](["흙 속에서 낯선 조각 하나를 발견했다."])
 
-[node name="Marker" type="Node2D" parent="KeyItemA"]
-script = ExtResource("12_marker")
+[node name="Visual" type="Sprite2D" parent="KeyItemA"]
+texture = ExtResource("99_frag")
+scale = Vector2(0.55, 0.55)
 
 [node name="PromptLabel" type="Label" parent="KeyItemA"]
 offset_left = -60.0
@@ -121,8 +123,9 @@ item_index = 1
 item_name = "조각 B"
 found_lines = Array[String](["장독 안에서 또 다른 조각을 찾았다."])
 
-[node name="Marker" type="Node2D" parent="KeyItemB"]
-script = ExtResource("12_marker")
+[node name="Visual" type="Sprite2D" parent="KeyItemB"]
+texture = ExtResource("99_frag")
+scale = Vector2(0.55, 0.55)
 
 [node name="PromptLabel" type="Label" parent="KeyItemB"]
 offset_left = -60.0
@@ -141,8 +144,9 @@ item_index = 2
 item_name = "조각 C"
 found_lines = Array[String](["원두막 마루 틈에서 마지막 조각을 찾았다."])
 
-[node name="Marker" type="Node2D" parent="KeyItemC"]
-script = ExtResource("12_marker")
+[node name="Visual" type="Sprite2D" parent="KeyItemC"]
+texture = ExtResource("99_frag")
+scale = Vector2(0.55, 0.55)
 
 [node name="PromptLabel" type="Label" parent="KeyItemC"]
 offset_left = -60.0

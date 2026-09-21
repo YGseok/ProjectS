@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" path="res://scenes/common/FadeOverlay.tscn" id="2_fade"]
 [ext_resource type="PackedScene" path="res://scenes/common/InteractTrigger.tscn" id="3_trigger"]
 [ext_resource type="PackedScene" path="res://scenes/common/ShadowNPC.tscn" id="4_shadow_npc"]
-[ext_resource type="TileSet" path="res://assets/tiles/main/main_tileset.tres" id="5_tileset"]
+[ext_resource type="TileSet" path="res://assets/tiles/village/village_tileset.tres" id="5_tileset"]
 [ext_resource type="Script" path="res://scripts/chapter1_real_background.gd" id="6_background"]
 [ext_resource type="Texture2D" path="res://assets/props/nature/tree_green.png" id="7_tree_green"]
 [ext_resource type="Texture2D" path="res://assets/props/nature/tree_small.png" id="8_tree_small"]
@@ -16,6 +16,9 @@
 [ext_resource type="Script" path="res://scripts/chapter1_real_entry.gd" id="23_real_entry"]
 [ext_resource type="Script" path="res://scripts/clue_object.gd" id="24_clue"]
 [ext_resource type="PackedScene" path="res://scenes/common/DailyLifeHint.tscn" id="25_daily_hint"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters/npc/ajusshi_apron.png" id="26_npca"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters/npc/grandma_vest.png" id="27_npcb"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters/npc/girl_brown.png" id="28_npcc"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 18
@@ -235,6 +238,9 @@ label_settings = SubResource("LabelSettings_zone")
 position = Vector2(384, -160)
 dialogue_lines = Array[String](["오늘도 덥네.", "..."])
 
+[node name="Sprite" parent="YSortObjects/NpcA" index="0"]
+texture = ExtResource("26_npca")
+
 [node name="NpcALabel" type="Label" parent="."]
 offset_left = 340.0
 offset_top = -196.0
@@ -247,6 +253,9 @@ label_settings = SubResource("LabelSettings_zone")
 position = Vector2(800, -160)
 dialogue_lines = Array[String](["또 왔구나.", "밥은 먹었니?"])
 
+[node name="Sprite" parent="YSortObjects/NpcB" index="0"]
+texture = ExtResource("27_npcb")
+
 [node name="NpcBLabel" type="Label" parent="."]
 offset_left = 756.0
 offset_top = -196.0
@@ -258,6 +267,9 @@ label_settings = SubResource("LabelSettings_zone")
 [node name="NpcC" parent="YSortObjects" instance=ExtResource("4_shadow_npc")]
 position = Vector2(960, 544)
 dialogue_lines = Array[String](["...", "여긴 조용해서 좋아."])
+
+[node name="Sprite" parent="YSortObjects/NpcC" index="0"]
+texture = ExtResource("28_npcc")
 
 [node name="NpcCLabel" type="Label" parent="."]
 offset_left = 916.0

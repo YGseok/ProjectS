@@ -28,8 +28,6 @@ SCENES=(
   "chapter2_end|res://scenes/chapter2_end.tscn"
   "chapter3_dream|res://scenes/chapter3_dream.tscn"
   "chapter3_end|res://scenes/chapter3_end.tscn"
-  "pipeline_test|res://scenes/test/pipeline_test.tscn"
-  "main_tileset_test|res://scenes/test/main_tileset_test.tscn"
 )
 
 pass_count=0

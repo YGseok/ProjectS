@@ -2,13 +2,14 @@
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
 [ext_resource type="PackedScene" path="res://scenes/common/FadeOverlay.tscn" id="2_fade"]
-[ext_resource type="TileSet" path="res://assets/tiles/main/main_tileset.tres" id="3_tileset"]
+[ext_resource type="TileSet" path="res://assets/tiles/village/village_tileset.tres" id="3_tileset"]
 [ext_resource type="Script" path="res://scripts/chapter3_dream_background.gd" id="4_background"]
 [ext_resource type="Script" path="res://scripts/collision_map.gd" id="5_collision_map"]
 [ext_resource type="Script" path="res://scripts/chapter_dream_entry.gd" id="6_dream_entry"]
 [ext_resource type="Script" path="res://scripts/chapter_key_item.gd" id="7_key_item"]
 [ext_resource type="Script" path="res://scripts/chapter_escape_trigger.gd" id="8_escape"]
 [ext_resource type="Script" path="res://scripts/ground_marker.gd" id="9_marker"]
+[ext_resource type="Texture2D" path="res://assets/props/main_tileset_props/fragment_item.png" id="99_frag"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_action_prompt"]
 font_size = 16
@@ -32,14 +33,6 @@ map_bounds = Rect2(0, 0, 1280, 720)
 tile_set = ExtResource("3_tileset")
 script = ExtResource("4_background")
 
-[node name="LakeWater" type="ColorRect" parent="."]
-offset_left = 256.0
-offset_top = 224.0
-offset_right = 1024.0
-offset_bottom = 544.0
-mouse_filter = 2
-color = Color(0.12, 0.22, 0.35, 0.85)
-
 [node name="LakeLabel" type="Label" parent="."]
 offset_left = 600.0
 offset_top = 368.0
@@ -60,8 +53,9 @@ item_index = 0
 item_name = "조각 A"
 found_lines = Array[String](["호숫가 풀숲에서 조각 하나를 발견했다."])
 
-[node name="Marker" type="Node2D" parent="KeyItemA"]
-script = ExtResource("9_marker")
+[node name="Visual" type="Sprite2D" parent="KeyItemA"]
+texture = ExtResource("99_frag")
+scale = Vector2(0.55, 0.55)
 
 [node name="PromptLabel" type="Label" parent="KeyItemA"]
 offset_left = -60.0
@@ -80,8 +74,9 @@ item_index = 1
 item_name = "조각 B"
 found_lines = Array[String](["반대편 호숫가에서 또 다른 조각을 찾았다."])
 
-[node name="Marker" type="Node2D" parent="KeyItemB"]
-script = ExtResource("9_marker")
+[node name="Visual" type="Sprite2D" parent="KeyItemB"]
+texture = ExtResource("99_frag")
+scale = Vector2(0.55, 0.55)
 
 [node name="PromptLabel" type="Label" parent="KeyItemB"]
 offset_left = -60.0
@@ -100,8 +95,9 @@ item_index = 2
 item_name = "조각 C"
 found_lines = Array[String](["호수 남쪽 기슭에서 마지막 조각을 찾았다."])
 
-[node name="Marker" type="Node2D" parent="KeyItemC"]
-script = ExtResource("9_marker")
+[node name="Visual" type="Sprite2D" parent="KeyItemC"]
+texture = ExtResource("99_frag")
+scale = Vector2(0.55, 0.55)
 
 [node name="PromptLabel" type="Label" parent="KeyItemC"]
 offset_left = -60.0
