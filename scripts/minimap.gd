@@ -22,7 +22,7 @@ const MAP_SIZE := Vector2(160.0, 90.0)
 const DOT_SIZE := Vector2(6.0, 6.0)
 
 @onready var _panel: Panel = $Panel
-@onready var _dot: ColorRect = $Panel/PlayerDot
+@onready var _dot: TextureRect = $Panel/PlayerDot
 @onready var _terrain: Control = $Panel/Terrain
 
 var _map_bounds := Rect2(Vector2.ZERO, Vector2(1280, 720))

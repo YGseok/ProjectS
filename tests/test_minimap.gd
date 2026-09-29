@@ -31,7 +31,7 @@ func _initialize() -> void:
 	var player: Node2D = get_first_node_in_group("player")
 	_assert(player != null, "player 그룹 노드를 찾음")
 	if player != null:
-		var dot: ColorRect = minimap.get_node("Panel/PlayerDot")
+		var dot: TextureRect = minimap.get_node("Panel/PlayerDot")
 		var pos_before: Vector2 = dot.position
 		await _move_one_tile("ui_right")
 		await _move_one_tile("ui_right")

@@ -21,7 +21,10 @@ signal released
 @export var trigger_radius: float = 20.0
 @export var one_shot: bool = false
 
-@onready var _visual: ColorRect = get_node_or_null("Visual")
+## 눌림 색 피드백은 `Visual`이 `ColorRect`일 때만 적용한다 — 실제 그림
+## (Sprite2D 등)이 붙은 인스턴스(예: `CreakyBoardPlate`)는 색을 바꿀
+## `.color` 속성이 없으므로 그냥 건너뛴다.
+@onready var _visual: CanvasItem = get_node_or_null("Visual")
 
 var _player: Node2D
 var _is_pressed := false
@@ -41,13 +44,13 @@ func _process(_delta: float) -> void:
 	var in_range := global_position.distance_to(_player.global_position) <= trigger_radius
 	if in_range and not _is_pressed:
 		_is_pressed = true
-		if _visual:
+		if _visual is ColorRect:
 			_visual.color = Color(0.3, 0.75, 0.35, 0.9)
 		pressed.emit()
 		if one_shot:
 			_consumed = true
 	elif not in_range and _is_pressed and not one_shot:
 		_is_pressed = false
-		if _visual:
+		if _visual is ColorRect:
 			_visual.color = Color(0.5, 0.5, 0.5, 0.9)
 		released.emit()

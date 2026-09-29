@@ -16,6 +16,8 @@
 [ext_resource type="Script" path="res://scripts/chapter1_real_entry.gd" id="23_real_entry"]
 [ext_resource type="Script" path="res://scripts/clue_object.gd" id="24_clue"]
 [ext_resource type="PackedScene" path="res://scenes/common/DailyLifeHint.tscn" id="25_daily_hint"]
+[ext_resource type="Texture2D" path="res://assets/props/main_tileset_props/clue_paper.png" id="30_clue1"]
+[ext_resource type="Texture2D" path="res://assets/props/main_tileset_props/clue_underfloor.png" id="31_clue2"]
 [ext_resource type="Texture2D" path="res://assets/sprites/characters/npc/ajusshi_apron.png" id="26_npca"]
 [ext_resource type="Texture2D" path="res://assets/sprites/characters/npc/grandma_vest.png" id="27_npcb"]
 [ext_resource type="Texture2D" path="res://assets/sprites/characters/npc/girl_brown.png" id="28_npcc"]
@@ -106,6 +108,9 @@ script = ExtResource("24_clue")
 required_chapter = 1
 lines = Array[String](["밭 한쪽에 낯익은 글씨가 적힌 종잇조각이 떨어져 있다.", "(placeholder 단서 — 1장 이후)"])
 
+[node name="Visual" type="Sprite2D" parent="ClueChapter1"]
+texture = ExtResource("30_clue1")
+
 [node name="PromptLabel" type="Label" parent="ClueChapter1"]
 offset_left = -60.0
 offset_top = -40.0
@@ -120,6 +125,9 @@ position = Vector2(480, 608)
 script = ExtResource("24_clue")
 required_chapter = 2
 lines = Array[String](["평소와 다르게, 마루 밑에서 희미한 냄새가 난다.", "(placeholder 단서 — 2장 이후)"])
+
+[node name="Visual" type="Sprite2D" parent="ClueChapter2"]
+texture = ExtResource("31_clue2")
 
 [node name="PromptLabel" type="Label" parent="ClueChapter2"]
 offset_left = -60.0

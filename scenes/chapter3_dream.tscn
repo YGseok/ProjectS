@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scripts/chapter_key_item.gd" id="7_key_item"]
 [ext_resource type="Script" path="res://scripts/chapter_escape_trigger.gd" id="8_escape"]
 [ext_resource type="Script" path="res://scripts/ground_marker.gd" id="9_marker"]
+[ext_resource type="Texture2D" path="res://assets/props/main_tileset_props/exit_door.png" id="98_door"]
 [ext_resource type="Texture2D" path="res://assets/props/main_tileset_props/fragment_item.png" id="99_frag"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_action_prompt"]
@@ -118,10 +119,9 @@ title_text = "3장 종료"
 next_scene = "res://scenes/chapter3_end.tscn"
 advances_story = false
 
-[node name="Marker" type="Node2D" parent="EscapeTrigger"]
-script = ExtResource("9_marker")
-color = Color(0.4, 0.85, 0.75, 0.9)
-radius = 11.0
+[node name="Visual" type="Sprite2D" parent="EscapeTrigger"]
+texture = ExtResource("98_door")
+offset = Vector2(0, -30)
 
 [node name="PromptLabel" type="Label" parent="EscapeTrigger"]
 offset_left = -60.0

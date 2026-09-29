@@ -13,3 +13,13 @@
 원본이 JPG이거나 배경에 회색 체크무늬가 픽셀로 박혀 있어서, 캐릭터/소품은 코너 flood-fill +
 최대 연결 성분만 남기는 방식으로 배경을 제거했다(흙 배경 소품은 배경을 그대로 둠).
 `village_tiles.png` 셀 순서: 0 grass, 1 dirt, 2 water, 3 wall, 4 roof, 5 floor_porch, 6 floor_gazebo, 7 floor_interior.
+
+## 2026-09-29 추가분
+
+| 원본 | 내용 | 파생물 |
+|---|---|---|
+| `asset004.png` | 호수 물/원두막 기와지붕 타일, 챕터2·3 탈출문, 일상 단서 2종, 벽 낙서("미워"), 마루 삐걱임 발판, 미니맵 아이콘 3종 | `tiles/village/village_tiles.png` 슬롯 2(water)·4(roof) 교체, `props/main_tileset_props/{exit_door,clue_paper,clue_underfloor,wall_scribble,creaky_plate}.png`, `props/ui_icons/mm_{player,npc,wall}.png` |
+
+카드형 시트라 배경이 흰 바탕+어두운 회색 격자였음 — 흰색/검은 테두리/회색
+격자 3가지 톤을 모두 배경으로 보고 제거(`asset001/002`의 체크무늬 제거와
+다른 방식). `village_tiles.png` 슬롯 순서는 위 표와 동일하게 유지.
