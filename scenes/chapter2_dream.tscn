@@ -11,7 +11,6 @@
 [ext_resource type="Script" path="res://scripts/chapter_dream_entry.gd" id="9_dream_entry"]
 [ext_resource type="Script" path="res://scripts/chapter_key_item.gd" id="10_key_item"]
 [ext_resource type="Script" path="res://scripts/chapter_escape_trigger.gd" id="11_escape"]
-[ext_resource type="Script" path="res://scripts/ground_marker.gd" id="12_marker"]
 [ext_resource type="Texture2D" path="res://assets/props/main_tileset_props/exit_door.png" id="98_door"]
 [ext_resource type="Texture2D" path="res://assets/props/main_tileset_props/fragment_item.png" id="99_frag"]
 
