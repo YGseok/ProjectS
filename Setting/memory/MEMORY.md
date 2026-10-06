@@ -2,3 +2,5 @@
 - [ProjectD loop cycle cleanup](feedback_projectd_loop_cycle_cleanup.md) — on loop restart (new iter_1), analyze+report+delete prior cycle's logs
 - [Thread scope: PC sync](feedback_thread_scope_pc_sync.md) — this thread is dedicated to cross-PC transfer methods/commands only
 - [Push every iteration](feedback_projects_push_every_iteration.md) — ProjectS: push to origin/master after each iteration commit, not just at batch end
+- [Korean iteration notes](feedback_projects_korean_notes.md) — ProjectS: respond/summarize in Korean by default, not just when asked
+- [Thread scope: artwork](feedback_thread_scope_artwork.md) — ProjectS art thread: resource list / 발주 / 적용 via docs/art/
