@@ -5,7 +5,7 @@
 
 | 원본 | 내용 | 파생물 |
 |---|---|---|
-| `pc001.jpg` | 주인공 4방향(3열×4행 걷기 시트) | `sprites/characters/player/player_{down,left,right,up}.png` (가운데 열, 70px 높이) |
+| `pc001.jpg` | 주인공 4방향(3열×4행 걷기 시트) | `sprites/characters/player/player_{down,left,right,up}.png`(가운데 열, 정지) + `_walk1`/`_walk2`(왼쪽/오른쪽 열, 걷기) — 70px 높이, `tools/crop_player_walk.gd`로 재생성 (v0.38) |
 | `npc001.jpg` `npc002.jpg` `npc003.jpg` | NPC 여러 명(정면/측면/뒷면) | `sprites/characters/npc/` — 현재 4명 사용(grandpa_cane, ajusshi_apron, grandma_vest, girl_brown). npc002/003의 나머지 인물은 미사용 |
 | `asset001.png` | 지형/작물/건물/울타리/소품 시트 | `tiles/village/village_tiles.png`(잔디·밭·물·벽·지붕), `props/nature/`(나무·덤불), `props/main_tileset_props/jar.png` |
 | `asset002.png` (`asset003.png`는 동일 이미지) | 마을 멀티시트 A~F | `tiles/village/village_tiles.png`(마루·원두막바닥·방바닥), `props/main_tileset_props/{hopscotch,gonggi_stone,fragment_item}.png`, `props/ui_icons/{key,stamp}_icon.png` |

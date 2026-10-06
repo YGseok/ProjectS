@@ -26,7 +26,7 @@
 | ID | 리소스 | 파일 | 원본 | 상태 | 메모 |
 |---|---|---|---|---|---|
 | CH-101 | 주인공 4방향(정지) | `sprites/characters/player/player_{down,left,right,up}.png` | pc001 | 적용됨 | 흰 원피스 10세 여아, 70 px |
-| CH-102 | 주인공 걷기 애니메이션 | — | pc001 | 적용 대기 | pc001이 3열×4행 걷기 시트인데 가운데 프레임만 사용 중. 좌우 프레임 잘라 `player.gd`에 애니메이션 추가 |
+| CH-102 | 주인공 걷기 애니메이션 | `sprites/characters/player/player_{dir}_walk{1,2}.png` | pc001 | 적용됨 | v0.38. `tools/crop_player_walk.gd`로 12프레임 재추출(정지 프레임도 같이 재생성, 치마 구멍 개선) |
 | CH-201 | 지팡이 할아버지 | `sprites/characters/npc/grandpa_cane.png` | npc001~003 | 부분 적용 | 정면만. 측면/뒷면은 원본에 있음(적용 대기) |
 | CH-202 | 앞치마 아저씨 | `sprites/characters/npc/ajusshi_apron.png` | npc001~003 | 부분 적용 | 〃 |
 | CH-203 | 조끼 할머니 | `sprites/characters/npc/grandma_vest.png` | npc001~003 | 부분 적용 | 〃 |

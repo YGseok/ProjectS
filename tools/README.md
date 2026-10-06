@@ -23,6 +23,7 @@
 
 | 파일 | 용도 | 상태 |
 |---|---|---|
+| `crop_player_walk.gd` | `pc001.jpg`에서 주인공 4방향×3프레임(정지+걷기 2)을 잘라 `assets/sprites/characters/player/`에 저장. 행별 합집합 bbox로 캔버스 고정, 체크무늬·발밑 그림자 제거. `-- --preview`면 `qa/output/`에 저장 | 재사용 가능 — 시트를 다시 받으면 재실행 |
 | `verify_occlusion.gd` | 플레이어를 나무 캐노피/밑둥 뒤로 이동시킨 뒤 실제 창을 캡처해서 오클루전 반투명 리빌 셰이더가 시각적으로 동작하는지 확인 (`res://qa/output/occlusion_check.png` + `occlusion_log.txt`). **창모드 전용**(헤드리스 불가), 실행 시 `--script` 플래그 필수 | 재사용 중 — 나무 오클루전 확인용으로 작성했지만 건물/원두막 지붕 등 다른 오브젝트 검증에도 좌표만 바꿔서 재사용 가능 |
 
 ## 새 도구를 추가할 때
