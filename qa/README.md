@@ -32,6 +32,8 @@ GAME_START=dungeon ./qa/run_qa.sh
 | `QA_FRAME`      | X    | `30`                              | 캡처 전 대기 프레임 수 (위치 인자 `$1`로도 가능)   |
 | `QA_OUTPUT`     | X    | `qa/output/<key>.png`             | 출력 PNG 경로 (위치 인자 `$2`로도 가능)            |
 | `QA_SCENE_PATH` | X    | -                                 | `res://scenes/<key>.tscn` 규칙을 무시하고 직접 지정 |
+| `QA_RAW`        | X    | -                                 | `1`이면 진행 상태 선세팅/추가 뷰 없이 "막 시작한 그대로" 캡처 |
+| `QA_TIMEOUT`    | X    | `120`                             | 캡처 프로세스 최대 실행 초 (넘으면 강제 종료 → 실패 처리) |
 | `GODOT_BIN`     | X    | `godot4`                          | Godot 실행 파일 이름/경로 (Windows: `godot4.exe` 또는 전체 경로) |
 
 예시:
@@ -82,6 +84,26 @@ godot4 --path . res://qa/QACapture.tscn
 
 이 씬은 `GAME_START` 에 해당하는 실제 게임 씬을 자식으로 로드하고,
 지정된 프레임만큼 기다린 뒤 뷰포트를 PNG로 저장하고 종료한다.
+
+## 기본 캡처가 "깨끗한 상태"에서 찍히도록 하는 처리 (v0.38)
+
+예전에는 씬을 로드하고 frame 30에서 바로 찍어서, 꿈 씬은 챕터 타이틀 카드가 화면을
+덮은 채로 캡처됐고(그래서 지면 틴트 누락·텍스트 오타·타일 이음매 같은 결함을 못 잡았다),
+진행 조건이 걸린 오브젝트(현실 파트 단서 등)는 아예 안 보였다. 지금은:
+
+1. **상태 선세팅** — `QACapture.gd`의 `_prepare_state()`가 씬 로드 전에
+   `Chapter1Progress.chapter_started` / `ChapterProgress`(챕터 1~3 시작됨,
+   `current_chapter=3`)를 세팅해서 타이틀 카드를 건너뛰고 조건부 오브젝트를 해금한다.
+2. **추가 뷰** — `QACapture.gd`의 `VIEWS` 상수에 적힌 씬은 기본 캡처 뒤에 플레이어를
+   지정 좌표로 순간이동시켜 화면 밖 구역을 추가로 찍는다. 파일명은
+   `qa/output/<씬키>_<뷰이름>.png` (현재: `chapter1_real_south`,
+   `chapter1_dream_gazebo`, `chapter1_dream_porch` — porch는 벽 낙서 플래시를 켠 채).
+   새 구역/오브젝트를 만들면 `VIEWS`에 한 줄 추가할 것.
+3. 기존 방식("처음 보이는 그대로")이 필요하면 `QA_RAW=1`.
+
+주의: `qa/run_qa.sh`는 메인 PNG 하나만 존재 여부로 판단한다. 추가 뷰 PNG는 사람이
+열어서 봐야 한다. 또 `QACapture.gd`에 파싱 오류가 있으면 Godot 창이 안 닫히고 영원히
+떠 있었기 때문에(이번에 실제로 겪음) 실행에 `timeout`을 걸어뒀다.
 
 ## 실패 시 종료 코드
 

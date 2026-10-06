@@ -54,7 +54,7 @@ if ! "$GODOT_BIN" --headless --editor --quit-after 60 --path "$PROJECT_DIR" >"$I
   echo "[QA] (참고) 이미 임포트된 프로젝트라면 이 경고는 무시해도 되는 경우가 많습니다." >&2
 fi
 
-RUN_CMD=("$GODOT_BIN" --path "$PROJECT_DIR" "res://qa/QACapture.tscn")
+RUN_CMD=(timeout "${QA_TIMEOUT:-120}" "$GODOT_BIN" --path "$PROJECT_DIR" "res://qa/QACapture.tscn")
 
 echo "[QA] (2/3) 실제 창을 띄워 실행 및 캡처..."
 if [[ -n "${DISPLAY:-}" ]]; then
