@@ -1,6 +1,6 @@
 # RESOURCE_LIST.md — 필요 리소스 목록
 
-마지막 갱신: 2026-10-06 (v0.37 기준 전수 점검)
+마지막 갱신: 2026-10-06 (ORDER-001 발주 반영)
 
 ## ID 규칙
 
@@ -58,17 +58,20 @@
 |---|---|---|---|---|---|
 | OB-101 | 큰 나무 | `props/nature/tree_green.png` | asset001 | 적용됨 | 140×215 |
 | OB-102 | 작은 나무 | `props/nature/tree_small.png` | asset001 | 적용됨 | 150×165 |
-| OB-103 | 열매 덤불 | `props/nature/bush_berry.png` | asset001 | **재발주 필요** | v0.37 QA: 오른쪽 세로 잘림 + 점 자국. 140×170. 챕터1 꿈/일상/챕터2 사용 |
+| OB-103 | 열매 덤불 | `props/nature/bush_berry.png` | asset001 | 발주됨(ORDER-001) | v0.37 QA: 오른쪽 세로 잘림 + 점 자국. 140×170. 챕터1 꿈/일상/챕터2 사용 |
 | OB-201 | 장독 | `props/main_tileset_props/jar.png` | asset001 | 적용됨 | 48×48 |
 | OB-301 | 공기돌 | `props/main_tileset_props/gonggi_stone.png` | asset002 | 적용됨 | 챕터1 퍼즐 |
-| OB-302 | 사방치기 | `props/main_tileset_props/hopscotch.png` | asset002 | **재발주 필요** | v0.37 QA: 위쪽 반원 잘림 + 나무 가지에 가려짐. 155×210, 땅에 그린 분필 그림 |
+| OB-302 | 사방치기 | `props/main_tileset_props/hopscotch.png` | asset002 | 발주됨(ORDER-001) | v0.37 QA: 위쪽 반원 잘림 + 나무 가지에 가려짐. 155×210, 땅에 그린 분필 그림 |
 | OB-303 | 헐거운 마루판 | `props/main_tileset_props/floorboard_loose.png` | asset002 | 적용됨 | 48×48 |
 | OB-304 | 삐걱임 발판 | `props/main_tileset_props/creaky_plate.png` | asset004 | 적용됨 | 48×48 |
-| OB-305 | 조각(깨진 동전) | `props/main_tileset_props/fragment_item.png` | asset002 | 적용됨 | 챕터2/3 KeyItemA/B/C 셋 다 이것 재사용 중 → OB-306~308로 대체 예정 |
-| OB-306 | 조각 A | — | — | 발주 대기 | 서로 구분되는 모양 3종, 각 48~64 px. 어떤 사물로 할지 시놉시스에서 골라 제안 필요 |
-| OB-307 | 조각 B | — | — | 발주 대기 | 〃 |
-| OB-308 | 조각 C | — | — | 발주 대기 | 〃 |
+| OB-305 | 조각(깨진 동전) | `props/main_tileset_props/fragment_item.png` | asset002 | 적용됨 | 챕터2/3 KeyItemA/B/C 셋 다 이것 재사용 중 → OB-306~308, OB-310~312로 대체 예정 |
+| OB-306 | 2장 키 아이템 A (제안: 고무신 한 짝) | — | — | 발주됨(ORDER-001) | 챕터2/3이 A/B/C를 따로 가져서 3종이 아니라 6종 필요(OB-309는 탈출문이라 3장은 310~312). 각 48~64 px |
+| OB-307 | 2장 키 아이템 B (제안: 이 빠진 밥그릇) | — | — | 발주됨(ORDER-001) | 〃 |
+| OB-308 | 2장 키 아이템 C (제안: 바랜 가족사진 조각) | — | — | 발주됨(ORDER-001) | 〃 |
 | OB-309 | 탈출문 | `props/main_tileset_props/exit_door.png` | asset004 | 적용됨 | 챕터2/3, 60×85 |
+| OB-310 | 3장 키 아이템 A (제안: 젖은 손거울) | — | — | 발주됨(ORDER-001) | 〃 |
+| OB-311 | 3장 키 아이템 B (제안: 녹슨 머리핀) | — | — | 발주됨(ORDER-001) | 〃 |
+| OB-312 | 3장 키 아이템 C (제안: 젖은 편지 봉투) | — | — | 발주됨(ORDER-001) | 〃 |
 | OB-401 | 단서: 종이 | `props/main_tileset_props/clue_paper.png` | asset004 | 적용됨 | 일상 파트 ClueChapter1 |
 | OB-402 | 단서: 마루 밑 | `props/main_tileset_props/clue_underfloor.png` | asset004 | 적용됨 | 일상 파트 ClueChapter2 |
 | OB-501 | 벽 낙서 "미워" | `props/main_tileset_props/wall_scribble.png` | asset004 | 적용됨 | WallMarkFlash |
