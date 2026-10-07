@@ -114,7 +114,7 @@ func _run() -> int:
 		player.position = view["pos"]
 		player.set("_target_position", player.position)
 		if view.get("flash_wall", false):
-			var mark: Node = get_tree().current_scene.get_node_or_null("WallMarkFlash")
+			var mark: Node = instance.get_node_or_null("WallMarkFlash")
 			if mark:
 				mark.set("flash_seconds", 5.0)
 				mark.call("flash")
