@@ -97,7 +97,7 @@ godot4 --path . res://qa/QACapture.tscn
 2. **추가 뷰** — `QACapture.gd`의 `VIEWS` 상수에 적힌 씬은 기본 캡처 뒤에 플레이어를
    지정 좌표로 순간이동시켜 화면 밖 구역을 추가로 찍는다. 파일명은
    `qa/output/<씬키>_<뷰이름>.png` (현재: `chapter1_real_south`,
-   `chapter1_dream_gazebo`, `chapter1_dream_porch` — porch는 벽 낙서 플래시를 켠 채).
+   `chapter1_dream_gazebo`, `chapter1_dream_porch` — porch는 벽 낙서 플래시를 켠 채, `chapter2_dream_southeast`, `chapter3_dream_northeast/south/southwest`).
    새 구역/오브젝트를 만들면 `VIEWS`에 한 줄 추가할 것.
 3. 기존 방식("처음 보이는 그대로")이 필요하면 `QA_RAW=1`.
 

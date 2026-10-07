@@ -26,6 +26,12 @@ const VIEWS := {
 		"gazebo": {"pos": Vector2(864, 448)},
 		"porch": {"pos": Vector2(352, 224), "flash_wall": true},
 	},
+	"chapter2_dream": {"southeast": {"pos": Vector2(896, 448)}},
+	"chapter3_dream": {
+		"northeast": {"pos": Vector2(1152, 160)},
+		"south": {"pos": Vector2(640, 624)},
+		"southwest": {"pos": Vector2(160, 576)},
+	},
 }
 
 func _ready() -> void:
