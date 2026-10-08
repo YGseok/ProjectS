@@ -7,7 +7,7 @@ ProjectS의 아트 리소스를 **리스트 → 발주 → 수령 → 적용** �
 | 파일 | 역할 |
 |---|---|
 | [RESOURCE_LIST.md](RESOURCE_LIST.md) | ID 규칙(분류 접두 + 대역)과 리소스 전체 목록·상태 |
-| [orders/](orders/) | 발주서. 한 번 발주할 묶음마다 `ORDER-NNN.md` 하나 |
+| [orders/](orders/) | 발주서. 한 번 발주할 묶음마다 `ORDER-NNN.md` 하나 + 이미지 생성 AI용 복붙 프롬프트 `ORDER-NNN_gemini.md` |
 | [`assets/README.md`](../../assets/README.md) | 받은 원본 시트 → 잘라낸 파생물 대응표 (적용 기록) |
 
 ## 워크플로
